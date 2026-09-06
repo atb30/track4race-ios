@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: macos-14
+    env:
+      HAS_SIGNING_SECRETS: ${{ secrets.BUILD_CERTIFICATE_BASE64 != '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,7 +41,7 @@ jobs:
 
       # --- Camino A: todavía sin cuenta de Apple Developer -> build de Simulador ---
       - name: "Build sin firmar para el Simulador"
-        if: ${{ secrets.BUILD_CERTIFICATE_BASE64 == '' }}
+        if: ${{ env.HAS_SIGNING_SECRETS == 'false' }}
         working-directory: ios/App
         run: |
           set -euo pipefail
@@ -48,7 +50,7 @@ jobs:
             CODE_SIGNING_ALLOWED=NO build
 
       - name: "Arrancar Simulador, instalar y capturar pantalla"
-        if: ${{ secrets.BUILD_CERTIFICATE_BASE64 == '' }}
+        if: ${{ env.HAS_SIGNING_SECRETS == 'false' }}
         run: |
           set -euo pipefail
           UDID=$(xcrun simctl create "Track4Race-CI" "iPad (10th generation)")
@@ -63,7 +65,7 @@ jobs:
           xcrun simctl shutdown "$UDID"
 
       - name: "Subir build de Simulador + captura"
-        if: ${{ secrets.BUILD_CERTIFICATE_BASE64 == '' }}
+        if: ${{ env.HAS_SIGNING_SECRETS == 'false' }}
         uses: actions/upload-artifact@v4
         with:
           name: ios-simulator-build
@@ -74,7 +76,7 @@ jobs:
 
       # --- Camino B: ya hay cuenta de Apple Developer -> firmar y subir a TestFlight ---
       - name: "Importar certificado y perfil de aprovisionamiento"
-        if: ${{ secrets.BUILD_CERTIFICATE_BASE64 != '' }}
+        if: ${{ env.HAS_SIGNING_SECRETS == 'true' }}
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
@@ -100,7 +102,7 @@ jobs:
           cp "$PP_PATH" ~/Library/MobileDevice/"Provisioning Profiles"/
 
       - name: "Archivar y exportar .ipa"
-        if: ${{ secrets.BUILD_CERTIFICATE_BASE64 != '' }}
+        if: ${{ env.HAS_SIGNING_SECRETS == 'true' }}
         env:
           TEAM_ID: ${{ secrets.TEAM_ID }}
         working-directory: ios/App
@@ -124,7 +126,7 @@ jobs:
             -exportPath ../../build/export -exportOptionsPlist ../../build/ExportOptions.plist
 
       - name: "Subir a TestFlight"
-        if: ${{ secrets.BUILD_CERTIFICATE_BASE64 != '' }}
+        if: ${{ env.HAS_SIGNING_SECRETS == 'true' }}
         env:
           APPSTORE_API_KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID }}
           APPSTORE_API_ISSUER_ID: ${{ secrets.APPSTORE_API_ISSUER_ID }}
@@ -138,7 +140,7 @@ jobs:
             --apiKey "$APPSTORE_API_KEY_ID" --apiIssuer "$APPSTORE_API_ISSUER_ID"
 
       - name: "Subir .ipa como artefacto"
-        if: ${{ secrets.BUILD_CERTIFICATE_BASE64 != '' }}
+        if: ${{ env.HAS_SIGNING_SECRETS == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: ios-release-ipa

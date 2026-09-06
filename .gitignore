@@ -34,3 +34,6 @@ base44/.app.jsonc
 ios/
 build/
 artifacts/
+
+# Carpeta donde el puente de Claude deja los archivos que te envía
+Claude outputs/

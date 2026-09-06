@@ -1,0 +1,96 @@
+{
+  "name": "GpxTrack",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nombre de la ruta GPX"
+    },
+    "description": {
+      "type": "string",
+      "description": "Descripci\u00f3n de la ruta"
+    },
+    "gpx_data": {
+      "type": "string",
+      "description": "Contenido completo del archivo GPX"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL del archivo GPX subido"
+    },
+    "total_distance": {
+      "type": "number",
+      "description": "Distancia total en kil\u00f3metros"
+    },
+    "total_elevation_gain": {
+      "type": "number",
+      "description": "Ganancia de elevaci\u00f3n total en metros"
+    },
+    "max_elevation": {
+      "type": "number",
+      "description": "Elevaci\u00f3n m\u00e1xima en metros"
+    },
+    "min_elevation": {
+      "type": "number",
+      "description": "Elevaci\u00f3n m\u00ednima en metros"
+    },
+    "waypoints": {
+      "type": "array",
+      "description": "Puntos del track con coordenadas y elevaci\u00f3n",
+      "items": {
+        "type": "object",
+        "properties": {
+          "lat": {
+            "type": "number"
+          },
+          "lng": {
+            "type": "number"
+          },
+          "elevation": {
+            "type": "number"
+          },
+          "distance": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "climb_segments": {
+      "type": "array",
+      "description": "Segmentos de subida autom\u00e1ticamente calculados",
+      "items": {
+        "type": "object",
+        "properties": {
+          "start_km": {
+            "type": "number"
+          },
+          "end_km": {
+            "type": "number"
+          },
+          "grade_percent": {
+            "type": "number"
+          },
+          "elevation_gain": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "is_active": {
+      "type": "boolean",
+      "description": "Si esta ruta est\u00e1 actualmente activa para navegaci\u00f3n",
+      "default": false
+    },
+    "allowed_user_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Lista de emails de usuarios con acceso a esta ruta"
+    }
+  },
+  "required": [
+    "name",
+    "gpx_data"
+  ]
+}

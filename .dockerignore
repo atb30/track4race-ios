@@ -1,0 +1,8 @@
+node_modules
+dist
+data
+.env
+.git
+base44
+npm-debug.log*
+pnpm-debug.log*

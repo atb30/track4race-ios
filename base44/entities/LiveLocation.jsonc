@@ -1,0 +1,44 @@
+{
+  "name": "LiveLocation",
+  "type": "object",
+  "properties": {
+    "user_name": {
+      "type": "string",
+      "description": "Nombre del usuario para mostrar en el mapa"
+    },
+    "latitude": {
+      "type": "number",
+      "description": "Latitud de la ubicaci\u00f3n actual"
+    },
+    "longitude": {
+      "type": "number",
+      "description": "Longitud de la ubicaci\u00f3n actual"
+    },
+    "elevation": {
+      "type": "number",
+      "description": "Altitud actual en metros"
+    },
+    "speed": {
+      "type": "number",
+      "description": "Velocidad actual en km/h"
+    },
+    "distance_on_route": {
+      "type": "number",
+      "description": "Distancia recorrida en la ruta en metros"
+    },
+    "gpx_track_id": {
+      "type": "string",
+      "description": "ID de la ruta GPX que se est\u00e1 siguiendo"
+    },
+    "last_update": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp de la \u00faltima actualizaci\u00f3n"
+    }
+  },
+  "required": [
+    "user_name",
+    "latitude",
+    "longitude"
+  ]
+}

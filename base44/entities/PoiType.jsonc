@@ -1,0 +1,31 @@
+{
+  "name": "PoiType",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nombre del tipo de POI"
+    },
+    "icon_url": {
+      "type": "string",
+      "description": "URL del icono para este tipo"
+    },
+    "color": {
+      "type": "string",
+      "description": "Color asociado al tipo",
+      "default": "#3b82f6"
+    },
+    "description": {
+      "type": "string",
+      "description": "Descripci\u00f3n del tipo de POI"
+    },
+    "show_in_profile": {
+      "type": "boolean",
+      "description": "Si este tipo de POI debe mostrarse en el perfil de elevaci\u00f3n",
+      "default": true
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

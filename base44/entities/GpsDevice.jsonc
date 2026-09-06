@@ -1,0 +1,71 @@
+{
+  "name": "GpsDevice",
+  "type": "object",
+  "properties": {
+    "device_imei": {
+      "type": "string",
+      "description": "IMEI \u00fanico del dispositivo GPS"
+    },
+    "device_name": {
+      "type": "string",
+      "description": "Nombre descriptivo del dispositivo"
+    },
+    "runner_id": {
+      "type": "string",
+      "description": "ID del corredor asociado a este dispositivo"
+    },
+    "team_id": {
+      "type": "string",
+      "description": "ID del equipo propietario del dispositivo"
+    },
+    "report_interval": {
+      "type": "number",
+      "enum": [
+        10,
+        20,
+        30
+      ],
+      "default": 30,
+      "description": "Intervalo de reporte en segundos"
+    },
+    "color": {
+      "type": "string",
+      "description": "Color para representar el dispositivo en el mapa",
+      "default": "#3b82f6"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Si el dispositivo est\u00e1 activo"
+    },
+    "last_seen": {
+      "type": "string",
+      "format": "date-time",
+      "description": "\u00daltima vez que el dispositivo envi\u00f3 datos"
+    },
+    "battery_level": {
+      "type": "number",
+      "description": "Nivel de bater\u00eda del dispositivo (0-100)"
+    },
+    "signal_quality": {
+      "type": "number",
+      "description": "Calidad de se\u00f1al GPS (0-100)"
+    },
+    "configuration_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "configured",
+        "error"
+      ],
+      "default": "pending",
+      "description": "Estado de configuraci\u00f3n del dispositivo"
+    }
+  },
+  "required": [
+    "device_imei",
+    "device_name",
+    "runner_id",
+    "team_id"
+  ]
+}

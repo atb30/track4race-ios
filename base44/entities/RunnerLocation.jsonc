@@ -1,0 +1,54 @@
+{
+  "name": "RunnerLocation",
+  "type": "object",
+  "properties": {
+    "runner_id": {
+      "type": "string",
+      "description": "ID del corredor"
+    },
+    "device_id": {
+      "type": "string",
+      "description": "ID del dispositivo GPS"
+    },
+    "latitude": {
+      "type": "number",
+      "description": "Latitud de la ubicaci\u00f3n"
+    },
+    "longitude": {
+      "type": "number",
+      "description": "Longitud de la ubicaci\u00f3n"
+    },
+    "elevation": {
+      "type": "number",
+      "description": "Altitud en metros"
+    },
+    "speed": {
+      "type": "number",
+      "description": "Velocidad en km/h"
+    },
+    "battery_level": {
+      "type": "number",
+      "description": "Nivel de bater\u00eda del dispositivo (0-100)"
+    },
+    "signal_quality": {
+      "type": "number",
+      "description": "Calidad de se\u00f1al GPS (0-100)"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp de la ubicaci\u00f3n"
+    },
+    "route_distance": {
+      "type": "number",
+      "description": "Distancia recorrida en la ruta en metros"
+    }
+  },
+  "required": [
+    "runner_id",
+    "device_id",
+    "latitude",
+    "longitude",
+    "timestamp"
+  ]
+}

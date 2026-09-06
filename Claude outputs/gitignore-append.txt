@@ -1,0 +1,5 @@
+
+# Capacitor / iOS build (el workflow los genera en cada build)
+ios/
+build/
+artifacts/

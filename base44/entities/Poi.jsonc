@@ -1,0 +1,44 @@
+{
+  "name": "Poi",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nombre del POI"
+    },
+    "description": {
+      "type": "string",
+      "description": "Descripci\u00f3n del POI"
+    },
+    "gpx_track_id": {
+      "type": "string",
+      "description": "ID de la ruta GPX asociada"
+    },
+    "poi_type_id": {
+      "type": "string",
+      "description": "ID del tipo de POI"
+    },
+    "latitude": {
+      "type": "number",
+      "description": "Latitud del POI"
+    },
+    "longitude": {
+      "type": "number",
+      "description": "Longitud del POI"
+    },
+    "distance_from_start": {
+      "type": "number",
+      "description": "Distancia desde el inicio de la ruta en km"
+    },
+    "elevation": {
+      "type": "number",
+      "description": "Elevaci\u00f3n del POI en metros"
+    }
+  },
+  "required": [
+    "gpx_track_id",
+    "poi_type_id",
+    "latitude",
+    "longitude"
+  ]
+}

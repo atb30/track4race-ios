@@ -1,0 +1,34 @@
+{
+  "name": "Team",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Nombre del equipo"
+    },
+    "description": {
+      "type": "string",
+      "description": "Descripci\u00f3n del equipo"
+    },
+    "color": {
+      "type": "string",
+      "description": "Color identificativo del equipo",
+      "default": "#3b82f6"
+    },
+    "allowed_user_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Lista de emails de usuarios con acceso a ver este equipo"
+    },
+    "is_active": {
+      "type": "boolean",
+      "description": "Si el equipo est\u00e1 activo",
+      "default": true
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

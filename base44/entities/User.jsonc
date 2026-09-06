@@ -1,0 +1,11 @@
+{
+  "can_upload_routes": {
+    "type": "boolean",
+    "description": "Si el usuario tiene permiso para subir sus propias rutas GPX",
+    "default": false
+  },
+  "name": "User",
+  "type": "object",
+  "properties": {},
+  "required": []
+}

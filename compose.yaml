@@ -1,0 +1,21 @@
+services:
+  mirat:
+    build: .
+    container_name: mirat
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      # Solo accesible desde el propio VPS. Expón la app con un proxy HTTPS.
+      - "127.0.0.1:3001:3001"
+    volumes:
+      - mirat_data:/app/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3001/health >/dev/null"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+volumes:
+  mirat_data:

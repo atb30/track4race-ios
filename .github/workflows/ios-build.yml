@@ -99,7 +99,10 @@ jobs:
           security set-key-partition-list -S apple-tool:,apple:,codesign: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
 
           mkdir -p ~/Library/MobileDevice/"Provisioning Profiles"
-          cp "$PP_PATH" ~/Library/MobileDevice/"Provisioning Profiles"/
+          security cms -D -i "$PP_PATH" > "$RUNNER_TEMP/profile.plist"
+          PROFILE_UUID=$(/usr/libexec/PlistBuddy -c 'Print UUID' "$RUNNER_TEMP/profile.plist")
+          cp "$PP_PATH" ~/Library/MobileDevice/"Provisioning Profiles"/"$PROFILE_UUID.mobileprovision"
+          echo "PROFILE_UUID=$PROFILE_UUID" >> "$GITHUB_ENV"
 
       - name: "Archivar y exportar .ipa"
         if: ${{ env.HAS_SIGNING_SECRETS == 'true' }}
@@ -108,8 +111,23 @@ jobs:
         working-directory: ios/App
         run: |
           set -euo pipefail
+          ruby <<'RUBY'
+          require 'xcodeproj'
+          project = Xcodeproj::Project.open('App.xcodeproj')
+          project.targets.select { |target| target.name == 'App' }.each do |target|
+            target.build_configurations.each do |config|
+              config.build_settings['CODE_SIGN_STYLE'] = 'Manual'
+              config.build_settings['DEVELOPMENT_TEAM'] = ENV.fetch('TEAM_ID')
+              config.build_settings['CODE_SIGN_IDENTITY'] = 'Apple Distribution'
+              config.build_settings['CODE_SIGN_IDENTITY[sdk=iphoneos*]'] = 'Apple Distribution'
+              config.build_settings['PROVISIONING_PROFILE_SPECIFIER'] = ENV.fetch('PROFILE_UUID')
+            end
+          end
+          project.save
+          RUBY
           xcodebuild -workspace App.xcworkspace -scheme App -configuration Release \
-            -archivePath ../../build/App.xcarchive DEVELOPMENT_TEAM="$TEAM_ID" archive
+            -destination 'generic/platform=iOS' \
+            -archivePath ../../build/App.xcarchive archive
 
           cat > ../../build/ExportOptions.plist <<PLIST
           <?xml version="1.0" encoding="UTF-8"?>
@@ -118,6 +136,10 @@ jobs:
           <dict>
             <key>method</key><string>app-store</string>
             <key>teamID</key><string>$TEAM_ID</string>
+            <key>signingStyle</key><string>manual</string>
+            <key>signingCertificate</key><string>Apple Distribution</string>
+            <key>provisioningProfiles</key>
+            <dict><key>com.track4race.viewer</key><string>$PROFILE_UUID</string></dict>
           </dict>
           </plist>
           PLIST

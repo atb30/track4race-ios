@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.track4race.viewer',
-  appName: 'Track&Race',
+  appName: 'track4race',
   webDir: 'dist',
   ios: {
     // Evita el "rebote" del WebView al hacer scroll/pan del mapa: se siente más nativo.

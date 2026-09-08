@@ -5,8 +5,9 @@ const config: CapacitorConfig = {
   appName: 'track4race',
   webDir: 'dist',
   ios: {
-    // Evita el "rebote" del WebView al hacer scroll/pan del mapa: se siente más nativo.
-    scrollEnabled: true,
+    // La pantalla de navegación se desplaza internamente cuando hace falta,
+    // pero el WebView no rebota ni desplaza toda la app en el iPad.
+    scrollEnabled: false,
     contentInset: 'always',
   },
   server: {

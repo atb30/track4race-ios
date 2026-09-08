@@ -131,7 +131,7 @@ jobs:
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $GITHUB_RUN_NUMBER" App/Info.plist
           xcodebuild -workspace App.xcworkspace -scheme App -configuration Release \
             -destination 'generic/platform=iOS' \
-            -archivePath ../../build/App.xcarchive archive
+            -archivePath ../../build/App.xcarchive IPHONEOS_DEPLOYMENT_TARGET=15.0 archive
 
           cat > ../../build/ExportOptions.plist <<PLIST
           <?xml version="1.0" encoding="UTF-8"?>

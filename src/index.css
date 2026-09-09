@@ -11,6 +11,8 @@
   height: var(--app-vh, 100dvh);
   min-height: 0;
   max-height: 100dvh;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-sizing: border-box;
   overflow: hidden;
   overscroll-behavior: none;
 }
@@ -33,6 +35,21 @@ html, body, #root { width: 100%; height: 100%; overflow: hidden; }
   .navigation-lists [class*="md:w-12"] { width: 28px; height: 28px; }
   .navigation-lists button { height: 26px; }
   .navigation-sidebar svg[height="140"] { height: 90px; }
+}
+
+/* iPads report a desktop-sized CSS width, so Tailwind's md breakpoint can
+   otherwise make the sidebar too tall. Keep its controls compact by physical
+   viewport width as well as height. */
+@media (max-width: 900px) {
+  .navigation-sidebar { width: 30%; min-width: 210px; }
+  .navigation-sidebar > .border-b .grid > div { padding: 6px; }
+  .navigation-sidebar > .border-b .text-4xl,
+  .navigation-sidebar > .border-b [class*="text-4xl"] { font-size: 24px; line-height: 1.1; }
+  .navigation-sidebar > .border-b [class*="h-[80px]"] { height: 32px; }
+  .navigation-sidebar > .border-b img { width: 28px; height: 28px; }
+  .navigation-sidebar .navigation-lists [class*="md:p-3"] { padding: 6px; }
+  .navigation-sidebar .navigation-lists [class*="md:w-12"] { width: 28px; height: 28px; }
+  .navigation-sidebar .navigation-lists button { height: 26px; }
 }
 
 /* Océano: presentation only. Map tiles and severity colours are untouched. */

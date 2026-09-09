@@ -55,11 +55,17 @@ html, body, #root { width: 100%; height: 100%; overflow: hidden; }
 .navigation-controls-bar .controls-items > [data-radix-popper-trigger] { flex: 1 1 auto; min-width: 64px; }
 @media (max-width: 1100px) {
   .navigation-controls-bar { width: calc(100% - 12px); max-width: none; }
-  .navigation-controls-bar .controls-items { display: grid; grid-template-columns: repeat(5, minmax(52px, 1fr)); gap: 3px; }
+  .navigation-controls-bar .controls-items { display: grid; grid-template-columns: repeat(5, minmax(48px, 1fr)); gap: 2px; }
+  .navigation-controls-bar .controls-items > * { min-width: 0; width: 100%; }
   .navigation-controls-bar .controls-items > button,
   .navigation-controls-bar .controls-items > [data-radix-popper-trigger] { min-width: 0; width: 100%; padding: 0 3px; }
-  .navigation-controls-bar .controls-items > button { min-width: 0; width: 100%; height: 28px; padding: 0 3px; font-size: 10px; gap: 2px; }
+  .navigation-controls-bar .controls-items > button { min-width: 0; width: 100%; height: 25px; padding: 0 2px; font-size: 9px; gap: 1px; }
   .navigation-controls-bar .controls-items svg { width: 11px; height: 11px; }
+}
+@media (min-width: 900px) and (orientation: landscape) {
+  .navigation-controls-bar .controls-items { display: grid; grid-template-columns: repeat(9, minmax(48px, 1fr)); gap: 2px; }
+  .navigation-controls-bar .controls-items > * { min-width: 0; }
+  .navigation-controls-bar .controls-items > button { height: 25px; padding: 0 2px; font-size: 9px; }
 }
 @media (max-width: 760px) {
   .navigation-controls-bar .controls-items { grid-template-columns: repeat(4, minmax(60px, 1fr)); }

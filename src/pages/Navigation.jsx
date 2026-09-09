@@ -372,6 +372,28 @@ function NavigationPages({ items, renderItem }) {
 }
 
 export default function Navigation() {
+  // Keep the shell synced with the real visible viewport (including iPad
+  // rotation and Safari/Capacitor safe-area changes).
+  useEffect(() => {
+    const updateViewport = () => {
+      const viewport = window.visualViewport;
+      const height = viewport?.height || window.innerHeight;
+      const width = viewport?.width || window.innerWidth;
+      const root = document.documentElement;
+      root.style.setProperty('--app-vh', `${height}px`);
+      root.style.setProperty('--app-vw', `${width}px`);
+      root.style.setProperty('--app-density', String(window.devicePixelRatio || 1));
+    };
+    updateViewport();
+    window.addEventListener('resize', updateViewport);
+    window.visualViewport?.addEventListener('resize', updateViewport);
+    window.visualViewport?.addEventListener('scroll', updateViewport);
+    return () => {
+      window.removeEventListener('resize', updateViewport);
+      window.visualViewport?.removeEventListener('resize', updateViewport);
+      window.visualViewport?.removeEventListener('scroll', updateViewport);
+    };
+  }, []);
   const [checkingRoutes, setCheckingRoutes] = useState(true);
   const [routeLoadError, setRouteLoadError] = useState(null);
   const [visibleTrackId, setVisibleTrackId] = useState(null);

@@ -7,10 +7,17 @@
 .navigation-viewport {
   position: fixed;
   inset: 0;
-  height: 100%;
+  width: var(--app-vw, 100vw);
+  height: var(--app-vh, 100dvh);
   min-height: 0;
+  max-height: 100dvh;
   overflow: hidden;
   overscroll-behavior: none;
+}
+
+html, body, #root { width: 100%; height: 100%; overflow: hidden; }
+@supports (height: 100svh) {
+  .navigation-viewport { min-height: 100svh; }
 }
 .navigation-viewport > .ocean-chrome,
 .navigation-sidebar > :not(.flex-1) { flex-shrink: 0; }

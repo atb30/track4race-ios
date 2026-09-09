@@ -2429,7 +2429,7 @@ export default function Navigation() {
           />
           
           {/* Left Controls - RESPONSIVE */}
-          <div className="absolute top-2 sm:top-4 left-2 sm:left-4 z-[1002] flex flex-col gap-1 sm:gap-2">
+          <div className="navigation-map-left-controls absolute top-20 sm:top-24 left-2 sm:left-4 z-[1002] flex flex-col gap-1 sm:gap-2">
             <ClimbExplorer key={activeTrack.id} track={activeTrack} googleApiKey={googleApiKey} />
             <Button
               variant="ghost"
@@ -2502,7 +2502,7 @@ export default function Navigation() {
           
           {/* Right Controls - Only in Fullscreen - RESPONSIVE & STACKED */}
           {isFullscreen && (
-            <div className="absolute top-2 sm:top-4 right-2 sm:right-4 z-[1002] flex flex-col items-center gap-1 sm:gap-2">
+            <div className="navigation-map-right-controls absolute top-20 sm:top-24 right-2 sm:right-4 z-[1002] flex flex-col items-center gap-1 sm:gap-2">
               {/* Map Orientation Button - SMALLER */}
               <Button
                 variant="ghost"

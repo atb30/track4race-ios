@@ -20,7 +20,7 @@ export default function MapControlsBar({
   showTurnByTurn, setShowTurnByTurn
 }) {
   return (
-    <div className="absolute top-2 left-1/2 transform -translate-x-1/2 z-[1002] w-[95vw] max-w-sm">
+    <div className="navigation-controls-bar absolute top-2 left-1/2 transform -translate-x-1/2 z-[1002] w-[95vw] max-w-5xl">
       {/* MOBILE VIEW - Ultra simplified */}
       <div className="lg:hidden flex items-center justify-center gap-1">
         <Button
@@ -141,7 +141,7 @@ export default function MapControlsBar({
       </div>
 
       {/* DESKTOP VIEW - All buttons visible */}
-      <div className="hidden lg:flex items-center gap-2 justify-center">
+      <div className="controls-items hidden lg:flex items-center gap-2 justify-center">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button

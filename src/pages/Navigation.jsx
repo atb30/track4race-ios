@@ -358,6 +358,19 @@ const formatDistanceToPoiData = (distanceKm) => {
   }
 };
 
+function NavigationPages({ items, renderItem }) {
+  const [page, setPage] = useState(0);
+  const current = Math.min(page, Math.max(0, items.length - 1));
+  return <>
+    {items.length > 0 && renderItem(items[current])}
+    {items.length > 1 && <div className="flex shrink-0 items-center justify-between gap-1 px-2 py-1">
+      <Button size="sm" variant="outline" disabled={current === 0} onClick={() => setPage(current - 1)} aria-label="Página anterior">‹</Button>
+      <span className="text-xs">{current + 1} / {items.length}</span>
+      <Button size="sm" variant="outline" disabled={current === items.length - 1} onClick={() => setPage(current + 1)} aria-label="Página siguiente">›</Button>
+    </div>}
+  </>;
+}
+
 export default function Navigation() {
   const [checkingRoutes, setCheckingRoutes] = useState(true);
   const [routeLoadError, setRouteLoadError] = useState(null);
@@ -2104,7 +2117,7 @@ export default function Navigation() {
   };
 
   return (
-    <div className="h-screen bg-white flex flex-col" data-fullscreen={isFullscreen ? "true" : "false"}>
+    <div className="navigation-viewport bg-white flex flex-col" data-fullscreen={isFullscreen ? "true" : "false"}>
       {visibleTrackId !== activeTrack.id && <NavigationLoadingScreen stage="map" overlay error={mapLoadTimedOut ? 'El mapa está tardando más de lo esperado. Comprueba tu conexión o vuelve a intentarlo.' : null} onRetry={() => window.location.reload()} />}
       {/* Orientation Warning Modal */}
       {showOrientationWarning && (
@@ -2259,10 +2272,10 @@ export default function Navigation() {
       />
 
       {/* Main Layout */}
-      <div className={`${isFullscreen ? 'h-screen' : 'flex-1'} flex relative`}>
+      <div className="flex-1 min-h-0 min-w-0 overflow-hidden flex relative">
         {/* Map Container - RESPONSIVE CONTROLS */}
         <div 
-          className="flex-1 relative overflow-hidden"
+          className="flex-1 min-w-0 min-h-0 relative overflow-hidden"
           onDragOver={(e) => {
             e.preventDefault();
           }}
@@ -2555,7 +2568,7 @@ export default function Navigation() {
         </div>
 
         {/* Sidebar - RESPONSIVE SIZING */}
-        <div className="ocean-panel w-[25%] min-w-[180px] sm:w-[22%] sm:min-w-[200px] md:w-[28%] md:min-w-[280px] lg:w-[25%] lg:min-w-[250px] border-l flex flex-col z-[2000]">
+        <div className="navigation-sidebar ocean-panel w-[25%] min-w-[180px] sm:w-[22%] sm:min-w-[200px] md:w-[28%] md:min-w-[280px] lg:w-[25%] lg:min-w-[250px] border-l flex flex-col min-h-0 overflow-hidden z-[2000]">
           
           {/* Off-track Warning Banner */}
           {isOffTrack && currentPosition && currentPosition.distanceFromTrack !== null && (
@@ -2624,7 +2637,7 @@ export default function Navigation() {
           )}
 
           {/* Combined Scrollable Area - RESPONSIVE */}
-          <div className="flex-1 overflow-y-auto scrollbar-thin">
+          <div className="navigation-lists flex-1 min-h-0 overflow-hidden">
 
             {/* Runners on Track Section - RESPONSIVE TEXT */}
             <div className="border-b border-slate-800">
@@ -2640,7 +2653,7 @@ export default function Navigation() {
                 </div>
               ) : (
                 <div className="divide-y divide-slate-200">
-                  {runnersOnTrack.map((runner) => (
+                  <NavigationPages items={runnersOnTrack} renderItem={(runner) => (
                     <div key={`runner-${runner.id}`} className="flex items-center justify-between py-1 sm:py-2 px-1 sm:px-2 md:px-3 gap-1 sm:gap-2">
                       <div className="flex items-center gap-1 sm:gap-2 min-w-0">
                         <div 
@@ -2661,7 +2674,7 @@ export default function Navigation() {
                         </span>
                       </div>
                     </div>
-                  ))}
+                  )} />
                 </div>
               )}
             </div>
@@ -2680,7 +2693,7 @@ export default function Navigation() {
                 </div>
               ) : (
                 <div className="divide-y divide-slate-200">
-                  {nearbyPois.map((poi) => {
+                  <NavigationPages items={nearbyPois} renderItem={(poi) => {
                     const poiType = getPoiType(poi.poi_type_id);
                     const distanceData = formatDistanceToPoiData(poi.remainingDistanceKm);
                     
@@ -2721,14 +2734,14 @@ export default function Navigation() {
                         </div>
                       </div>
                     );
-                  })}
+                  }} />
                 </div>
               )}
             </div>
           </div>
 
           {/* NEW: Elevation Segment View Selector at the bottom */}
-          <div className="border-t border-slate-800 bg-white p-2">
+          <div className="shrink-0 border-t border-slate-800 bg-white p-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button

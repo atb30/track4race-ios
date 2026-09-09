@@ -2570,7 +2570,7 @@ export default function Navigation() {
 
           {/* Elevation Profile - RESPONSIVE HEIGHT */}
           {showElevationProfile && (
-            <div className="absolute bottom-0 left-0 w-full h-32 sm:h-48 pointer-events-none z-[1001]">
+            <div className="navigation-elevation-profile absolute left-0 w-full h-32 sm:h-48 pointer-events-none z-[1001]">
               <div className="absolute top-2 left-2 pointer-events-auto z-10">
                 <Button variant={selectionMode ? "default" : "outline"} size="sm" onClick={() => setSelectionMode(!selectionMode)}
                   className={`flex items-center gap-2 shadow-lg ${selectionMode ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-white/90 backdrop-blur-sm text-slate-700 hover:bg-white border-slate-200'}`}

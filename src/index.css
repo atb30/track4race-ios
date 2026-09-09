@@ -22,19 +22,18 @@ html, body, #root { width: 100%; height: 100%; overflow: hidden; }
   .navigation-viewport { min-height: 100svh; }
 }
 
-/* Keep the elevation view menu inside the visible safe area on phones and
-   tablets, even when the sidebar content is taller than the viewport. */
+/* Keep the elevation view menu in the sidebar while reserving the device's
+   bottom safe area. */
 .navigation-elevation-selector {
-  position: fixed;
-  right: 0;
-  bottom: env(safe-area-inset-bottom, 0px);
-  width: clamp(180px, 30vw, 320px);
+  position: relative;
+  width: 100%;
+  margin-bottom: env(safe-area-inset-bottom, 0px);
   z-index: 3000;
-  box-shadow: 0 -2px 12px rgb(9 40 68 / 18%);
 }
-@media (max-width: 640px) {
-  .navigation-elevation-selector { width: min(46vw, 240px); padding: 4px; }
-  .navigation-elevation-selector button { min-height: 30px; }
+
+.navigation-elevation-profile {
+  bottom: env(safe-area-inset-bottom, 0px);
+  height: clamp(112px, 22vh, 220px) !important;
 }
 .navigation-viewport > .ocean-chrome,
 .navigation-sidebar > :not(.flex-1) { flex-shrink: 0; }

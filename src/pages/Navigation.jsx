@@ -2769,9 +2769,10 @@ export default function Navigation() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
+                  type="button"
                   variant="outline"
                   size="sm"
-                  className="w-full flex items-center justify-between text-xs"
+                  className="navigation-elevation-trigger w-full flex items-center justify-between text-xs"
                 >
                   <span className="flex items-center gap-2">
                     <BarChart3 className="w-3 h-3" />
@@ -2783,7 +2784,7 @@ export default function Navigation() {
                   <ChevronDown className="w-3 h-3" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-white border-slate-200 text-slate-800 w-48 z-[9999]" align="end">
+              <DropdownMenuContent className="bg-white border-slate-200 text-slate-800 w-48 z-[10001]" align="end" sideOffset={4}>
                 <DropdownMenuLabel>Perfil de Elevación</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem 

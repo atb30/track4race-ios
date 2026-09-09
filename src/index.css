@@ -25,15 +25,30 @@ html, body, #root { width: 100%; height: 100%; overflow: hidden; }
 /* Keep the elevation view menu in the sidebar while reserving the device's
    bottom safe area. */
 .navigation-elevation-selector {
-  position: relative;
-  width: 100%;
-  margin-bottom: env(safe-area-inset-bottom, 0px);
-  z-index: 3000;
+  position: fixed;
+  right: 8px;
+  bottom: max(8px, env(safe-area-inset-bottom, 0px));
+  width: clamp(190px, 28vw, 320px);
+  z-index: 10000;
+  zoom: 1 !important;
+  border: 1px solid #17496d;
+  border-radius: 8px;
+  box-shadow: 0 -2px 14px rgb(9 40 68 / 28%);
 }
 
 .navigation-elevation-profile {
-  bottom: env(safe-area-inset-bottom, 0px);
-  height: clamp(112px, 22vh, 220px) !important;
+  position: fixed !important;
+  left: 0;
+  bottom: 0;
+  width: calc(100vw - clamp(190px, 28vw, 320px) - 16px) !important;
+  height: clamp(120px, 24vh, 240px) !important;
+  max-height: calc(100dvh - env(safe-area-inset-bottom, 0px));
+  z-index: 9999;
+  zoom: 1 !important;
+}
+@media (max-width: 640px) {
+  .navigation-elevation-selector { right: 4px; bottom: max(4px, env(safe-area-inset-bottom, 0px)); width: min(48vw, 240px); }
+  .navigation-elevation-profile { width: calc(100vw - min(48vw, 240px) - 10px) !important; height: clamp(100px, 21vh, 180px) !important; }
 }
 .navigation-viewport > .ocean-chrome,
 .navigation-sidebar > :not(.flex-1) { flex-shrink: 0; }

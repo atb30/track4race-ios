@@ -33,6 +33,7 @@ html, body, #root { width: 100%; height: 100%; overflow: hidden; }
   width: 100% !important;
   max-width: none;
   z-index: 10000;
+  display: block !important;
   zoom: 1 !important;
   border: 1px solid #17496d;
   border-right: 0;
@@ -48,6 +49,7 @@ html, body, #root { width: 100%; height: 100%; overflow: hidden; }
 .navigation-elevation-trigger { pointer-events: auto !important; touch-action: manipulation; min-height: 32px; }
 
 .navigation-sidebar { position: relative !important; overflow: visible !important; }
+.navigation-sidebar > .navigation-elevation-selector { z-index: 3000 !important; visibility: visible !important; opacity: 1 !important; }
 .navigation-sidebar .navigation-lists { padding-bottom: 54px; overflow: hidden; }
 
 .navigation-elevation-profile {

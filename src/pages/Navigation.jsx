@@ -2365,8 +2365,8 @@ export default function Navigation() {
 
           {/* Street View Overlay */}
           {streetViewPosition && (
-            <div className="absolute inset-0 z-[1004] flex items-end justify-center pb-4">
-              <div className="w-full max-w-4xl h-64 bg-white rounded-lg shadow-2xl border relative mx-4">
+            <div className="navigation-streetview-overlay absolute inset-0 z-[1004] flex items-start justify-center pointer-events-none">
+              <div className="navigation-streetview-window w-full max-w-4xl bg-white rounded-lg shadow-2xl border relative mx-4 pointer-events-auto">
                 {/* Close button */}
                 <button
                   onClick={() => setStreetViewPosition(null)}

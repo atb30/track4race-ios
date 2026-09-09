@@ -54,9 +54,12 @@ html, body, #root { width: 100%; height: 100%; overflow: hidden; }
 .navigation-controls-bar .controls-items > button,
 .navigation-controls-bar .controls-items > [data-radix-popper-trigger] { flex: 1 1 auto; min-width: 64px; }
 @media (max-width: 1100px) {
-  .navigation-controls-bar .controls-items { display: grid; grid-template-columns: repeat(5, minmax(64px, 1fr)); gap: 4px; }
+  .navigation-controls-bar { width: calc(100% - 12px); max-width: none; }
+  .navigation-controls-bar .controls-items { display: grid; grid-template-columns: repeat(5, minmax(52px, 1fr)); gap: 3px; }
   .navigation-controls-bar .controls-items > button,
-  .navigation-controls-bar .controls-items > [data-radix-popper-trigger] { min-width: 0; width: 100%; padding-left: 6px; padding-right: 6px; }
+  .navigation-controls-bar .controls-items > [data-radix-popper-trigger] { min-width: 0; width: 100%; padding: 0 3px; }
+  .navigation-controls-bar .controls-items > button { min-width: 0; width: 100%; height: 28px; padding: 0 3px; font-size: 10px; gap: 2px; }
+  .navigation-controls-bar .controls-items svg { width: 11px; height: 11px; }
 }
 @media (max-width: 760px) {
   .navigation-controls-bar .controls-items { grid-template-columns: repeat(4, minmax(60px, 1fr)); }
@@ -94,8 +97,8 @@ html, body, #root { width: 100%; height: 100%; overflow: hidden; }
   .navigation-sidebar .navigation-lists [class*="md:p-3"] { padding: 6px; }
   .navigation-sidebar .navigation-lists [class*="md:w-12"] { width: 28px; height: 28px; }
   .navigation-sidebar .navigation-lists button { height: 26px; }
-  .navigation-elevation-selector { width: calc(30vw / var(--app-scale, 1)); }
-  .navigation-elevation-profile { width: calc(100vw - (30vw / var(--app-scale, 1))) !important; }
+  .navigation-elevation-selector { width: clamp(190px, 30vw, 320px); }
+  .navigation-elevation-profile { width: calc(100vw - clamp(190px, 30vw, 320px)) !important; }
 }
 
 /* Océano: presentation only. Map tiles and severity colours are untouched. */

@@ -41,7 +41,7 @@ html, body, #root { width: 100%; height: 100%; overflow: hidden; }
    otherwise make the sidebar too tall. Keep its controls compact by physical
    viewport width as well as height. */
 @media (max-width: 900px) {
-  .navigation-sidebar { width: 30%; min-width: 210px; }
+  .navigation-sidebar { width: calc(30% / var(--app-scale, 1)); min-width: 210px; zoom: var(--app-scale, 1); }
   .navigation-sidebar > .border-b .grid > div { padding: 6px; }
   .navigation-sidebar > .border-b .text-4xl,
   .navigation-sidebar > .border-b [class*="text-4xl"] { font-size: 24px; line-height: 1.1; }

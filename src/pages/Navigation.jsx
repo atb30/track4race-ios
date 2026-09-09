@@ -380,9 +380,11 @@ export default function Navigation() {
       const height = viewport?.height || window.innerHeight;
       const width = viewport?.width || window.innerWidth;
       const root = document.documentElement;
+      const scale = Math.min(1, Math.max(0.78, Math.min(width / 1000, height / 900)));
       root.style.setProperty('--app-vh', `${height}px`);
       root.style.setProperty('--app-vw', `${width}px`);
       root.style.setProperty('--app-density', String(window.devicePixelRatio || 1));
+      root.style.setProperty('--app-scale', String(scale));
     };
     updateViewport();
     window.addEventListener('resize', updateViewport);

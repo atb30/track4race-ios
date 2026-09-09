@@ -2765,7 +2765,7 @@ export default function Navigation() {
           </div>
 
           {/* NEW: Elevation Segment View Selector at the bottom */}
-          <div className="shrink-0 border-t border-slate-800 bg-white p-2">
+          <div className="navigation-elevation-selector shrink-0 border-t border-slate-800 bg-white p-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button

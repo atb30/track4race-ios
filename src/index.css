@@ -67,7 +67,7 @@ html, body, #root { width: 100%; height: 100%; overflow: hidden; }
 /* Street View lives in the upper map area so it never covers the elevation
    profile anchored at the bottom. */
 .navigation-streetview-overlay {
-  padding: clamp(42px, 8vh, 88px) 8px 0;
+  padding: clamp(16px, 3vh, 36px) 8px 0;
   box-sizing: border-box;
 }
 .navigation-streetview-window {
@@ -79,7 +79,7 @@ html, body, #root { width: 100%; height: 100%; overflow: hidden; }
 }
 .navigation-streetview-window:active { cursor: grabbing; }
 @media (max-width: 640px) {
-  .navigation-streetview-overlay { padding: 44px 6px 0; }
+  .navigation-streetview-overlay { padding: 18px 6px 0; }
   .navigation-streetview-window {
     height: clamp(160px, 34vh, 260px);
     max-height: calc(100% - 110px);

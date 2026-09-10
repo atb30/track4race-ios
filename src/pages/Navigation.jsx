@@ -1051,7 +1051,9 @@ export default function Navigation() {
       return averageSpeed < 1 ? 0 : averageSpeed; // Redondear a 0 si es muy lento
     };
 
-    const options = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
+    // iPad/iPhone pueden tardar varios segundos en obtener el primer fix,
+    // especialmente al iniciar en interior. Evitamos reinicios prematuros.
+    const options = { enableHighAccuracy: true, timeout: 30000, maximumAge: 5000 };
 
     const handleSuccess = (position) => {
       const { latitude, longitude, altitude, speed, heading } = position.coords;
@@ -1172,7 +1174,10 @@ export default function Navigation() {
     };
 
     const handleError = (error) => {
-      if (error.code === error.TIMEOUT) return; // Keep last position on timeout
+      if (error.code === error.TIMEOUT) {
+        setGpsError('Buscando señal GPS…');
+        return; // Keep the last position while the native location service retries
+      }
       let msg = error.code === error.PERMISSION_DENIED ? "Permiso de geolocalización denegado"
         : error.code === error.POSITION_UNAVAILABLE ? "Posición GPS no disponible"
         : `Error desconocido (${error.code})`;

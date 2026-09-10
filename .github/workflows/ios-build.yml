@@ -42,6 +42,13 @@ jobs:
       - name: Generar iconos desde resources/icon.png
         run: npx @capacitor/assets generate --ios
 
+      - name: Configurar permisos de localización en iOS
+        run: |
+          set -euo pipefail
+          PLIST="ios/App/App/Info.plist"
+          /usr/libexec/PlistBuddy -c "Add :NSLocationWhenInUseUsageDescription string 'Track&Race necesita tu ubicación para mostrar tu posición y avance sobre la ruta.'" "$PLIST" 2>/dev/null || true
+          /usr/libexec/PlistBuddy -c "Add :NSLocationAlwaysAndWhenInUseUsageDescription string 'Track&Race necesita tu ubicación para mantener el seguimiento durante la navegación.'" "$PLIST" 2>/dev/null || true
+
       # --- Camino A: todavía sin cuenta de Apple Developer -> build de Simulador ---
       - name: "Build sin firmar para el Simulador"
         if: ${{ env.HAS_SIGNING_SECRETS == 'false' }}

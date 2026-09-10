@@ -1,4 +1,5 @@
 name: iOS Build
+# Rebuild marker: force a fresh App Store Connect upload when processing stalls.
 
 on:
   push:

@@ -2321,7 +2321,7 @@ export default function Navigation() {
             }}
             title="Arrastra el muñeco para ver Street View"
           >
-            <img src="/streetview-pegman.png" alt="Street View" draggable="false" className="w-full h-full object-contain pointer-events-none" style={{ filter: 'invert(71%) sepia(95%) saturate(533%) hue-rotate(2deg) brightness(106%) contrast(102%)' }} />
+            <img src="/streetview-pegman.png" alt="Street View" draggable="false" className="w-full h-full object-contain pointer-events-none" />
           </div>}
 
           {/* Solo se ilumina en amarillo cuando Google confirma que hay una panorámica. */}

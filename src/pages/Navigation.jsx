@@ -359,16 +359,9 @@ const formatDistanceToPoiData = (distanceKm) => {
 };
 
 function NavigationPages({ items, renderItem }) {
-  const [page, setPage] = useState(0);
-  const current = Math.min(page, Math.max(0, items.length - 1));
-  return <>
-    {items.length > 0 && renderItem(items[current])}
-    {items.length > 1 && <div className="flex shrink-0 items-center justify-between gap-1 px-2 py-1">
-      <Button size="sm" variant="outline" disabled={current === 0} onClick={() => setPage(current - 1)} aria-label="Página anterior">‹</Button>
-      <span className="text-xs">{current + 1} / {items.length}</span>
-      <Button size="sm" variant="outline" disabled={current === items.length - 1} onClick={() => setPage(current + 1)} aria-label="Página siguiente">›</Button>
-    </div>}
-  </>;
+  // La web muestra todos los elementos próximos; el orden ya viene dado por
+  // la distancia al usuario, por lo que no necesitamos paginación ni flechas.
+  return <>{items.map((item, index) => <React.Fragment key={item.id || index}>{renderItem(item)}</React.Fragment>)}</>;
 }
 
 export default function Navigation() {

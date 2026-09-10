@@ -447,6 +447,8 @@ export default function Navigation() {
 
   // NEW: State for Street View position
   const [streetViewPosition, setStreetViewPosition] = useState(null);
+  const [streetViewOffset, setStreetViewOffset] = useState({ x: 0, y: 0 });
+  const streetViewDragRef = useRef(null);
   const [googleApiKey, setGoogleApiKey] = useState(null);
 
   // NEW: Pegman drag state and refs
@@ -2364,7 +2366,22 @@ export default function Navigation() {
           {/* Street View Overlay */}
           {streetViewPosition && (
             <div className="navigation-streetview-overlay absolute inset-0 z-[1004] flex items-start justify-center pointer-events-none">
-              <div className="navigation-streetview-window w-full max-w-4xl bg-white rounded-lg shadow-2xl border relative mx-4 pointer-events-auto">
+              <div
+                className="navigation-streetview-window w-full max-w-4xl bg-white rounded-lg shadow-2xl border relative mx-4 pointer-events-auto"
+                style={{ transform: `translate(${streetViewOffset.x}px, ${streetViewOffset.y}px)` }}
+                onPointerDown={(event) => {
+                  if (event.target.closest('button, iframe')) return;
+                  event.currentTarget.setPointerCapture?.(event.pointerId);
+                  streetViewDragRef.current = { x: event.clientX, y: event.clientY, ox: streetViewOffset.x, oy: streetViewOffset.y };
+                }}
+                onPointerMove={(event) => {
+                  const drag = streetViewDragRef.current;
+                  if (!drag) return;
+                  setStreetViewOffset({ x: drag.ox + event.clientX - drag.x, y: drag.oy + event.clientY - drag.y });
+                }}
+                onPointerUp={() => { streetViewDragRef.current = null; }}
+                onPointerCancel={() => { streetViewDragRef.current = null; }}
+              >
                 {/* Close button */}
                 <button
                   onClick={() => setStreetViewPosition(null)}

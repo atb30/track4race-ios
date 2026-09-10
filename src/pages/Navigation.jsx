@@ -2306,10 +2306,10 @@ export default function Navigation() {
         >
           
           {/* Street View Pegman */}
-          {false && <div
+          {<div
             ref={pegmanRef}
             onPointerDown={handleDragStart}
-            className="absolute bottom-36 sm:bottom-52 right-4 z-[1003] cursor-grab active:cursor-grabbing transition-all select-none"
+            className="navigation-pegman absolute right-4 z-[1006] cursor-grab active:cursor-grabbing transition-all select-none"
             style={{
               width: '44px',
               height: '58px',
@@ -2325,7 +2325,7 @@ export default function Navigation() {
           </div>}
 
           {/* Solo se ilumina en amarillo cuando Google confirma que hay una panorámica. */}
-          {false && isPegmanDragging && dragTargetPosition && (
+          {isPegmanDragging && dragTargetPosition && (
             <div
               className="fixed pointer-events-none z-[1001]"
               style={{

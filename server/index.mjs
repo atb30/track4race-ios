@@ -141,6 +141,26 @@ async function entityApi(req, res, user, entity, action) {
 }
 
 async function functionsApi(req, res, user, name) {
+  if (name === 'getValhallaRoute') {
+    const valhallaUrl = String(process.env.VALHALLA_URL || 'http://valhalla:8002').replace(/\/$/, '');
+    const input = await body(req);
+    const locations = Array.isArray(input.locations) ? input.locations : [];
+    if (locations.length < 2 || locations.some((p) => !Number.isFinite(Number(p.lat)) || !Number.isFinite(Number(p.lon ?? p.lng)))) {
+      return json(res, 400, { error: 'Se necesitan al menos dos coordenadas válidas' });
+    }
+    const costing = ['auto', 'bicycle', 'pedestrian'].includes(input.costing) ? input.costing : 'auto';
+    try {
+      const remote = await fetch(`${valhallaUrl}/route`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+        locations: locations.map((p) => ({ lat: Number(p.lat), lon: Number(p.lon ?? p.lng) })), costing,
+        units: 'kilometers', directions_options: { units: 'kilometers', language: 'es-ES' }, shape_format: 'geojson',
+      }) });
+      const result = await remote.json();
+      if (!remote.ok) return json(res, 502, { error: 'Valhalla no pudo calcular la ruta', details: result });
+      return json(res, 200, { ...result, engine: 'valhalla' });
+    } catch {
+      return json(res, 503, { error: 'Motor Valhalla no disponible', fallback: true });
+    }
+  }
   if (name === 'getGoogleMapsApiKey') {
     const apiKey = process.env.GOOGLE_MAPS_API_KEY;
     return apiKey ? json(res, 200, { apiKey }) : json(res, 503, { error: 'GOOGLE_MAPS_API_KEY no configurada' });

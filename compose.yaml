@@ -17,5 +17,17 @@ services:
       retries: 3
       start_period: 15s
 
+  # Motor opcional: se activa con `docker compose --profile routing up -d`.
+  # Requiere colocar el extracto de Castilla y León procesado en ./data/valhalla.
+  valhalla:
+    image: ghcr.io/valhalla/valhalla:latest
+    profiles: [routing]
+    restart: unless-stopped
+    volumes:
+      - ./data/valhalla:/custom_files
+    command: ["valhalla_service", "/custom_files/valhalla.json", "1"]
+    expose:
+      - "8002"
+
 volumes:
   mirat_data:

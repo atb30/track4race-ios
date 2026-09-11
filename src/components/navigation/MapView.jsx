@@ -1290,7 +1290,7 @@ export default function MapView({
               >
                 <Popup>
                   <div className="text-center">
-                    <strong style={{color: runner.color}}>{runner.device_name || runner.user_name}</strong><br />
+                    <strong style={{color: runner.color}}>{runner.user_name || runner.device_name || 'Runner'}</strong><br />
                     {runner.user_name && (
                       <>👤 Corredor: {runner.user_name}<br /></>
                     )}

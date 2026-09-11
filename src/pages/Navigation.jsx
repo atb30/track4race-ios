@@ -29,6 +29,7 @@ import LoadingScreen from "../components/common/LoadingScreen";
 import NavigationLoadingScreen from "../components/navigation/NavigationLoadingScreen";
 import ClimbExplorer from "../components/navigation/ClimbExplorer";
 import QuickPoiDialog from "../components/navigation/QuickPoiDialog";
+import { requestReliableInstructions } from "../lib/navigationEngine";
 import OrientationWarning from "../components/common/OrientationWarning";
 import AdminMenu from "../components/common/AdminMenu";
 
@@ -413,6 +414,7 @@ export default function Navigation() {
   const [showRunners, setShowRunners] = useState(true);
   const [showRouteArrows, setShowRouteArrows] = useState(false); // New state for route arrows
   const [showTurnByTurn, setShowTurnByTurn] = useState(false); // Turn-by-turn navigation mode
+  const [valhallaStatus, setValhallaStatus] = useState('idle');
   const [isNativeFullscreen, setIsNativeFullscreen] = useState(false);
   const [currentSpeed, setCurrentSpeed] = useState(0);
   const [previousPositions, setPreviousPositions] = useState([]);
@@ -437,6 +439,23 @@ export default function Navigation() {
   const [mapType, setMapType] = useState('google'); // 'google', 'satellite', 'hybrid', 'terrain', 'street'
   const [mapInstance, setMapInstance] = useState(null); // New state for map instance
   const [manualRotation, setManualRotation] = useState(0); // New state for manual rotation angle
+
+  // Prepara las instrucciones al cargar el track y las deja disponibles sin cobertura.
+  useEffect(() => {
+    if (!activeTrack?.id || !activeTrack?.waypoints?.length) return;
+    const cacheKey = `mirat_valhalla_${activeTrack.id}`;
+    if (localStorage.getItem(cacheKey)) { setValhallaStatus('cached'); return; }
+    let cancelled = false;
+    setValhallaStatus('loading');
+    requestReliableInstructions(activeTrack.waypoints, 'auto').then((result) => {
+      if (cancelled) return;
+      if (!result.fallback) {
+        localStorage.setItem(cacheKey, JSON.stringify({ savedAt: Date.now(), route: result }));
+        setValhallaStatus('ready');
+      } else setValhallaStatus('fallback');
+    });
+    return () => { cancelled = true; };
+  }, [activeTrack?.id, activeTrack?.waypoints]);
 
   // NEW: Track position history for smart detection
   const [trackPositionHistory, setTrackPositionHistory] = useState([]); const previousPositionsRef = useRef([]); const trackPositionHistoryRef = useRef([]); const lastGpsTimeRef = useRef(Date.now());

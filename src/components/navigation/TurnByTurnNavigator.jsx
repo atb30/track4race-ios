@@ -110,17 +110,23 @@ export default function TurnByTurnNavigator({ gpxTrack, currentPosition, current
       return raw.includes('roundabout') || raw === '26' || raw === '27' || raw === '28';
     };
     if (remote.length) return remote.map((item, index) => {
-      const beginIndex = Math.min(Number(item.begin_shape_index) || 0, (gpxTrack.waypoints?.length || 1) - 1);
+      const waypointCount = gpxTrack.waypoints?.length || 1;
+      const rawShapeIndex = Number(item.begin_shape_index) || 0;
+      const shapeCount = Math.max(1, ...remote.map((maneuver) => Number(maneuver.begin_shape_index) || 0)) + 1;
+      const beginIndex = Math.min(Math.round((rawShapeIndex / Math.max(1, shapeCount - 1)) * (waypointCount - 1)), waypointCount - 1);
       const beginPoint = gpxTrack.waypoints?.[beginIndex];
+      const spoken = item.verbal_pre_transition_instruction || item.verbal_post_transition_instruction || item.instruction || '';
+      const roundaboutByText = /roundabout|rotonda|rotatoria/i.test(String(spoken));
+      const parsedExit = String(spoken).match(/(?:exit|salida)\s*(?:number|n[úu]mero|n\.?|#)?\s*(\d+)/i)?.[1];
       return {
       lat: Number(item.lat) || beginPoint?.lat,
       lng: Number(item.lon) || beginPoint?.lng,
       distance: beginPoint ? Number(beginPoint.distance || 0) * 1000 : Number(item.begin_shape_index || index),
       distanceMeters: Number(item.length || 0) * 1000,
       instruction: item.verbal_pre_transition_instruction || item.verbal_post_transition_instruction || item.instruction || 'Continúa por la ruta',
-      type: isRoundaboutManeuver(item) ? 'roundabout' : 'normal',
+      type: isRoundaboutManeuver(item) || roundaboutByText ? 'roundabout' : 'normal',
       direction: String(item.type).toLowerCase().includes('right') ? 'right' : String(item.type).toLowerCase().includes('left') ? 'left' : null,
-      exit: item.exit_number ?? item.exit ?? item.roundabout_exit_count ?? item.roundabout_exit,
+      exit: item.exit_number ?? item.exit ?? item.roundabout_exit_count ?? item.roundabout_exit ?? parsedExit,
     }; });
     if (!gpxTrack?.waypoints || gpxTrack.waypoints.length < 3) return [];
     const waypoints = gpxTrack.waypoints;

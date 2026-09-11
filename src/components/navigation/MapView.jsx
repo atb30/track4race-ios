@@ -126,7 +126,7 @@ const defaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = defaultIcon;
 
-const createRunnerIcon = (color = '#3b82f6', isOnline = false) => {
+const createRunnerIcon = (color = '#3b82f6', isOnline = false, name = '') => {
   const pulsingAnimation = `
     @keyframes pulse {
       0% { transform: scale(0.9); opacity: 0.7; }
@@ -152,6 +152,7 @@ const createRunnerIcon = (color = '#3b82f6', isOnline = false) => {
         box-shadow: 0 0 5px rgba(0,0,0,0.5);
         ${animationStyle}
       "></div>
+      ${name ? `<span style="position:absolute; left:50%; top:26px; transform:translateX(-50%); white-space:nowrap; background:rgba(255,255,255,.92); color:#0f172a; border:1px solid ${color}; border-radius:4px; padding:1px 4px; font:600 11px system-ui;">${String(name).replace(/[<>&\"']/g, '')}</span>` : ''}
     </div>
   `;
 
@@ -1286,7 +1287,7 @@ export default function MapView({
               <Marker
                 key={`runner-${runner.id}-${index}`}
                 position={[runner.latitude, runner.longitude]}
-                icon={createRunnerIcon(runner.color, runner.is_online)}
+                icon={createRunnerIcon(runner.color, runner.is_online, runner.user_name || runner.device_name || 'Runner')}
               >
                 <Popup>
                   <div className="text-center">

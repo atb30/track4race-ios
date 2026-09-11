@@ -2227,7 +2227,7 @@ export default function Navigation() {
 
             {/* Navigation Controls - RESPONSIVE */}
             <div className="flex items-center gap-1 sm:gap-2">
-              <select aria-label={t.language} value={language || 'es'} onChange={(event) => setLanguage(event.target.value)} className="h-9 rounded-md border border-blue-200 bg-white px-2 text-xs text-slate-700">
+              <select aria-label={t.language} value={language || 'es'} onChange={(event) => setLanguage(event.target.value)} className="h-9 rounded-md border border-blue-300 bg-blue-700 px-2 text-xs font-semibold text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-white/70">
                 <option value="es">{t.spanish}</option><option value="en">{t.english}</option>
               </select>
               {/* START/FINISH BUTTONS - RESPONSIVE */}

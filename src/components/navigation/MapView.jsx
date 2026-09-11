@@ -1083,7 +1083,6 @@ export default function MapView({
           }}
         >
           <InitialBoundsFitter gpxTrack={gpxTrack} />
-          {map && <StreetViewControl map={map} gpxTrack={gpxTrack} onStreetViewOpen={onStreetViewOpen} />}
           
           <MapEvents 
             followUser={followUser}

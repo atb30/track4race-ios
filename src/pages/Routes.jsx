@@ -383,7 +383,7 @@ export default function Routes() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+    <div className="routes-page min-h-screen max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
       <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 flex items-center gap-3 mb-2">

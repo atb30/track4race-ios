@@ -109,16 +109,19 @@ export default function TurnByTurnNavigator({ gpxTrack, currentPosition, current
       // Valhalla exposes roundabout enter/exit as enum values 26/27 in some responses.
       return raw.includes('roundabout') || raw === '26' || raw === '27' || raw === '28';
     };
-    if (remote.length) return remote.map((item, index) => ({
-      lat: Number(item.lat) || gpxTrack.waypoints[Math.min(item.begin_shape_index || 0, gpxTrack.waypoints.length - 1)].lat,
-      lng: Number(item.lon) || gpxTrack.waypoints[Math.min(item.begin_shape_index || 0, gpxTrack.waypoints.length - 1)].lng,
-      distance: Number(item.begin_shape_index || index),
+    if (remote.length) return remote.map((item, index) => {
+      const beginIndex = Math.min(Number(item.begin_shape_index) || 0, (gpxTrack.waypoints?.length || 1) - 1);
+      const beginPoint = gpxTrack.waypoints?.[beginIndex];
+      return {
+      lat: Number(item.lat) || beginPoint?.lat,
+      lng: Number(item.lon) || beginPoint?.lng,
+      distance: beginPoint ? Number(beginPoint.distance || 0) * 1000 : Number(item.begin_shape_index || index),
       distanceMeters: Number(item.length || 0) * 1000,
       instruction: item.verbal_pre_transition_instruction || item.verbal_post_transition_instruction || item.instruction || 'Continúa por la ruta',
       type: isRoundaboutManeuver(item) ? 'roundabout' : 'normal',
       direction: String(item.type).toLowerCase().includes('right') ? 'right' : String(item.type).toLowerCase().includes('left') ? 'left' : null,
       exit: item.exit_number ?? item.exit ?? item.roundabout_exit_count ?? item.roundabout_exit,
-    }));
+    }; });
     if (!gpxTrack?.waypoints || gpxTrack.waypoints.length < 3) return [];
     const waypoints = gpxTrack.waypoints;
 

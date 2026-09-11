@@ -37,3 +37,8 @@ artifacts/
 
 # Carpeta donde el puente de Claude deja los archivos que te envía
 Claude outputs/
+
+# Datos persistentes locales/VPS: nunca versionar la base de datos ni mapas.
+data/*
+!data/valhalla/
+!data/valhalla/README.md

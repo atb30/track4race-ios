@@ -350,7 +350,7 @@ export default function TurnByTurnNavigator({ gpxTrack, currentPosition, current
         {/* Distance + instruction */}
         <div className="flex-1 min-w-0">
           <p className={`uppercase tracking-wider font-semibold ${isNow ? 'text-white' : 'text-cyan-300'} text-xs sm:text-sm`}>{phase}</p>
-          <p className="text-xl sm:text-2xl font-bold leading-tight">{turnAction(nextManeuver.turnType)}</p>
+          <p className="text-xl sm:text-2xl font-bold leading-tight">{turnAction(nextManeuver.turnType, language)}</p>
           {!isNow && <div className="flex items-baseline gap-1 mt-1"><span className="text-3xl sm:text-4xl font-bold leading-none">{distance.value}</span><span className="text-base font-semibold">{distance.unit}</span></div>}
         </div>
       </div>
@@ -365,7 +365,7 @@ export default function TurnByTurnNavigator({ gpxTrack, currentPosition, current
               ? <RoundaboutIcon exit={followingManeuver.turnType.exit} className="w-6 h-6 flex-shrink-0" />
               : <NextIcon className="w-4 h-4 flex-shrink-0" />;
           })()}
-          <span className="text-xs sm:text-sm text-white truncate">{turnAction(followingManeuver.turnType)}</span>
+          <span className="text-xs sm:text-sm text-white truncate">{turnAction(followingManeuver.turnType, language)}</span>
         </div>
       )}
 

@@ -6,16 +6,17 @@ export function formatNavigationDistance(meters) {
   return { value: String(Math.max(10, Math.round(distance / 5) * 5)), unit: 'm' };
 }
 
-export function turnAction(turnType) {
+export function turnAction(turnType, language = 'es') {
+  const en = language === 'en';
   if (turnType?.type === 'roundabout') {
     const exit = Math.max(1, Number(turnType.exit) || 1);
-    return `En la rotonda, toma la ${exit}.ª salida`;
+    return en ? `At the roundabout, take exit ${exit}` : `En la rotonda, toma la ${exit}.ª salida`;
   }
-  if (turnType?.type === 'straight') return 'Continúa recto';
-  const side = turnType?.direction === 'right' ? 'a la derecha' : 'a la izquierda';
-  if (turnType?.type === 'slight') return `Mantente ligeramente ${side}`;
-  if (turnType?.type === 'sharp') return `Giro cerrado ${side}`;
-  return `Gira ${side}`;
+  if (turnType?.type === 'straight') return en ? 'Continue straight' : 'Continúa recto';
+  const side = turnType?.direction === 'right' ? (en ? 'right' : 'a la derecha') : (en ? 'left' : 'a la izquierda');
+  if (turnType?.type === 'slight') return en ? `Keep slightly ${side}` : `Mantente ligeramente ${side}`;
+  if (turnType?.type === 'sharp') return en ? `Sharp turn ${side}` : `Giro cerrado ${side}`;
+  return en ? `Turn ${side}` : `Gira ${side}`;
 }
 
 export function roundaboutExitFromBearings(entryBearing, exitBearing) {

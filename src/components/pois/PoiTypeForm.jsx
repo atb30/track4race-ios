@@ -8,12 +8,14 @@ import { UploadFile } from "@/integrations/Core";
 import { Tag, X, Save, Upload } from "lucide-react";
 import { motion } from "framer-motion";
 import PoiIcon from "./PoiIcon";
+import { useLanguage } from "@/lib/LanguageContext";
 
 export default function PoiTypeForm({ 
   poiType = null, 
   onSave, 
   onCancel 
 }) {
+  const { language } = useLanguage(); const en = language === 'en';
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -184,7 +186,7 @@ export default function PoiTypeForm({
           <CardHeader className="flex flex-row items-center justify-between border-b border-slate-200">
             <CardTitle className="flex items-center gap-2 text-slate-800">
               <Tag className="w-5 h-5 text-blue-500" />
-              {poiType ? "Editar Tipo de POI" : "Nuevo Tipo de POI"}
+              {poiType ? (en ? "Edit POI Type" : "Editar Tipo de POI") : (en ? "New POI Type" : "Nuevo Tipo de POI")}
             </CardTitle>
             <Button variant="ghost" size="icon" onClick={onCancel} className="text-slate-500 hover:text-slate-800">
               <X className="w-4 h-4" />
@@ -194,18 +196,18 @@ export default function PoiTypeForm({
           <CardContent className="p-6 overflow-y-auto">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-slate-600">Nombre del tipo *</Label>
+                <Label htmlFor="name" className="text-slate-600">{en ? 'Type name' : 'Nombre del tipo'} *</Label>
                 <Input id="name" value={formData.name} onChange={(e) => handleInputChange("name", e.target.value)} placeholder="Ej: Refugio, Mirador, Fuente..." className={`bg-slate-50 border-slate-300 ${errors.name ? 'border-red-500' : ''}`}/>
                 {errors.name && (<p className="text-xs text-red-600">{errors.name}</p>)}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description" className="text-slate-600">Descripción</Label>
+                <Label htmlFor="description" className="text-slate-600">{en ? 'Description' : 'Descripción'}</Label>
                 <Textarea id="description" value={formData.description} onChange={(e) => handleInputChange("description", e.target.value)} placeholder="Descripción del tipo de POI..." className="h-20 bg-slate-50 border-slate-300"/>
               </div>
 
               <div className="space-y-3">
-                <Label className="text-slate-600">Color del tipo</Label>
+                <Label className="text-slate-600">{en ? 'Type color' : 'Color del tipo'}</Label>
                 <div className="flex flex-wrap gap-2">
                   {presetColors.map((color) => (
                     <button
@@ -226,7 +228,7 @@ export default function PoiTypeForm({
 
               {/* Subir icono */}
               <div className="space-y-3">
-                <Label className="text-slate-600">Icono personalizado (opcional)</Label>
+                <Label className="text-slate-600">{en ? 'Custom icon (optional)' : 'Icono personalizado (opcional)'}</Label>
                 <div className="flex items-center gap-4">
                   <PoiIcon type={{ icon_url: formData.icon_url, color: formData.color, name: formData.name || 'Preview' }} className="w-12 h-12" />
                   <div className="flex-1">
@@ -236,12 +238,12 @@ export default function PoiTypeForm({
                           {isUploadingIcon ? (
                               <div className="flex items-center gap-2 text-slate-600 justify-center">
                                 <div className="w-4 h-4 border-2 border-slate-400/30 border-t-slate-500 rounded-full animate-spin"></div>
-                                Procesando...
+                                {en ? 'Processing...' : 'Procesando...'}
                               </div>
                           ) : (
                               <div className="flex items-center gap-2 text-slate-700 justify-center">
                                 <Upload className="w-4 h-4"/>
-                                Subir icono
+                                {en ? 'Upload icon' : 'Subir icono'}
                               </div>
                           )}
                         </span>
@@ -262,13 +264,13 @@ export default function PoiTypeForm({
                         onClick={() => setFormData(prev => ({ ...prev, icon_url: "" }))}
                         className="mt-2 text-slate-500 hover:text-red-500 w-full"
                       >
-                        Eliminar icono
+                        {en ? 'Remove icon' : 'Eliminar icono'}
                       </Button>
                     )}
                   </div>
                 </div>
                 <p className="text-xs text-slate-500">
-                  Acepta: PNG, JPG, SVG. Se optimizará automáticamente a 64x64px con fondo transparente.
+                  {en ? 'Accepted: PNG, JPG, SVG. Automatically optimized to 64x64px with a transparent background.' : 'Acepta: PNG, JPG, SVG. Se optimizará automáticamente a 64x64px con fondo transparente.'}
                 </p>
               </div>
 
@@ -283,24 +285,24 @@ export default function PoiTypeForm({
                     className="w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 rounded focus:ring-blue-500 focus:ring-2"
                   />
                   <Label htmlFor="show_in_profile" className="text-slate-600 cursor-pointer">
-                    Mostrar en perfil de elevación
+                    {en ? 'Show in elevation profile' : 'Mostrar en perfil de elevación'}
                   </Label>
                 </div>
                 <p className="text-xs text-slate-500">
-                  Si está marcado, los POIs de este tipo aparecerán en el gráfico de elevación.
+                  {en ? 'When enabled, POIs of this type appear on the elevation chart.' : 'Si está marcado, los POIs de este tipo aparecerán en el gráfico de elevación.'}
                 </p>
               </div>
               
               {/* Botones */}
               <div className="flex gap-3 pt-4 border-t border-slate-200">
                 <Button type="button" variant="outline" onClick={onCancel} className="flex-1" disabled={isSubmitting}>
-                  Cancelar
+                  {en ? 'Cancel' : 'Cancelar'}
                 </Button>
                 <Button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700 text-white" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <div className="flex items-center gap-2 text-white"><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>Guardando...</div>
                   ) : (
-                    <div className="flex items-center gap-2 text-white"><Save className="w-4 h-4" />Guardar Tipo</div>
+                    <div className="flex items-center gap-2 text-white"><Save className="w-4 h-4" />{en ? 'Save Type' : 'Guardar Tipo'}</div>
                   )}
                 </Button>
               </div>

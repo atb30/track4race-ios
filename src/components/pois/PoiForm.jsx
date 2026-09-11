@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, X, Save } from "lucide-react";
 import { motion } from "framer-motion";
 import PoiIcon from "./PoiIcon";
+import { useLanguage } from "@/lib/LanguageContext";
 
 export default function PoiForm({ 
   poi = null, 
@@ -19,6 +20,7 @@ export default function PoiForm({
   initialRouteId = null,
   canCreateTypes = true // NEW PROP - defaults to true for backwards compatibility
 }) {
+  const { language } = useLanguage(); const en = language === 'en';
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -150,7 +152,7 @@ export default function PoiForm({
           <CardHeader className="flex flex-row items-center justify-between border-b border-slate-200">
             <CardTitle className="flex items-center gap-2 text-slate-800">
               <MapPin className="w-5 h-5 text-blue-500" />
-              {poi ? "Editar POI" : "Nuevo POI"}
+              {poi ? (en ? "Edit POI" : "Editar POI") : (en ? "New POI" : "Nuevo POI")}
             </CardTitle>
             <Button variant="ghost" size="icon" onClick={onCancel} className="text-slate-500 hover:text-slate-800">
               <X className="w-4 h-4" />
@@ -161,7 +163,7 @@ export default function PoiForm({
             {!canCreateTypes && (
               <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                 <p className="text-sm text-blue-700">
-                  ℹ️ Solo puedes usar tipos de POI existentes. Si necesitas un nuevo tipo, contacta con el administrador.
+                  ℹ️ {en ? 'You can only use existing POI types. Contact an administrator if you need a new type.' : 'Solo puedes usar tipos de POI existentes. Si necesitas un nuevo tipo, contacta con el administrador.'}
                 </p>
               </div>
             )}
@@ -169,7 +171,7 @@ export default function PoiForm({
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="text-slate-600">Nombre del POI (Opcional)</Label>
+                    <Label htmlFor="name" className="text-slate-600">{en ? 'POI Name (Optional)' : 'Nombre del POI (Opcional)'}</Label>
                     <Input id="name" value={formData.name} onChange={(e) => handleInputChange("name", e.target.value)} placeholder="Ej: Refugio de montaña" className={`bg-slate-50 border-slate-300 ${errors.name ? "border-red-500" : ""}`}/>
                     {errors.name && <p className="text-xs text-red-500">{errors.name}</p>}
                   </div>
@@ -178,7 +180,7 @@ export default function PoiForm({
                     <Label htmlFor="poi_type_id" className="text-slate-600">Tipo de POI *</Label>
                     <Select value={formData.poi_type_id} onValueChange={(value) => handleInputChange("poi_type_id", value)}>
                       <SelectTrigger className={`bg-slate-50 border-slate-300 ${errors.poi_type_id ? "border-red-500" : ""}`}>
-                        <SelectValue placeholder="Selecciona tipo" />
+                        <SelectValue placeholder={en ? 'Select type' : 'Selecciona tipo'} />
                       </SelectTrigger>
                       <SelectContent className="bg-white border-slate-200 text-slate-800">
                         {poiTypes.length > 0 ? (
@@ -192,7 +194,7 @@ export default function PoiForm({
                           ))
                         ) : (
                           <SelectItem value="no-types" disabled>
-                            No hay tipos de POI disponibles
+                            {en ? 'No POI types available' : 'No hay tipos de POI disponibles'}
                           </SelectItem>
                         )}
                       </SelectContent>
@@ -207,15 +209,15 @@ export default function PoiForm({
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="description" className="text-slate-600">Descripción</Label>
+                  <Label htmlFor="description" className="text-slate-600">{en ? 'Description' : 'Descripción'}</Label>
                   <Textarea id="description" value={formData.description} onChange={(e) => handleInputChange("description", e.target.value)} placeholder="Descripción opcional del POI..." className="h-20 bg-slate-50 border-slate-300"/>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="gpx_track_id" className="text-slate-600">Ruta asociada *</Label>
+                  <Label htmlFor="gpx_track_id" className="text-slate-600">{en ? 'Associated route' : 'Ruta asociada'} *</Label>
                    <Select value={formData.gpx_track_id} onValueChange={(value) => handleInputChange("gpx_track_id", value)} disabled={routes.length === 1}>
                      <SelectTrigger className={`bg-slate-50 border-slate-300 ${errors.gpx_track_id ? "border-red-500" : ""}`}>
-                        <SelectValue placeholder="Selecciona ruta" />
+                        <SelectValue placeholder={en ? 'Select route' : 'Selecciona ruta'} />
                       </SelectTrigger>
                       <SelectContent className="bg-white border-slate-200 text-slate-800">
                         {routes.map((route) => (
@@ -230,7 +232,7 @@ export default function PoiForm({
                 
                 <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <Label htmlFor="distance_from_start" className="text-slate-600">Punto kilométrico *</Label>
+                        <Label htmlFor="distance_from_start" className="text-slate-600">{en ? 'Kilometer point' : 'Punto kilométrico'} *</Label>
                         <Input 
                           id="distance_from_start" 
                           type="number" 
@@ -248,7 +250,7 @@ export default function PoiForm({
                         )}
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="elevation" className="text-slate-600">Elevación (m)</Label>
+                        <Label htmlFor="elevation" className="text-slate-600">{en ? 'Elevation (m)' : 'Elevación (m)'}</Label>
                         <Input id="elevation" type="number" step="1" value={formData.elevation} onChange={(e) => handleInputChange("elevation", e.target.value)} placeholder="Opcional - se calculará automáticamente" className="bg-slate-50 border-slate-300"/>
                         <p className="text-xs text-slate-500">
                           Si no se especifica, se usará la elevación de la ruta
@@ -258,7 +260,7 @@ export default function PoiForm({
 
                <div className="flex gap-3 pt-4 border-t border-slate-200">
                   <Button type="button" variant="outline" onClick={onCancel} className="flex-1" disabled={isSubmitting}>
-                    Cancelar
+                    {en ? 'Cancel' : 'Cancelar'}
                   </Button>
                   <Button 
                     type="submit" 
@@ -268,7 +270,7 @@ export default function PoiForm({
                     {isSubmitting ? (
                         <div className="flex items-center gap-2"><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>Guardando...</div>
                     ) : (
-                        <div className="flex items-center gap-2"><Save className="w-4 h-4" />Guardar POI</div>
+                        <div className="flex items-center gap-2"><Save className="w-4 h-4" />{en ? 'Save POI' : 'Guardar POI'}</div>
                     )}
                   </Button>
                 </div>

@@ -9,8 +9,11 @@ import { createPageUrl } from "@/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { motion, AnimatePresence } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"; // Added Tabs components
+import { useLanguage } from "../lib/LanguageContext";
 
 export default function UserManagement() {
+  const { language } = useLanguage();
+  const en = language === 'en';
   const [allUsers, setAllUsers] = useState([]);
   const [allRoutes, setAllRoutes] = useState([]);
   const [allTeams, setAllTeams] = useState([]); // New state for teams
@@ -299,10 +302,10 @@ export default function UserManagement() {
         <div>
           <h1 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
             <Users className="w-8 h-8 text-blue-600" />
-            Gestión de Usuarios
+            {en ? 'User Management' : 'Gestión de Usuarios'}
           </h1>
           <p className="text-slate-500 text-sm sm:text-base">
-            Gestiona roles, permisos de subida de rutas y acceso a rutas y equipos para cada usuario.
+            {en ? 'Manage roles, route upload permissions, and route and team access for each user.' : 'Gestiona roles, permisos de subida de rutas y acceso a rutas y equipos para cada usuario.'}
           </p>
         </div>
       </div>
@@ -310,7 +313,7 @@ export default function UserManagement() {
       <Alert className="mb-6 bg-blue-50 border-blue-200">
         <Info className="h-4 w-4 text-blue-500" />
         <AlertDescription className="text-blue-700">
-          <strong>Nota:</strong> Para añadir nuevos usuarios, ve al Dashboard → Users → Invite User en la consola de base44.
+          <strong>{en ? 'Note:' : 'Nota:'}</strong> {en ? 'To add users, go to Dashboard → Users → Invite User in the Base44 console.' : 'Para añadir nuevos usuarios, ve al Dashboard → Users → Invite User en la consola de base44.'}
         </AlertDescription>
       </Alert>
 
@@ -344,7 +347,7 @@ export default function UserManagement() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="w-5 h-5 text-blue-500" />
-              Usuarios Regulares ({regularUsers.length})
+              {en ? 'Regular Users' : 'Usuarios Regulares'} ({regularUsers.length})
             </CardTitle>
             <CardDescription>
               Gestiona permisos individuales de cada usuario

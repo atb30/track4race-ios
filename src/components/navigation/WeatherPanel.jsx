@@ -1,5 +1,6 @@
 import React from "react";
 import { Wind, CloudRain, ArrowBigUp } from "lucide-react";
+import { useLanguage } from "@/lib/LanguageContext";
 
 const getWindColor = (speedKmh) => {
   if (speedKmh >= 40) return '#ef4444';
@@ -14,6 +15,7 @@ const getCardinalDirection = (direction) => {
 };
 
 export default function WeatherPanel({ isFetchingWeather, windData, weatherError, rainForecast }) {
+  const { language } = useLanguage(); const en = language === 'en';
   return (
     <div className="border-b border-slate-800">
       <div className="grid grid-cols-2">
@@ -21,11 +23,11 @@ export default function WeatherPanel({ isFetchingWeather, windData, weatherError
         <div className="bg-white p-1 sm:p-2 md:p-4 lg:p-3 border-r border-slate-800">
           <div className="flex justify-between items-center mb-1">
             <div className="text-xs text-slate-500 uppercase tracking-wide flex items-center gap-1">
-              <Wind className="w-3 h-3 sm:w-4 sm:h-4"/> Viento Actual
+              <Wind className="w-3 h-3 sm:w-4 sm:h-4"/> {en ? 'Current Wind' : 'Viento Actual'}
             </div>
           </div>
           {isFetchingWeather && !windData ? (
-            <div className="text-center text-xs text-slate-500 py-2 h-[40px] sm:h-[60px] md:h-[80px] flex items-center justify-center">Cargando...</div>
+            <div className="text-center text-xs text-slate-500 py-2 h-[40px] sm:h-[60px] md:h-[80px] flex items-center justify-center">{en ? 'Loading...' : 'Cargando...'}</div>
           ) : weatherError ? (
             <div className="text-center text-xs text-red-500 py-2 h-[40px] sm:h-[60px] md:h-[80px] flex items-center justify-center">{weatherError}</div>
           ) : windData ? (
@@ -59,18 +61,18 @@ export default function WeatherPanel({ isFetchingWeather, windData, weatherError
               </div>
             </div>
           ) : (
-            <div className="text-center text-xs text-slate-500 py-2 h-[40px] sm:h-[60px] md:h-[80px] flex items-center justify-center">Esperando GPS...</div>
+            <div className="text-center text-xs text-slate-500 py-2 h-[40px] sm:h-[60px] md:h-[80px] flex items-center justify-center">{en ? 'Waiting for GPS...' : 'Esperando GPS...'}</div>
           )}
         </div>
         {/* Rain Forecast Cell */}
         <div className="bg-white p-1 sm:p-2 md:p-4 lg:p-3">
           <div className="flex justify-between items-center mb-1">
             <div className="text-xs text-slate-500 uppercase tracking-wide flex items-center gap-1">
-              <CloudRain className="w-3 h-3 sm:w-4 sm:h-4"/> Lluvia (3h)
+              <CloudRain className="w-3 h-3 sm:w-4 sm:h-4"/> {en ? 'Rain (3h)' : 'Lluvia (3h)'}
             </div>
           </div>
           {isFetchingWeather && !rainForecast ? (
-            <div className="text-center text-xs text-slate-500 py-2 h-[40px] sm:h-[60px] md:h-[80px] flex items-center justify-center">Calculando...</div>
+            <div className="text-center text-xs text-slate-500 py-2 h-[40px] sm:h-[60px] md:h-[80px] flex items-center justify-center">{en ? 'Calculating...' : 'Calculando...'}</div>
           ) : weatherError ? (
             <div className="text-center text-xs text-red-500 py-2 h-[40px] sm:h-[60px] md:h-[80px] flex items-center justify-center">{weatherError}</div>
           ) : rainForecast ? (
@@ -87,13 +89,13 @@ export default function WeatherPanel({ isFetchingWeather, windData, weatherError
               </div>
             </div>
           ) : (
-            <div className="text-center text-xs text-slate-500 py-2 h-[40px] sm:h-[60px] md:h-[80px] flex items-center justify-center">Esperando...</div>
+            <div className="text-center text-xs text-slate-500 py-2 h-[40px] sm:h-[60px] md:h-[80px] flex items-center justify-center">{en ? 'Waiting...' : 'Esperando...'}</div>
           )}
         </div>
       </div>
       <div className="bg-white px-2 pb-1 text-right text-[10px] leading-none text-slate-400">
         <a href="https://open-meteo.com/" target="_blank" rel="noreferrer" className="hover:text-slate-600">
-          Datos meteorológicos: Open-Meteo.com
+          {en ? 'Weather data: Open-Meteo.com' : 'Datos meteorológicos: Open-Meteo.com'}
         </a>
       </div>
     </div>

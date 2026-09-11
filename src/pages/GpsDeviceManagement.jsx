@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
+import { useLanguage } from "../lib/LanguageContext";
 
 import GpsDeviceForm from "../components/gps/GpsDeviceForm";
 import GpsConfigurationGuide from "../components/gps/GpsConfigurationGuide";
@@ -23,6 +24,8 @@ import {
 } from "@/components/ui/table";
 
 export default function GpsDeviceManagement() {
+  const { language } = useLanguage();
+  const en = language === 'en';
   const [devices, setDevices] = useState([]);
   const [runners, setRunners] = useState([]);
   const [teams, setTeams] = useState([]);
@@ -163,7 +166,7 @@ export default function GpsDeviceManagement() {
     return (
       <div className="text-center py-12">
         <div className="w-12 h-12 border-4 border-slate-300 border-t-green-600 rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-slate-500">Cargando dispositivos GPS...</p>
+        <p className="text-slate-500">{en ? 'Loading GPS devices...' : 'Cargando dispositivos GPS...'}</p>
       </div>
     );
   }
@@ -174,7 +177,7 @@ export default function GpsDeviceManagement() {
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 flex items-center gap-3 mb-2">
             <Smartphone className="w-6 sm:w-8 h-6 sm:h-8 text-green-600" />
-            Dispositivos GPS ST-903
+            {en ? 'ST-903 GPS Devices' : 'Dispositivos GPS ST-903'}
           </h1>
           <p className="text-slate-500 text-sm sm:text-base">
             Gestiona y configura los dispositivos GPS Sinotrack ST-903 de tu equipo.
@@ -183,7 +186,7 @@ export default function GpsDeviceManagement() {
         <Link to={createPageUrl("RunnerManagement")}>
           <Button variant="outline" className="border-slate-300 hover:bg-slate-100 text-slate-700 hover:text-slate-800 w-full sm:w-auto">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Volver a Corredores
+            {en ? 'Back to Runners' : 'Volver a Corredores'}
           </Button>
         </Link>
       </div>
@@ -192,13 +195,13 @@ export default function GpsDeviceManagement() {
         <TabsList className="grid grid-cols-2 w-full sm:w-80 mb-6 bg-slate-200">
           <TabsTrigger value="devices" className="flex items-center gap-2 text-xs sm:text-sm">
             <Smartphone className="w-4 h-4" />
-            <span className="hidden sm:inline">Dispositivos</span>
-            <span className="sm:hidden">Dispositivos</span>
+            <span className="hidden sm:inline">{en ? 'Devices' : 'Dispositivos'}</span>
+            <span className="sm:hidden">{en ? 'Devices' : 'Dispositivos'}</span>
           </TabsTrigger>
           <TabsTrigger value="guide" className="flex items-center gap-2 text-xs sm:text-sm">
             <Settings className="w-4 h-4" />
-            <span className="hidden sm:inline">Configuración</span>
-            <span className="sm:hidden">Config</span>
+            <span className="hidden sm:inline">{en ? 'Configuration' : 'Configuración'}</span>
+            <span className="sm:hidden">{en ? 'Config' : 'Config'}</span>
           </TabsTrigger>
         </TabsList>
 
@@ -206,7 +209,7 @@ export default function GpsDeviceManagement() {
           <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
             <div className="p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 border-b border-slate-200">
               <h2 className="text-base sm:text-lg font-semibold text-slate-700">
-                {devices.length} Dispositivos GPS Registrados
+                {devices.length} {en ? 'Registered GPS Devices' : 'Dispositivos GPS Registrados'}
               </h2>
               <Button
                 onClick={() => {
@@ -217,7 +220,7 @@ export default function GpsDeviceManagement() {
                 size="sm"
               >
                 <Plus className="w-4 h-4 mr-2" />
-                Registrar Dispositivo
+                {en ? 'Register Device' : 'Registrar Dispositivo'}
               </Button>
             </div>
             
@@ -225,7 +228,7 @@ export default function GpsDeviceManagement() {
             <div className="block sm:hidden">
               {devices.length === 0 ? (
                 <div className="text-center py-12 text-slate-500">
-                  No se encontraron dispositivos GPS.
+                  {en ? 'No GPS devices found.' : 'No se encontraron dispositivos GPS.'}
                 </div>
               ) : (
                 <div className="divide-y divide-slate-200">
@@ -294,13 +297,13 @@ export default function GpsDeviceManagement() {
               <Table>
                 <TableHeader>
                   <TableRow className="border-slate-200 hover:bg-slate-50">
-                    <TableHead className="text-slate-600">Dispositivo</TableHead>
+                    <TableHead className="text-slate-600">{en ? 'Device' : 'Dispositivo'}</TableHead>
                     <TableHead className="text-slate-600">IMEI</TableHead>
-                    <TableHead className="text-slate-600">Corredor</TableHead>
-                    <TableHead className="text-slate-600">Equipo</TableHead>
-                    <TableHead className="text-slate-600">Estado</TableHead>
-                    <TableHead className="text-slate-600">Intervalo</TableHead>
-                    <TableHead className="text-slate-600 text-center">Acciones</TableHead>
+                    <TableHead className="text-slate-600">{en ? 'Runner' : 'Corredor'}</TableHead>
+                    <TableHead className="text-slate-600">{en ? 'Team' : 'Equipo'}</TableHead>
+                    <TableHead className="text-slate-600">{en ? 'Status' : 'Estado'}</TableHead>
+                    <TableHead className="text-slate-600">{en ? 'Interval' : 'Intervalo'}</TableHead>
+                    <TableHead className="text-slate-600 text-center">{en ? 'Actions' : 'Acciones'}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -367,9 +370,7 @@ export default function GpsDeviceManagement() {
                 </TableBody>
               </Table>
               {devices.length === 0 && (
-                <div className="text-center py-12 text-slate-500">
-                  No se encontraron dispositivos GPS.
-                </div>
+                <div className="text-center py-12 text-slate-500">{en ? 'No GPS devices found.' : 'No se encontraron dispositivos GPS.'}</div>
               )}
             </div>
           </div>
@@ -380,38 +381,38 @@ export default function GpsDeviceManagement() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Settings className="w-5 h-5 text-green-500" />
-                Guía de Configuración General ST-903
+                {en ? 'ST-903 General Configuration Guide' : 'Guía de Configuración General ST-903'}
               </CardTitle>
             </CardHeader>
             <CardContent className="prose max-w-none">
               <div className="space-y-4">
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-green-800 mb-2">Pasos Generales:</h3>
+                  <h3 className="font-semibold text-green-800 mb-2">{en ? 'General Steps:' : 'Pasos Generales:'}</h3>
                   <ol className="list-decimal list-inside space-y-2 text-green-700">
-                    <li>Registra el dispositivo GPS en la pestaña "Dispositivos"</li>
-                    <li>Haz clic en el botón de configuración (⚙️) del dispositivo específico</li>
-                    <li>Sigue las instrucciones SMS personalizadas para ese dispositivo</li>
-                    <li>Verifica que el dispositivo aparezca "En línea" en 1-2 minutos</li>
+                    <li>{en ? 'Register the GPS device in the “Devices” tab' : 'Registra el dispositivo GPS en la pestaña "Dispositivos"'}</li>
+                    <li>{en ? 'Click the configuration button (⚙️) for the device' : 'Haz clic en el botón de configuración (⚙️) del dispositivo específico'}</li>
+                    <li>{en ? 'Follow the personalized SMS instructions' : 'Sigue las instrucciones SMS personalizadas para ese dispositivo'}</li>
+                    <li>{en ? 'Verify that the device appears “Online” within 1–2 minutes' : 'Verifica que el dispositivo aparezca "En línea" en 1-2 minutos'}</li>
                   </ol>
                 </div>
                 
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-blue-800 mb-2">Requisitos del Dispositivo:</h3>
+                  <h3 className="font-semibold text-blue-800 mb-2">{en ? 'Device Requirements:' : 'Requisitos del Dispositivo:'}</h3>
                   <ul className="list-disc list-inside space-y-1 text-blue-700">
-                    <li>Tarjeta SIM activa con datos móviles</li>
-                    <li>Saldo suficiente para recibir SMS de configuración</li>
-                    <li>Antena GPS con señal clara (exterior recomendado)</li>
-                    <li>Batería cargada al 100%</li>
+                    <li>{en ? 'Active SIM card with mobile data' : 'Tarjeta SIM activa con datos móviles'}</li>
+                    <li>{en ? 'Enough credit to receive configuration SMS' : 'Saldo suficiente para recibir SMS de configuración'}</li>
+                    <li>{en ? 'GPS antenna with a clear signal (outdoors recommended)' : 'Antena GPS con señal clara (exterior recomendado)'}</li>
+                    <li>{en ? 'Battery charged to 100%' : 'Batería cargada al 100%'}</li>
                   </ul>
                 </div>
 
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-amber-800 mb-2">Solución de Problemas:</h3>
+                  <h3 className="font-semibold text-amber-800 mb-2">{en ? 'Troubleshooting:' : 'Solución de Problemas:'}</h3>
                   <ul className="list-disc list-inside space-y-1 text-amber-700">
-                    <li><strong>El dispositivo no responde:</strong> Verifica que tenga batería y cobertura móvil</li>
-                    <li><strong>No aparece en el mapa:</strong> Reenvía el comando "STATUS#" y verifica la configuración</li>
-                    <li><strong>Ubicación imprecisa:</strong> Asegúrate de que esté en exterior con buena señal GPS</li>
-                    <li><strong>Se desconecta frecuentemente:</strong> Revisa la batería y la calidad de señal móvil</li>
+                    <li><strong>{en ? 'Device does not respond:' : 'El dispositivo no responde:'}</strong> {en ? 'Check its battery and mobile coverage' : 'Verifica que tenga batería y cobertura móvil'}</li>
+                    <li><strong>{en ? 'Not shown on the map:' : 'No aparece en el mapa:'}</strong> {en ? 'Resend the “STATUS#” command and check the configuration' : 'Reenvía el comando "STATUS#" y verifica la configuración'}</li>
+                    <li><strong>{en ? 'Inaccurate location:' : 'Ubicación imprecisa:'}</strong> {en ? 'Make sure it is outdoors with a good GPS signal' : 'Asegúrate de que esté en exterior con buena señal GPS'}</li>
+                    <li><strong>{en ? 'Disconnects frequently:' : 'Se desconecta frecuentemente:'}</strong> {en ? 'Check the battery and mobile signal quality' : 'Revisa la batería y la calidad de señal móvil'}</li>
                   </ul>
                 </div>
               </div>
@@ -448,7 +449,7 @@ export default function GpsDeviceManagement() {
               <div className="bg-white rounded-lg">
                 <div className="p-4 border-b border-slate-200 flex items-center justify-between">
                   <h3 className="text-lg font-semibold text-slate-800">
-                    Configuración: {selectedDevice.device_name}
+                    {en ? 'Configuration' : 'Configuración'}: {selectedDevice.device_name}
                   </h3>
                   <Button
                     variant="ghost"

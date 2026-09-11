@@ -4,6 +4,7 @@ import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, ReferenceLine, Tool
 import { X, Plus, Minus, ChevronsLeft, ChevronsRight, Expand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useLanguage } from "@/lib/LanguageContext";
 
 
 // NEW: Popup for clicked points on the chart
@@ -188,6 +189,7 @@ export default function ElevationProfile({
   selectionMode = false,
   onSegmentSelect
 }) {
+  const { language } = useLanguage(); const en = language === 'en';
   const [clickedPoi, setClickedPoi] = useState(null);
   const [clickedPoiType, setClickedPoiType] = useState(null);
   const [clickedPointInfo, setClickedPointInfo] = useState(null);
@@ -795,7 +797,7 @@ export default function ElevationProfile({
                   <ChevronsLeft className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent><p>Desplazar Izquierda</p></TooltipContent>
+              <TooltipContent><p>{en ? 'Pan left' : 'Desplazar Izquierda'}</p></TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -803,7 +805,7 @@ export default function ElevationProfile({
                   <Minus className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent><p>Alejar</p></TooltipContent>
+              <TooltipContent><p>{en ? 'Zoom out' : 'Alejar'}</p></TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -811,7 +813,7 @@ export default function ElevationProfile({
                   <Plus className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent><p>Acercar</p></TooltipContent>
+              <TooltipContent><p>{en ? 'Zoom in' : 'Acercar'}</p></TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -819,7 +821,7 @@ export default function ElevationProfile({
                   <ChevronsRight className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent><p>Desplazar Derecha</p></TooltipContent>
+              <TooltipContent><p>{en ? 'Pan right' : 'Desplazar Derecha'}</p></TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -827,7 +829,7 @@ export default function ElevationProfile({
                   <Expand className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent><p>Vista Completa</p></TooltipContent>
+              <TooltipContent><p>{en ? 'Full view' : 'Vista Completa'}</p></TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>

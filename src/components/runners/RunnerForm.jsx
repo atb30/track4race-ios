@@ -7,8 +7,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UserCheck, X, Save } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/lib/LanguageContext";
 
 export default function RunnerForm({ runner, teams, onSave, onCancel }) {
+  const { language } = useLanguage(); const en = language === 'en';
   const [formData, setFormData] = useState({
     name: "",
     device_id: "",
@@ -37,15 +39,15 @@ export default function RunnerForm({ runner, teams, onSave, onCancel }) {
     const newErrors = {};
     
     if (!formData.name.trim()) {
-      newErrors.name = "El nombre es requerido";
+      newErrors.name = en ? "Name is required" : "El nombre es requerido";
     }
     
     if (!formData.device_id.trim()) {
-      newErrors.device_id = "El ID del dispositivo es requerido";
+      newErrors.device_id = en ? "Device ID is required" : "El ID del dispositivo es requerido";
     }
     
     if (!formData.team_id) {
-      newErrors.team_id = "Debe seleccionar un equipo";
+      newErrors.team_id = en ? "Select a team" : "Debe seleccionar un equipo";
     }
 
     setErrors(newErrors);
@@ -94,7 +96,7 @@ export default function RunnerForm({ runner, teams, onSave, onCancel }) {
           <CardHeader className="flex flex-row items-center justify-between border-b border-slate-200">
             <CardTitle className="flex items-center gap-2 text-slate-800">
               <UserCheck className="w-5 h-5 text-blue-500" />
-              {runner ? "Editar Corredor" : "Nuevo Corredor"}
+              {runner ? (en ? "Edit Runner" : "Editar Corredor") : (en ? "New Runner" : "Nuevo Corredor")}
             </CardTitle>
             <Button variant="ghost" size="icon" onClick={onCancel} className="text-slate-500 hover:text-slate-800">
               <X className="w-4 h-4" />
@@ -104,7 +106,7 @@ export default function RunnerForm({ runner, teams, onSave, onCancel }) {
             <CardContent className="p-6 space-y-4">
               <div>
                 <Label htmlFor="name" className="text-slate-600">
-                  Nombre del Corredor *
+                  {en ? 'Runner Name' : 'Nombre del Corredor'} *
                 </Label>
                 <Input
                   id="name"
@@ -118,7 +120,7 @@ export default function RunnerForm({ runner, teams, onSave, onCancel }) {
 
               <div>
                 <Label htmlFor="device_id" className="text-slate-600">
-                  ID del Dispositivo GPS *
+                  {en ? 'GPS Device ID' : 'ID del Dispositivo GPS'} *
                 </Label>
                 <Input
                   id="device_id"
@@ -129,20 +131,20 @@ export default function RunnerForm({ runner, teams, onSave, onCancel }) {
                 />
                 {errors.device_id && <p className="text-red-500 text-xs mt-1">{errors.device_id}</p>}
                 <p className="text-xs text-slate-500 mt-1">
-                  Introduce el identificador único del dispositivo GPS
+                  {en ? 'Enter the unique identifier of the GPS device' : 'Introduce el identificador único del dispositivo GPS'}
                 </p>
               </div>
 
               <div>
                 <Label htmlFor="team_id" className="text-slate-600">
-                  Equipo *
+                  {en ? 'Team' : 'Equipo'} *
                 </Label>
                 <Select 
                   value={formData.team_id} 
                   onValueChange={(value) => handleInputChange("team_id", value)}
                 >
                   <SelectTrigger className={`border-slate-300 ${errors.team_id ? 'border-red-500' : ''}`}>
-                    <SelectValue placeholder="Selecciona un equipo..." />
+                    <SelectValue placeholder={en ? 'Select a team...' : 'Selecciona un equipo...'} />
                   </SelectTrigger>
                   <SelectContent>
                     {teams.map((team) => (
@@ -163,7 +165,7 @@ export default function RunnerForm({ runner, teams, onSave, onCancel }) {
 
               <div>
                 <Label htmlFor="phone_number" className="text-slate-600">
-                  Número de Teléfono
+                  {en ? 'Phone Number' : 'Número de Teléfono'}
                 </Label>
                 <Input
                   id="phone_number"
@@ -176,7 +178,7 @@ export default function RunnerForm({ runner, teams, onSave, onCancel }) {
 
               <div>
                 <Label htmlFor="notes" className="text-slate-600">
-                  Notas Adicionales
+                  {en ? 'Additional Notes' : 'Notas Adicionales'}
                 </Label>
                 <Textarea
                   id="notes"
@@ -196,19 +198,19 @@ export default function RunnerForm({ runner, teams, onSave, onCancel }) {
                   className="w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 rounded focus:ring-blue-500"
                 />
                 <Label htmlFor="is_active" className="text-slate-600 cursor-pointer">
-                  Corredor activo
+                  {en ? 'Active runner' : 'Corredor activo'}
                 </Label>
               </div>
             </CardContent>
             <div className="p-6 pt-0 flex gap-3">
               <Button type="button" variant="outline" onClick={onCancel} className="flex-1" disabled={isSubmitting}>
-                Cancelar
+                {en ? 'Cancel' : 'Cancelar'}
               </Button>
               <Button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700" disabled={isSubmitting}>
-                {isSubmitting ? "Guardando..." : (
+                {isSubmitting ? (en ? "Saving..." : "Guardando...") : (
                   <>
                     <Save className="w-4 h-4 mr-2" />
-                    {runner ? "Actualizar" : "Crear"}
+                    {runner ? (en ? "Update" : "Actualizar") : (en ? "Create" : "Crear")}
                   </>
                 )}
               </Button>

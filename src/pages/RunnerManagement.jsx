@@ -16,8 +16,11 @@ import GpsConfigurationGuide from "../components/gps/GpsConfigurationGuide";
 import TraccarSyncPanel from "../components/gps/TraccarSyncPanel";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import LoadingScreen from "../components/common/LoadingScreen";
+import { useLanguage } from "../lib/LanguageContext";
 
 export default function RunnerManagement() {
+  const { language } = useLanguage();
+  const en = language === 'en';
   const [runners, setRunners] = useState([]);
   const [teams, setTeams] = useState([]);
   const [gpsDevices, setGpsDevices] = useState([]);
@@ -102,27 +105,27 @@ export default function RunnerManagement() {
   const getLiveDataForDevice = (imei) => liveGpsData.find(d => d.device_imei === imei);
 
   if (isLoading || !userRole) {
-    return <LoadingScreen message="Cargando gestión de corredores..." />;
+    return <LoadingScreen message={en ? 'Loading runner management...' : 'Cargando gestión de corredores...'} />;
   }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-slate-800 flex items-center gap-3"><Users className="w-8 h-8 text-blue-600" />Gestión de Corredores y Equipos</h1>
+        <h1 className="text-3xl font-bold text-slate-800 flex items-center gap-3"><Users className="w-8 h-8 text-blue-600" />{en ? 'Runners and Teams' : 'Gestión de Corredores y Equipos'}</h1>
         {/* El botón de volver al mapa ya no es necesario aquí */}
       </div>
 
       <Tabs defaultValue={defaultTab}>
         <TabsList className="grid grid-cols-4 w-full sm:w-auto mb-6 bg-slate-200">
-          <TabsTrigger value="runners"><UserCheck className="w-4 h-4 mr-2"/>Corredores</TabsTrigger>
+          <TabsTrigger value="runners"><UserCheck className="w-4 h-4 mr-2"/>{en ? 'Runners' : 'Corredores'}</TabsTrigger>
           <TabsTrigger value="devices"><Smartphone className="w-4 h-4 mr-2"/>Dispositivos</TabsTrigger>
-          <TabsTrigger value="teams"><Users className="w-4 h-4 mr-2"/>Equipos</TabsTrigger>
+          <TabsTrigger value="teams"><Users className="w-4 h-4 mr-2"/>{en ? 'Teams' : 'Equipos'}</TabsTrigger>
           <TabsTrigger value="traccar"><Satellite className="w-4 h-4 mr-2"/>Traccar</TabsTrigger>
         </TabsList>
 
         <TabsContent value="runners">
           <Card>
-             <div className="p-4 flex justify-between items-center"><h2 className="text-lg font-semibold">{runners.length} Corredores</h2><Button onClick={() => { setEditingRunner(null); setShowRunnerForm(true); }}><Plus className="w-4 h-4 mr-2"/>Añadir</Button></div>
+             <div className="p-4 flex justify-between items-center"><h2 className="text-lg font-semibold">{runners.length} {en ? 'Runners' : 'Corredores'}</h2><Button onClick={() => { setEditingRunner(null); setShowRunnerForm(true); }}><Plus className="w-4 h-4 mr-2"/>{en ? 'Add' : 'Añadir'}</Button></div>
              <div className="overflow-x-auto"><Table>
                 <TableHeader><TableRow><TableHead>Nombre</TableHead><TableHead>Dispositivo</TableHead><TableHead>Equipo</TableHead><TableHead>Estado</TableHead><TableHead>Acciones</TableHead></TableRow></TableHeader>
                 <TableBody>{runners.map(r => { const team = teams.find(t=>t.id===r.team_id); return (<TableRow key={r.id}>
@@ -140,12 +143,12 @@ export default function RunnerManagement() {
           <Card>
             <div className="p-4 flex justify-between items-center">
                 <div>
-                    <h2 className="text-lg font-semibold">{gpsDevices.length} Dispositivos GPS</h2>
-                    {lastUpdate && <p className="text-xs text-slate-500">Ubicaciones actualizadas hace {Math.round((new Date() - lastUpdate) / 1000)}s <RefreshCw className={`inline w-3 h-3 ${isRefreshing ? 'animate-spin' : ''}`}/></p>}
+                    <h2 className="text-lg font-semibold">{gpsDevices.length} {en ? 'GPS Devices' : 'Dispositivos GPS'}</h2>
+                    {lastUpdate && <p className="text-xs text-slate-500">{en ? 'Locations updated' : 'Ubicaciones actualizadas'} {en ? `${Math.round((new Date() - lastUpdate) / 1000)}s ago` : `hace ${Math.round((new Date() - lastUpdate) / 1000)}s`} <RefreshCw className={`inline w-3 h-3 ${isRefreshing ? 'animate-spin' : ''}`}/></p>}
                 </div>
                 <div className="flex gap-2">
-                    <Button onClick={() => setShowConfigGuide(true)} variant="outline"><FileText className="w-4 h-4 mr-2" />Guía</Button>
-                    <Button onClick={() => { setEditingDevice(null); setShowDeviceForm(true); }}><Plus className="w-4 h-4 mr-2"/>Añadir Dispositivo</Button>
+                    <Button onClick={() => setShowConfigGuide(true)} variant="outline"><FileText className="w-4 h-4 mr-2" />{en ? 'Guide' : 'Guía'}</Button>
+                    <Button onClick={() => { setEditingDevice(null); setShowDeviceForm(true); }}><Plus className="w-4 h-4 mr-2"/>{en ? 'Add Device' : 'Añadir Dispositivo'}</Button>
                 </div>
             </div>
             <div className="overflow-x-auto"><Table>
@@ -168,7 +171,7 @@ export default function RunnerManagement() {
 
         <TabsContent value="teams">
             <Card>
-                <div className="p-4 flex justify-between items-center"><h2 className="text-lg font-semibold">{teams.length} Equipos</h2><Button onClick={() => { setEditingTeam(null); setShowTeamForm(true); }}><Plus className="w-4 h-4 mr-2"/>Nuevo Equipo</Button></div>
+                <div className="p-4 flex justify-between items-center"><h2 className="text-lg font-semibold">{teams.length} {en ? 'Teams' : 'Equipos'}</h2><Button onClick={() => { setEditingTeam(null); setShowTeamForm(true); }}><Plus className="w-4 h-4 mr-2"/>{en ? 'New Team' : 'Nuevo Equipo'}</Button></div>
                 <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {teams.map(t => <div key={t.id} className="bg-slate-50 p-4 rounded-lg">
                         <div className="flex justify-between items-start"><h3 className="font-semibold" style={{color:t.color}}>{t.name}</h3><div className="flex gap-1"><Button variant="ghost" size="icon" onClick={() => { setEditingTeam(t); setShowTeamForm(true); }}><Edit className="w-4"/></Button><Button variant="ghost" size="icon" onClick={() => handleDelete(Team, t.id, 'Eliminar equipo?')}><Trash2 className="w-4"/></Button></div></div>
@@ -191,7 +194,7 @@ export default function RunnerManagement() {
         {showRunnerForm && <RunnerForm runner={editingRunner} teams={teams} onSave={handleSaveRunner} onCancel={() => setShowRunnerForm(false)} />}
         {showTeamForm && <TeamForm team={editingTeam} onSave={handleSaveTeam} onCancel={() => setShowTeamForm(false)} allUsers={allUsers} />}
         {showDeviceForm && <GpsDeviceForm device={editingDevice} runners={runners} teams={teams} onSave={handleSaveDevice} onCancel={() => setShowDeviceForm(false)} />}
-        {showConfigGuide && <GpsConfigurationGuide onCancel={() => setShowConfigGuide(false)} />}
+        {showConfigGuide && <GpsConfigurationGuide onCancel={() => setShowConfigGuide(false)} language={language} />}
       </AnimatePresence>
     </div>
   );

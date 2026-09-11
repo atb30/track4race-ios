@@ -8,8 +8,11 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import LoadingScreen from "../components/common/LoadingScreen";
 import AppLogo from "../components/common/AppLogo";
+import { useLanguage } from "../lib/LanguageContext";
 
 export default function AppSettings() {
+  const { language } = useLanguage();
+  const en = language === 'en';
   const [isUploading, setIsUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userRole, setUserRole] = useState(null);
@@ -108,7 +111,7 @@ export default function AppSettings() {
   };
 
   if (isLoading || userRole !== 'admin') {
-    return <LoadingScreen message="Cargando configuración..." />;
+    return <LoadingScreen message={en ? 'Loading settings...' : 'Cargando configuración...'} />;
   }
 
   return (
@@ -117,15 +120,15 @@ export default function AppSettings() {
         <Link to={createPageUrl("Navigation")}>
           <Button variant="ghost" className="mb-4 text-slate-600 hover:text-slate-800">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Volver al Mapa
+            {en ? 'Back to Map' : 'Volver al Mapa'}
           </Button>
         </Link>
         <h1 className="text-3xl font-bold text-slate-800 flex items-center gap-3">
           <Settings className="w-8 h-8 text-blue-600" />
-          Configuración de la Aplicación
+          {en ? 'Application Settings' : 'Configuración de la Aplicación'}
         </h1>
         <p className="text-slate-500 mt-2">
-          Personaliza el logo y la apariencia de Track4Race
+          {en ? 'Customize the Track4Race logo and appearance' : 'Personaliza el logo y la apariencia de Track4Race'}
         </p>
       </div>
 
@@ -134,7 +137,7 @@ export default function AppSettings() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-slate-700">
             <Database className="w-5 h-5" />
-            Información de Debug
+            {en ? 'Debug Information' : 'Información de Debug'}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -162,17 +165,17 @@ export default function AppSettings() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Image className="w-5 h-5 text-blue-600" />
-            Logo de la Aplicación
+            {en ? 'Application Logo' : 'Logo de la Aplicación'}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div>
-            <h3 className="text-sm font-medium text-slate-700 mb-3">Logo Actual</h3>
+            <h3 className="text-sm font-medium text-slate-700 mb-3">{en ? 'Current Logo' : 'Logo Actual'}</h3>
             <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
               <AppLogo key={logoKey} className="w-16 h-16" showText={false} />
               <div className="flex-1">
                 <p className="text-sm font-medium text-slate-700">
-                  {currentLogoUrl ? "Logo personalizado cargado" : "Logo de Track4Race"}
+                  {currentLogoUrl ? (en ? 'Custom logo loaded' : 'Logo personalizado cargado') : 'Track4Race Logo'}
                 </p>
                 <p className="text-xs text-slate-500 mt-1">
                   {currentLogoUrl ? "Se mostrará en todas las pantallas de la aplicación" : "Sube tu logo para reemplazar las iniciales"}
@@ -182,7 +185,7 @@ export default function AppSettings() {
           </div>
 
           <div>
-            <h3 className="text-sm font-medium text-slate-700 mb-3">Subir Nuevo Logo</h3>
+            <h3 className="text-sm font-medium text-slate-700 mb-3">{en ? 'Upload New Logo' : 'Subir Nuevo Logo'}</h3>
             <div className="p-4 border-2 border-dashed border-slate-300 rounded-lg bg-slate-50">
               <div className="text-center">
                 <Upload className="w-12 h-12 mx-auto mb-4 text-slate-400" />

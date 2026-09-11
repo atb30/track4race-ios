@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { MapPin, Navigation, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/lib/LanguageContext";
 
 export default function NavigationPanel({ 
   gpxTrack, 
@@ -9,13 +10,14 @@ export default function NavigationPanel({
   nearbyPois = [],
   poiTypes = []
 }) {
+  const { language } = useLanguage(); const en = language === 'en';
   if (!gpxTrack) {
     return (
       <div className="h-full bg-white rounded-lg border border-slate-200 p-6 flex items-center justify-center">
         <div className="text-center text-slate-500">
           <Navigation className="w-12 h-12 mx-auto mb-3 opacity-50" />
-          <p className="font-medium">Sin navegación activa</p>
-          <p className="text-sm">Selecciona una ruta para comenzar</p>
+          <p className="font-medium">{en ? 'No active navigation' : 'Sin navegación activa'}</p>
+          <p className="text-sm">{en ? 'Select a route to begin' : 'Selecciona una ruta para comenzar'}</p>
         </div>
       </div>
     );
@@ -46,12 +48,12 @@ export default function NavigationPanel({
           <div className="flex items-center justify-between">
             <div className="text-center flex-1">
               <div className="text-2xl font-bold">{currentKm.toFixed(1)}</div>
-              <div className="text-xs opacity-90">km recorridos</div>
+              <div className="text-xs opacity-90">{en ? 'km traveled' : 'km recorridos'}</div>
             </div>
             <div className="w-px h-8 bg-white/30"></div>
             <div className="text-center flex-1">
               <div className="text-2xl font-bold">{remainingKm.toFixed(1)}</div>
-              <div className="text-xs opacity-90">km restantes</div>
+              <div className="text-xs opacity-90">{en ? 'km remaining' : 'km restantes'}</div>
             </div>
           </div>
           
@@ -71,13 +73,13 @@ export default function NavigationPanel({
         <div className="p-4">
           <div className="flex items-center gap-2 mb-4">
             <MapPin className="w-5 h-5 text-slate-600" />
-            <h3 className="font-semibold text-slate-900">POIs Próximos</h3>
+            <h3 className="font-semibold text-slate-900">{en ? 'Nearby POIs' : 'POIs Próximos'}</h3>
           </div>
 
           {nearbyPois.length === 0 ? (
             <div className="text-center text-slate-500 py-8">
               <Clock className="w-8 h-8 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">No hay POIs cercanos</p>
+              <p className="text-sm">{en ? 'No nearby POIs' : 'No hay POIs cercanos'}</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -116,7 +118,7 @@ export default function NavigationPanel({
                             </p>
                           )}
                           <p className="text-xs text-slate-500 mt-1">
-                            Km {poi.distance_from_start.toFixed(1)}
+                            {en ? 'Km ' : 'Km '}{poi.distance_from_start.toFixed(1)}
                           </p>
                         </div>
                       </div>

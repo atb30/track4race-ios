@@ -1,5 +1,6 @@
 import React from "react";
 import { BarChart3 } from "lucide-react";
+import { useLanguage } from "@/lib/LanguageContext";
 
 export default function ElevationSegmentViewer({
   elevationSegmentView,
@@ -9,6 +10,7 @@ export default function ElevationSegmentViewer({
   activeTrack,
   onSegmentClick
 }) {
+  const { language } = useLanguage(); const en = language === 'en';
   const displaySegments = elevationSegmentView === 'selection'
     ? selectedRangeSegments
     : elevationSegments;
@@ -17,7 +19,7 @@ export default function ElevationSegmentViewer({
     return (
       <div className="border-b border-slate-800 bg-white">
         <div className="p-2">
-          <p className="text-xs text-red-600">Calculando perfil...</p>
+          <p className="text-xs text-red-600">{en ? 'Calculating profile...' : 'Calculando perfil...'}</p>
         </div>
       </div>
     );
@@ -30,13 +32,13 @@ export default function ElevationSegmentViewer({
           <h3 className="text-xs text-slate-500 uppercase font-semibold tracking-wider flex items-center gap-2">
             <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4"/>
             {elevationSegmentView === 'selection' && selectedSegmentRange
-              ? `Selección: Km ${selectedSegmentRange.startKm.toFixed(1)} - ${selectedSegmentRange.endKm.toFixed(1)}`
-              : `Perfil: Últimos ${elevationSegmentView}`
+              ? `${en ? 'Selection' : 'Selección'}: Km ${selectedSegmentRange.startKm.toFixed(1)} - ${selectedSegmentRange.endKm.toFixed(1)}`
+              : `${en ? 'Profile: Last' : 'Perfil: Últimos'} ${elevationSegmentView}`
             }
           </h3>
         </div>
         <p className="text-xs text-yellow-600 p-2">
-          {elevationSegmentView === 'selection' ? "No hay datos suficientes para la selección." : `No hay datos suficientes para ${elevationSegmentView}.`}
+          {elevationSegmentView === 'selection' ? (en ? 'Not enough data for the selection.' : 'No hay datos suficientes para la selección.') : (en ? `Not enough data for ${elevationSegmentView}.` : `No hay datos suficientes para ${elevationSegmentView}.`)}
         </p>
       </div>
     );
@@ -54,8 +56,8 @@ export default function ElevationSegmentViewer({
         <h3 className="text-xs text-slate-500 uppercase font-semibold tracking-wider flex items-center gap-2">
           <BarChart3 className="w-3 h-3 sm:w-4 sm:h-4"/>
           {elevationSegmentView === 'selection' && selectedSegmentRange
-            ? `Selección: Km ${selectedSegmentRange.startKm.toFixed(1)} - ${selectedSegmentRange.endKm.toFixed(1)}`
-            : `Perfil: Últimos ${elevationSegmentView}`
+            ? `${en ? 'Selection' : 'Selección'}: Km ${selectedSegmentRange.startKm.toFixed(1)} - ${selectedSegmentRange.endKm.toFixed(1)}`
+            : `${en ? 'Profile: Last' : 'Perfil: Últimos'} ${elevationSegmentView}`
           }
         </h3>
         <div className="flex items-center gap-3 text-xs">

@@ -195,7 +195,7 @@ export default function RoutePoiManagement() {
           </h1>
           {userRole !== 'admin' && (
             <p className="text-sm text-slate-500 mt-2">
-              Estás gestionando los POIs de tu ruta. Solo puedes usar tipos de POI existentes.
+              {en ? 'You are managing this route\'s POIs. You can only use existing POI types.' : 'Estás gestionando los POIs de tu ruta. Solo puedes usar tipos de POI existentes.'}
             </p>
           )}
       </div>

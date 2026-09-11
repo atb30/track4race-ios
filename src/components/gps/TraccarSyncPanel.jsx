@@ -5,8 +5,10 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { RefreshCw, Satellite, CheckCircle, SkipForward, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { importTraccarDevices } from '@/functions/importTraccarDevices';
+import { useLanguage } from '@/lib/LanguageContext';
 
 export default function TraccarSyncPanel({ onTokenError }) {
+  const { language } = useLanguage(); const en = language === 'en';
   const [isImporting, setIsImporting] = useState(false);
   const [importResults, setImportResults] = useState(null);
   const [apiError, setApiError] = useState(null);
@@ -46,7 +48,7 @@ export default function TraccarSyncPanel({ onTokenError }) {
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Satellite className="w-5 h-5 text-blue-500" />
-            Sincronización con Traccar
+            {en ? 'Traccar Synchronization' : 'Sincronización con Traccar'}
           </div>
           <Button
             onClick={handleImportDevices}
@@ -56,7 +58,7 @@ export default function TraccarSyncPanel({ onTokenError }) {
             size="sm"
           >
             <RefreshCw className={`w-4 h-4 mr-2 ${isImporting ? 'animate-spin' : ''}`} />
-            {isImporting ? 'Importando...' : 'Importar Dispositivos'}
+            {isImporting ? (en ? 'Importing...' : 'Importando...') : (en ? 'Import Devices' : 'Importar Dispositivos')}
           </Button>
         </CardTitle>
       </CardHeader>
@@ -66,7 +68,7 @@ export default function TraccarSyncPanel({ onTokenError }) {
              <Alert variant="destructive">
                 <AlertTriangle className="h-4 w-4" />
                 <AlertDescription>
-                    Error de Conexión: {apiError}
+                    {en ? 'Connection Error' : 'Error de Conexión'}: {apiError}
                 </AlertDescription>
             </Alert>
         )}
@@ -101,7 +103,7 @@ export default function TraccarSyncPanel({ onTokenError }) {
         {!importResults && !isImporting && !apiError && (
           <div className="text-center text-slate-500 py-6">
             <p className="text-sm">
-              Haz clic en "Importar Dispositivos" para añadir automáticamente a la aplicación todos los dispositivos configurados en tu servidor de Traccar.
+              {en ? 'Click “Import Devices” to automatically add all devices configured on your Traccar server to the application.' : 'Haz clic en "Importar Dispositivos" para añadir automáticamente a la aplicación todos los dispositivos configurados en tu servidor de Traccar.'}
             </p>
           </div>
         )}

@@ -6,10 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Smartphone, X, Save, Zap, Palette } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/lib/LanguageContext";
 
 const DEVICE_COLORS = [ "#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#8b5cf6", "#06b6d4", "#ec4899", "#84cc16", "#6b7280", "#f97316" ];
 
 export default function GpsDeviceForm({ device, runners, teams, onSave, onCancel }) {
+  const { language } = useLanguage(); const en = language === 'en';
   const [formData, setFormData] = useState({
     device_imei: "",
     device_name: "",
@@ -37,10 +39,10 @@ export default function GpsDeviceForm({ device, runners, teams, onSave, onCancel
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.device_imei) newErrors.device_imei = "Debe seleccionar un dispositivo";
-    if (!formData.device_name.trim()) newErrors.device_name = "El nombre es requerido";
-    if (!formData.runner_id) newErrors.runner_id = "Debe seleccionar un corredor";
-    if (!formData.team_id) newErrors.team_id = "Debe seleccionar un equipo";
+    if (!formData.device_imei) newErrors.device_imei = en ? "Select a device" : "Debe seleccionar un dispositivo";
+    if (!formData.device_name.trim()) newErrors.device_name = en ? "Name is required" : "El nombre es requerido";
+    if (!formData.runner_id) newErrors.runner_id = en ? "Select a runner" : "Debe seleccionar un corredor";
+    if (!formData.team_id) newErrors.team_id = en ? "Select a team" : "Debe seleccionar un equipo";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -83,7 +85,7 @@ export default function GpsDeviceForm({ device, runners, teams, onSave, onCancel
           <CardHeader className="flex flex-row items-center justify-between border-b border-slate-200">
             <CardTitle className="flex items-center gap-2 text-slate-800">
               <Smartphone className="w-5 h-5 text-blue-500" />
-              {device ? "Editar Dispositivo GPS" : "Nuevo Dispositivo GPS"}
+              {device ? (en ? "Edit GPS Device" : "Editar Dispositivo GPS") : (en ? "New GPS Device" : "Nuevo Dispositivo GPS")}
             </CardTitle>
             <Button variant="ghost" size="icon" onClick={onCancel} className="text-slate-500 hover:text-slate-800">
               <X className="w-4 h-4" />
@@ -106,7 +108,7 @@ export default function GpsDeviceForm({ device, runners, teams, onSave, onCancel
               </div>
 
               <div>
-                <Label htmlFor="device_name" className="text-slate-600">Nombre del Dispositivo *</Label>
+                <Label htmlFor="device_name" className="text-slate-600">{en ? 'Device Name' : 'Nombre del Dispositivo'} *</Label>
                 <Input
                   id="device_name"
                   value={formData.device_name}
@@ -122,7 +124,7 @@ export default function GpsDeviceForm({ device, runners, teams, onSave, onCancel
                 <Label htmlFor="team_id" className="text-slate-600">Equipo *</Label>
                 <Select value={formData.team_id} onValueChange={(value) => handleInputChange("team_id", value)}>
                   <SelectTrigger className={`border-slate-300 ${errors.team_id ? 'border-red-500' : ''}`}>
-                    <SelectValue placeholder="Selecciona un equipo..." />
+                    <SelectValue placeholder={en ? 'Select a team...' : 'Selecciona un equipo...'} />
                   </SelectTrigger>
                   <SelectContent>
                     {teams.map((team) => (
@@ -139,10 +141,10 @@ export default function GpsDeviceForm({ device, runners, teams, onSave, onCancel
               </div>
 
               <div>
-                <Label htmlFor="runner_id" className="text-slate-600">Corredor Asociado *</Label>
+                <Label htmlFor="runner_id" className="text-slate-600">{en ? 'Associated Runner' : 'Corredor Asociado'} *</Label>
                 <Select value={formData.runner_id} onValueChange={(value) => handleInputChange("runner_id", value)}>
                   <SelectTrigger className={`border-slate-300 ${errors.runner_id ? 'border-red-500' : ''}`}>
-                    <SelectValue placeholder="Selecciona un corredor..." />
+                    <SelectValue placeholder={en ? 'Select a runner...' : 'Selecciona un corredor...'} />
                   </SelectTrigger>
                   <SelectContent>
                     {runners
@@ -155,7 +157,7 @@ export default function GpsDeviceForm({ device, runners, teams, onSave, onCancel
               </div>
 
               <div>
-                <Label className="text-slate-600 flex items-center gap-2 mb-3"><Palette className="w-4 h-4" />Color del Dispositivo</Label>
+                <Label className="text-slate-600 flex items-center gap-2 mb-3"><Palette className="w-4 h-4" />{en ? 'Device Color' : 'Color del Dispositivo'}</Label>
                 <div className="grid grid-cols-5 gap-2">
                   {DEVICE_COLORS.map((color) => (
                     <button 
@@ -171,13 +173,13 @@ export default function GpsDeviceForm({ device, runners, teams, onSave, onCancel
               </div>
 
               <div>
-                <Label htmlFor="report_interval" className="text-slate-600 flex items-center gap-2"><Zap className="w-4 h-4" />Intervalo de Reporte</Label>
+                <Label htmlFor="report_interval" className="text-slate-600 flex items-center gap-2"><Zap className="w-4 h-4" />{en ? 'Reporting Interval' : 'Intervalo de Reporte'}</Label>
                 <Select value={formData.report_interval.toString()} onValueChange={(value) => handleInputChange("report_interval", parseInt(value))}>
                   <SelectTrigger className="border-slate-300"><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="10">Cada 10 segundos (Máxima precisión)</SelectItem>
-                    <SelectItem value="20">Cada 20 segundos (Balance)</SelectItem>
-                    <SelectItem value="30">Cada 30 segundos (Ahorro de batería)</SelectItem>
+                    <SelectItem value="10">{en ? 'Every 10 seconds (Maximum accuracy)' : 'Cada 10 segundos (Máxima precisión)'}</SelectItem>
+                    <SelectItem value="20">{en ? 'Every 20 seconds (Balanced)' : 'Cada 20 segundos (Balance)'}</SelectItem>
+                    <SelectItem value="30">{en ? 'Every 30 seconds (Battery saving)' : 'Cada 30 segundos (Ahorro de batería)'}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -190,13 +192,13 @@ export default function GpsDeviceForm({ device, runners, teams, onSave, onCancel
                   onChange={(e) => handleInputChange("is_active", e.target.checked)}
                   className="w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 rounded focus:ring-blue-500"
                 />
-                <Label htmlFor="is_active" className="text-slate-600 cursor-pointer">Dispositivo activo</Label>
+                <Label htmlFor="is_active" className="text-slate-600 cursor-pointer">{en ? 'Active device' : 'Dispositivo activo'}</Label>
               </div>
             </CardContent>
             <div className="p-6 pt-0 flex gap-3">
-              <Button type="button" variant="outline" onClick={onCancel} className="flex-1" disabled={isSubmitting}>Cancelar</Button>
+              <Button type="button" variant="outline" onClick={onCancel} className="flex-1" disabled={isSubmitting}>{en ? 'Cancel' : 'Cancelar'}</Button>
               <Button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700" disabled={isSubmitting}>
-                {isSubmitting ? "Guardando..." : (<><Save className="w-4 h-4 mr-2" />{device ? "Actualizar" : "Crear"}</>)}
+                {isSubmitting ? (en ? "Saving..." : "Guardando...") : (<><Save className="w-4 h-4 mr-2" />{device ? (en ? "Update" : "Actualizar") : (en ? "Create" : "Crear")}</>)}
               </Button>
             </div>
           </form>
@@ -205,3 +207,4 @@ export default function GpsDeviceForm({ device, runners, teams, onSave, onCancel
     </motion.div>
   );
 }
+

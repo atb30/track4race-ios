@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Upload, File, BarChart, AlertCircle, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../lib/LanguageContext';
 
 // Helper functions for GPX parsing
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -116,6 +117,8 @@ const parseGpx = (gpxContent) => {
 };
 
 export default function UploadGpxPage() {
+  const { language } = useLanguage();
+  const en = language === 'en';
   const [file, setFile] = useState(null);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -218,7 +221,7 @@ export default function UploadGpxPage() {
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-slate-800 flex items-center gap-3">
             <Upload className="w-7 h-7 text-blue-600" />
-            Subir Nueva Ruta GPX
+            {en ? 'Upload New GPX Route' : 'Subir Nueva Ruta GPX'}
           </CardTitle>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -231,7 +234,7 @@ export default function UploadGpxPage() {
               >
                 <CheckCircle className="w-5 h-5" />
                 <div>
-                  <p className="font-bold">¡Ruta subida con éxito!</p>
+                  <p className="font-bold">{en ? 'Route uploaded successfully!' : '¡Ruta subida con éxito!'}</p>
                   <p className="text-sm">Ya está disponible en la biblioteca de rutas.</p>
                 </div>
               </motion.div>
@@ -316,7 +319,7 @@ export default function UploadGpxPage() {
                   Procesando y Subiendo...
                 </>
               ) : (
-                'Guardar Ruta'
+                {en ? 'Save Route' : 'Guardar Ruta'}
               )}
             </Button>
           </CardFooter>

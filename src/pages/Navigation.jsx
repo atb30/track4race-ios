@@ -2186,7 +2186,7 @@ export default function Navigation() {
               <div className="flex items-center gap-1 sm:gap-2 min-w-0">
                 <NavIcon className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" />
                 <span className="font-medium truncate text-sm sm:text-base text-slate-700">
-                  {activeTrack?.name || "Sin ruta activa"}
+                  {activeTrack?.name || t.noRoute}
                 </span>
               </div>
 
@@ -2212,11 +2212,11 @@ export default function Navigation() {
               {currentPosition && currentPosition.distanceFromTrack !== null && currentPosition.distanceFromTrack !== undefined && (
                 <div className="text-slate-500 text-xs sm:text-sm">
                   {isOffTrack ? (
-                    <span className="text-yellow-600 font-semibold">Fuera</span>
+                    <span className="text-yellow-600 font-semibold">{t.offRoute}</span>
                   ) : (
                     (() => {
                       const distance = currentPosition.distanceFromTrack;
-                      if (distance < 50) return "En ruta";
+                      if (distance < 50) return t.onRoute;
                       if (distance < 1000) return `${distance.toFixed(0)}m`;
                       return `${(distance / 1000).toFixed(1)}km`;
                     })()
@@ -2451,9 +2451,9 @@ export default function Navigation() {
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full text-slate-500">
                     <div className="animate-spin w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mb-2"></div>
-                    <p>Cargando Street View...</p>
+                    <p>{language === 'en' ? 'Loading Street View...' : 'Cargando Street View...'}</p>
                     {!googleApiKey && (
-                      <p className="text-xs text-red-500 mt-2">Error: Clave API no disponible</p>
+                      <p className="text-xs text-red-500 mt-2">{language === 'en' ? 'Error: API key unavailable' : 'Error: Clave API no disponible'}</p>
                     )}
                   </div>
                 )}
@@ -2491,7 +2491,7 @@ export default function Navigation() {
               size="icon"
               onClick={() => setFollowMode(true)}
               className={`h-7 w-7 sm:h-10 sm:w-10 rounded-full bg-white/90 backdrop-blur-sm text-slate-700 hover:text-slate-900 hover:bg-white shadow-lg border border-slate-200 ${followMode ? 'bg-blue-100 text-blue-700 border-blue-200' : ''}`}
-              title="Centrar en mi ubicación"
+              title={language === 'en' ? 'Center on my location' : 'Centrar en mi ubicación'}
             >
               <LocateFixed className="w-3 h-3 sm:w-5 sm:h-5" />
             </Button>
@@ -2728,7 +2728,7 @@ export default function Navigation() {
               </div>
               {runnersOnTrack.length === 0 ? (
                 <div className="text-center text-slate-500 py-2 sm:py-4 text-xs">
-                  Esperando corredores...
+                  {language === 'en' ? 'Waiting for runners...' : 'Esperando corredores...'}
                 </div>
               ) : (
                 <div className="divide-y divide-slate-200">
@@ -2768,7 +2768,7 @@ export default function Navigation() {
               </div>
               {nearbyPois.length === 0 ? (
                 <div className="text-center text-slate-500 py-2 sm:py-4 text-xs">
-                  {currentPosition ? "No hay más POIs adelante." : "Esperando GPS..."}
+                  {currentPosition ? (language === 'en' ? 'No more POIs ahead.' : 'No hay más POIs adelante.') : (language === 'en' ? 'Waiting for GPS...' : 'Esperando GPS...')}
                 </div>
               ) : (
                 <div className="divide-y divide-slate-200">

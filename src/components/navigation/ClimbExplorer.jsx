@@ -5,6 +5,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceA
 import { Button } from '@/components/ui/button';
 import { buildClimbProfiles, routePositionAt } from './climbProfile.mjs';
 import { getStreetViewMetadata } from '@/functions/getStreetViewMetadata';
+import { useLanguage } from '@/lib/LanguageContext';
 
 const format = (value, digits = 1) => value.toLocaleString('es-ES', { maximumFractionDigits: digits });
 
@@ -23,6 +24,7 @@ export default function ClimbExplorer(props) {
 }
 
 function ClimbExplorerContent({ track, googleApiKey }) {
+  const { language } = useLanguage(); const en = language === 'en';
   const [open, setOpen] = useState(false);
   // Never process GPX data while the map is starting and the window is closed.
   const climbs = useMemo(() => open ? buildClimbProfiles(track) : [], [track, open]);
@@ -75,21 +77,21 @@ function ClimbExplorerContent({ track, googleApiKey }) {
         <Dialog.Overlay className="fixed inset-0 bg-slate-950/40 z-[6000]" />
         <Dialog.Content style={{ scrollbarWidth: 'none' }} className="fixed z-[6001] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%_-_16px)] max-w-6xl max-h-[94dvh] overflow-y-auto overflow-x-hidden overscroll-contain rounded-2xl bg-white shadow-2xl border border-slate-200 [&::-webkit-scrollbar]:hidden">
           <header className="bg-slate-900 text-white px-5 py-4 pr-16 relative">
-            <Dialog.Title className="text-lg font-semibold flex gap-2 items-center"><Mountain className="text-cyan-400 w-5 h-5" />Subidas del track</Dialog.Title>
-            <Dialog.Description className="text-sm text-slate-200 mt-1">Selecciona una subida para consultar su perfil y pendientes.</Dialog.Description>
+          <Dialog.Title className="text-lg font-semibold flex gap-2 items-center"><Mountain className="text-cyan-400 w-5 h-5" />{en ? 'Track climbs' : 'Subidas del track'}</Dialog.Title>
+          <Dialog.Description className="text-sm text-slate-200 mt-1">{en ? 'Select a climb to view its profile and gradients.' : 'Selecciona una subida para consultar su perfil y pendientes.'}</Dialog.Description>
             <Dialog.Close asChild><button className="absolute right-2 top-2 w-11 h-11 flex items-center justify-center rounded-full hover:bg-slate-700" aria-label="Cerrar subidas"><X className="w-5 h-5" /></button></Dialog.Close>
           </header>
-          {!selected ? <p className="p-6 text-slate-600">Este track no tiene subidas identificadas con datos de elevación válidos.</p> : (
+          {!selected ? <p className="p-6 text-slate-600">{en ? 'This track has no climbs identified with valid elevation data.' : 'Este track no tiene subidas identificadas con datos de elevación válidos.'}</p> : (
             <div className="p-3 sm:p-4 grid grid-cols-1 md:grid-cols-[220px_minmax(0,1fr)] gap-4 items-start">
               <div className="space-y-3 min-w-0 md:pr-3 md:border-r border-slate-200" role="group" aria-label="Elegir subida">
-                <label className="block text-sm font-semibold text-slate-800">Subida {selectedIndex + 1} de {climbs.length}
+                <label className="block text-sm font-semibold text-slate-800">{en ? 'Climb' : 'Subida'} {selectedIndex + 1} {en ? 'of' : 'de'} {climbs.length}
                   <select value={selected.id} onChange={e => setSelectedId(e.target.value)} className="block w-full min-h-12 rounded-lg border border-blue-200 bg-blue-50 text-blue-900 text-base mt-2 px-2">
                     {climbs.map(c => <option key={c.id} value={c.id}>Subida {c.number} · {format(c.length, 2)} km · {format(c.grade)} %</option>)}
                   </select>
                 </label>
                 <div className="grid grid-cols-2 gap-2">
-                  <Button variant="outline" className="min-h-12 px-2" disabled={selectedIndex === 0} onClick={() => setSelectedId(climbs[selectedIndex - 1].id)}>Anterior</Button>
-                  <Button variant="outline" className="min-h-12 px-2" disabled={selectedIndex === climbs.length - 1} onClick={() => setSelectedId(climbs[selectedIndex + 1].id)}>Siguiente</Button>
+                  <Button variant="outline" className="min-h-12 px-2" disabled={selectedIndex === 0} onClick={() => setSelectedId(climbs[selectedIndex - 1].id)}>{en ? 'Previous' : 'Anterior'}</Button>
+                  <Button variant="outline" className="min-h-12 px-2" disabled={selectedIndex === climbs.length - 1} onClick={() => setSelectedId(climbs[selectedIndex + 1].id)}>{en ? 'Next' : 'Siguiente'}</Button>
                 </div>
                 <p className="text-sm text-slate-600">Del km {format(selected.start, 2)} al {format(selected.end, 2)}</p>
               </div>
@@ -125,3 +127,5 @@ function ClimbExplorerContent({ track, googleApiKey }) {
     </Dialog.Root>
   );
 }
+
+

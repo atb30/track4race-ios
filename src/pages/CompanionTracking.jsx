@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import { useLanguage } from "../lib/LanguageContext";
 import { User, Team } from "@/entities/all"; import { base44 } from "@/api/base44Client";
 import { getTraccarData } from "@/functions/getTraccarData";
 import { Button } from "@/components/ui/button";
@@ -78,6 +79,8 @@ function RunnerList({ runners, onSelectRunner, selectedRunnerId }) {
 }
 
 export default function CompanionTracking() {
+  const { language } = useLanguage();
+  const en = language === 'en';
   const [allRunners, setAllRunners] = useState([]);
   const [filteredRunners, setFilteredRunners] = useState([]);
   const [teams, setTeams] = useState([]);
@@ -192,9 +195,9 @@ export default function CompanionTracking() {
       <div className="h-screen flex items-center justify-center text-center max-w-md mx-auto px-6">
         <div>
             <Users className="w-16 h-16 mx-auto mb-6 text-slate-400" />
-            <h2 className="text-xl font-semibold text-slate-800 mb-3">Sin acceso a equipos</h2>
+            <h2 className="text-xl font-semibold text-slate-800 mb-3">{en ? 'No team access' : 'Sin acceso a equipos'}</h2>
             <p className="text-slate-500 mb-6 text-sm">No tienes permisos para ver el seguimiento de ningún equipo.</p>
-            <Link to={createPageUrl("Navigation")}><Button className="bg-blue-600 hover:bg-blue-700 text-white"><ArrowLeft className="w-4 h-4 mr-2" />Volver</Button></Link>
+            <Link to={createPageUrl("Navigation")}><Button className="bg-blue-600 hover:bg-blue-700 text-white"><ArrowLeft className="w-4 h-4 mr-2" />{en ? 'Back' : 'Volver'}</Button></Link>
         </div>
       </div>
     );
@@ -205,7 +208,7 @@ export default function CompanionTracking() {
       <header className="bg-white border-b border-slate-200 px-4 sm:px-6 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h1 className="text-xl font-bold text-slate-800 flex items-center gap-3"><Satellite className="w-6 h-6 text-blue-600" />Seguimiento GPS</h1>
+            <h1 className="text-xl font-bold text-slate-800 flex items-center gap-3"><Satellite className="w-6 h-6 text-blue-600" />{en ? 'GPS Tracking' : 'Seguimiento GPS'}</h1>
             <Badge variant="secondary">{filteredRunners.length} dispositivos</Badge>
             {summaryInfo && userRole === 'admin' && (
               <div className="flex gap-2">

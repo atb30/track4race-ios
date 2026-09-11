@@ -7,6 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MapPin, Layers, ChevronDown, Settings, Milestone, BarChart3, Users, Wind, ArrowRight, Check, CloudRain, Navigation as NavIcon } from "lucide-react";
+import { useLanguage } from "@/lib/LanguageContext";
 
 export default function MapControlsBar({
   showPois, setShowPois,
@@ -19,6 +20,7 @@ export default function MapControlsBar({
   showRouteArrows, setShowRouteArrows,
   showTurnByTurn, setShowTurnByTurn
 }) {
+  const { language } = useLanguage(); const en = language === 'en';
   return (
     <div className="navigation-controls-bar absolute top-2 left-1/2 transform -translate-x-1/2 z-[1002] w-[95vw] max-w-5xl">
       {/* MOBILE VIEW - Ultra simplified */}
@@ -44,7 +46,7 @@ export default function MapControlsBar({
           }`}
         >
           <CloudRain className="w-3 h-3 mr-1" />
-          Lluvia
+          {en ? 'Rain' : 'Lluvia'}
         </Button>
 
         <DropdownMenu>
@@ -55,19 +57,19 @@ export default function MapControlsBar({
               className="h-8 px-3 rounded-full bg-white/90 backdrop-blur-sm text-slate-700 shadow-lg border border-slate-200 text-xs"
             >
               <Layers className="w-3 h-3 mr-1" />
-              Mapa
+              {en ? 'Map' : 'Mapa'}
               <ChevronDown className="w-2 h-2 ml-1" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="bg-white border-slate-200 text-slate-800 z-[2001]" align="center">
             <DropdownMenuItem onClick={() => setMapType('google')} className="cursor-pointer focus:bg-slate-100 text-xs">
-              Carreteras
+              {en ? 'Roads' : 'Carreteras'}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setMapType('satellite')} className="cursor-pointer focus:bg-slate-100 text-xs">
-              Satélite
+              {en ? 'Satellite' : 'Satélite'}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setMapType('terrain')} className="cursor-pointer focus:bg-slate-100 text-xs">
-              Terreno
+              {en ? 'Terrain' : 'Terreno'}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -82,7 +84,7 @@ export default function MapControlsBar({
               }`}
             >
               <NavIcon className="w-3 h-3 mr-1" />
-              Navegación
+              {en ? 'Navigation' : 'Navegación'}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="bg-white border-slate-200 text-slate-800 z-[2001]" align="center">
@@ -92,7 +94,7 @@ export default function MapControlsBar({
             >
               <div className="flex items-center gap-2">
                 <Milestone className="w-3 h-3" />
-                <span>Marcadores Km</span>
+                <span>{en ? 'Km markers' : 'Marcadores Km'}</span>
               </div>
               {showKmMarkers && <Check className="w-3 h-3 text-blue-600" />}
             </DropdownMenuItem>
@@ -102,7 +104,7 @@ export default function MapControlsBar({
             >
               <div className="flex items-center gap-2">
                 <BarChart3 className="w-3 h-3" />
-                <span>Perfil Elevación</span>
+                <span>{en ? 'Elevation profile' : 'Perfil Elevación'}</span>
               </div>
               {showElevationProfile && <Check className="w-3 h-3 text-blue-600" />}
             </DropdownMenuItem>
@@ -112,7 +114,7 @@ export default function MapControlsBar({
             >
               <div className="flex items-center gap-2">
                 <Users className="w-3 h-3" />
-                <span>GPS Corredores</span>
+                <span>{en ? 'Runner GPS' : 'GPS Corredores'}</span>
               </div>
               {showRunners && <Check className="w-3 h-3 text-blue-600" />}
             </DropdownMenuItem>
@@ -122,7 +124,7 @@ export default function MapControlsBar({
             >
               <div className="flex items-center gap-2">
                 <Wind className="w-3 h-3" />
-                <span>Viento en Mapa</span>
+                <span>{en ? 'Wind on map' : 'Viento en Mapa'}</span>
               </div>
               {showWindArrowsOnMap && <Check className="w-3 h-3 text-blue-600" />}
             </DropdownMenuItem>
@@ -132,7 +134,7 @@ export default function MapControlsBar({
             >
               <div className="flex items-center gap-2">
                 <ArrowRight className="w-3 h-3" />
-                <span>Flechas Ruta</span>
+                <span>{en ? 'Route arrows' : 'Flechas Ruta'}</span>
               </div>
               {showRouteArrows && <Check className="w-3 h-3 text-blue-600" />}
             </DropdownMenuItem>
@@ -150,22 +152,22 @@ export default function MapControlsBar({
               className="h-9 px-3 rounded-full bg-white/90 backdrop-blur-sm text-slate-700 hover:text-slate-900 hover:bg-white shadow-lg border border-slate-200 flex items-center gap-1 text-sm"
             >
               <Layers className="w-4 h-4" />
-              <span>Mapa</span>
+              <span>{en ? 'Map' : 'Mapa'}</span>
               <ChevronDown className="w-3 h-3" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="bg-white border-slate-200 text-slate-800 z-[2001]" align="center">
             <DropdownMenuItem onClick={() => setMapType('google')} className="cursor-pointer focus:bg-slate-100 text-xs">
-              Carreteras
+              {en ? 'Roads' : 'Carreteras'}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setMapType('satellite')} className="cursor-pointer focus:bg-slate-100 text-xs">
-              Satélite
+              {en ? 'Satellite' : 'Satélite'}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setMapType('hybrid')} className="cursor-pointer focus:bg-slate-100 text-xs">
-              Híbrido
+              {en ? 'Hybrid' : 'Híbrido'}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setMapType('terrain')} className="cursor-pointer focus:bg-slate-100 text-xs">
-              Terreno
+              {en ? 'Terrain' : 'Terreno'}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setMapType('street')} className="cursor-pointer focus:bg-slate-100 text-xs">
               OpenStreetMap
@@ -209,7 +211,7 @@ export default function MapControlsBar({
           title="Perfil de elevación"
         >
           <BarChart3 className="w-3 h-3" />
-          <span>Perfil</span>
+          <span>{en ? 'Profile' : 'Perfil'}</span>
         </Button>
 
         <Button
@@ -235,7 +237,7 @@ export default function MapControlsBar({
           title="Mostrar flechas de viento en el mapa"
         >
           <Wind className="w-3 h-3" />
-          <span>Viento</span>
+          <span>{en ? 'Wind' : 'Viento'}</span>
         </Button>
 
         <Button
@@ -248,7 +250,7 @@ export default function MapControlsBar({
           title="Mostrar radar de lluvia"
         >
           <CloudRain className="w-3 h-3" />
-          <span>Lluvia</span>
+          <span>{en ? 'Rain' : 'Lluvia'}</span>
         </Button>
 
         <Button
@@ -261,7 +263,7 @@ export default function MapControlsBar({
           title="Flechas de dirección"
         >
           <ArrowRight className="w-3 h-3" />
-          <span>Ruta</span>
+          <span>{en ? 'Route' : 'Ruta'}</span>
         </Button>
 
         <Button
@@ -274,7 +276,7 @@ export default function MapControlsBar({
           title="Navegación turno a turno"
         >
           <NavIcon className="w-3 h-3" />
-          <span>Navegación</span>
+          <span>{en ? 'Navigation' : 'Navegación'}</span>
         </Button>
       </div>
     </div>

@@ -2346,7 +2346,7 @@ export default function Navigation() {
         >
           
           {/* Street View Pegman */}
-          {<div
+          {false && <div
             ref={pegmanRef}
             onPointerDown={handleDragStart}
             className="navigation-pegman absolute right-4 z-[1006] cursor-grab active:cursor-grabbing transition-all select-none"

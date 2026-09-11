@@ -1092,6 +1092,7 @@ export default function MapView({
             heading={currentPosition?.heading}
             onMapViewChange={onMapViewChange}
           />
+          <StreetViewControl map={mapInstance?.target} gpxTrack={gpxTrack} onStreetViewOpen={onStreetViewOpen} />
 
           <TileLayer
             key={mapType}

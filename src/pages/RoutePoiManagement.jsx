@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useLanguage } from "../lib/LanguageContext";
 import { createPageUrl } from "@/utils";
 import { Poi, PoiType, GpxTrack, User } from "@/entities/all"; import { base44 } from "@/api/base44Client"; // Added User
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,8 @@ import LoadingScreen from "../components/common/LoadingScreen";
 import AppLogo from "../components/common/AppLogo"; // Added AppLogo
 
 export default function RoutePoiManagement() {
+  const { language } = useLanguage();
+  const en = language === 'en';
   const [route, setRoute] = useState(null);
   const [pois, setPois] = useState([]);
   const [poiTypes, setPoiTypes] = useState([]);
@@ -188,7 +191,7 @@ export default function RoutePoiManagement() {
           </Link>
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 flex items-center gap-3">
             <MapPin className="w-6 sm:w-8 h-6 sm:h-8 text-blue-600" />
-            POIs de: <span className="text-blue-700">{route?.name || 'Cargando...'}</span>
+            {en ? 'POIs for:' : 'POIs de:'} <span className="text-blue-700">{route?.name || (en ? 'Loading...' : 'Cargando...')}</span>
           </h1>
           {userRole !== 'admin' && (
             <p className="text-sm text-slate-500 mt-2">
@@ -200,7 +203,7 @@ export default function RoutePoiManagement() {
       <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
         <div className="p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 border-b border-slate-200">
             <h2 className="text-base sm:text-lg font-semibold text-slate-700">
-                {pois.length} Puntos de Interés en esta ruta
+                {pois.length} {en ? 'Points of Interest on this route' : 'Puntos de Interés en esta ruta'}
             </h2>
             {canManagePois && ( // Conditionally render "Add POI" button
               <Button
@@ -212,7 +215,7 @@ export default function RoutePoiManagement() {
                   size="sm"
               >
                   <Plus className="w-4 h-4 mr-2" />
-                  Añadir POI a esta Ruta
+                  {en ? 'Add POI to this Route' : 'Añadir POI a esta Ruta'}
               </Button>
             )}
         </div>
@@ -221,12 +224,12 @@ export default function RoutePoiManagement() {
             <Table>
               <TableHeader>
                 <TableRow className="border-slate-200 hover:bg-slate-50">
-                  <TableHead className="text-slate-600">Nombre</TableHead>
-                  <TableHead className="text-slate-600">Tipo</TableHead>
-                  <TableHead className="text-slate-600 text-right">Distancia (km)</TableHead>
-                  <TableHead className="text-slate-600 text-right">Elevación (m)</TableHead>
+                  <TableHead className="text-slate-600">{en ? 'Name' : 'Nombre'}</TableHead>
+                  <TableHead className="text-slate-600">{en ? 'Type' : 'Tipo'}</TableHead>
+                  <TableHead className="text-slate-600 text-right">{en ? 'Distance (km)' : 'Distancia (km)'}</TableHead>
+                  <TableHead className="text-slate-600 text-right">{en ? 'Elevation (m)' : 'Elevación (m)'}</TableHead>
                   {canManagePois && ( // Conditionally render "Actions" header
-                    <TableHead className="text-slate-600 text-center">Acciones</TableHead>
+                    <TableHead className="text-slate-600 text-center">{en ? 'Actions' : 'Acciones'}</TableHead>
                   )}
                 </TableRow>
               </TableHeader>

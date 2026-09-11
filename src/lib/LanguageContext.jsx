@@ -6,7 +6,8 @@ const translations = {
 };
 
 function detectLanguage() {
-  const saved = localStorage.getItem('track4race_language');
+  let saved = null;
+  try { saved = localStorage.getItem('track4race_language'); } catch { /* WebViews may temporarily block storage. */ }
   if (saved === 'es' || saved === 'en') return saved;
   const locale = `${navigator.language || ''} ${Intl.DateTimeFormat().resolvedOptions().timeZone || ''}`.toLowerCase();
   return locale.includes('es') || locale.includes('madrid') || locale.includes('canary') ? 'es' : null;
@@ -16,7 +17,7 @@ const LanguageContext = createContext(null);
 export function LanguageProvider({ children }) {
   const [language, setLanguageState] = useState(detectLanguage);
   const [needsChoice, setNeedsChoice] = useState(() => !detectLanguage());
-  const setLanguage = (next) => { setLanguageState(next); setNeedsChoice(false); localStorage.setItem('track4race_language', next); };
+  const setLanguage = (next) => { setLanguageState(next); setNeedsChoice(false); try { localStorage.setItem('track4race_language', next); } catch { /* keep the choice for this session */ } };
   const value = useMemo(() => ({ language, needsChoice, setLanguage, t: translations[language || 'es'] }), [language, needsChoice]);
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }

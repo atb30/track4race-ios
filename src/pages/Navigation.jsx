@@ -30,6 +30,7 @@ import NavigationLoadingScreen from "../components/navigation/NavigationLoadingS
 import ClimbExplorer from "../components/navigation/ClimbExplorer";
 import QuickPoiDialog from "../components/navigation/QuickPoiDialog";
 import { requestReliableInstructions } from "../lib/navigationEngine";
+import { useLanguage } from "../lib/LanguageContext";
 import OrientationWarning from "../components/common/OrientationWarning";
 import AdminMenu from "../components/common/AdminMenu";
 
@@ -405,6 +406,7 @@ export default function Navigation() {
   const [quickPoiError, setQuickPoiError] = useState('');
   const [nearbyPois, setNearbyPois] = useState([]);
   const { user } = useAuth();
+  const { t, language, needsChoice, setLanguage } = useLanguage();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [gpsError, setGpsError] = useState(null);
   const [isOffTrack, setIsOffTrack] = useState(false); // Nuevo estado
@@ -2225,6 +2227,9 @@ export default function Navigation() {
 
             {/* Navigation Controls - RESPONSIVE */}
             <div className="flex items-center gap-1 sm:gap-2">
+              <select aria-label={t.language} value={language || 'es'} onChange={(event) => setLanguage(event.target.value)} className="h-9 rounded-md border border-blue-200 bg-white px-2 text-xs text-slate-700">
+                <option value="es">{t.spanish}</option><option value="en">{t.english}</option>
+              </select>
               {/* START/FINISH BUTTONS - RESPONSIVE */}
               <Button
                 variant="outline"
@@ -2236,7 +2241,7 @@ export default function Navigation() {
               >
                 <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
                 <MapPin className="h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="hidden sm:inline">Añadir POI</span>
+                <span className="hidden sm:inline">{t.addPoi}</span>
                 <span className="text-xs sm:hidden">POI</span>
               </Button>
               {startPoint && (
@@ -2303,6 +2308,19 @@ export default function Navigation() {
               )}
             </div>
           </div>
+
+          {needsChoice && (
+            <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-slate-900/45 p-4">
+              <div className="w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-2xl">
+                <h2 className="text-lg font-semibold text-slate-800">{t.language}</h2>
+                <p className="mt-2 text-sm text-slate-500">Choose your language / Elige tu idioma</p>
+                <div className="mt-5 grid grid-cols-2 gap-3">
+                  <Button type="button" onClick={() => setLanguage('es')}>Español</Button>
+                  <Button type="button" onClick={() => setLanguage('en')} variant="outline">English</Button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 

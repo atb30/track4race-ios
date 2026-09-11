@@ -7,6 +7,7 @@ import { Route, Play, Trash2, Mountain, MapPin, Clock, TrendingUp, ArrowLeft, Us
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import { useLanguage } from "../lib/LanguageContext";
 import { createPageUrl } from "@/utils";
 import ManageAccessForm from "../components/routes/ManageAccessForm";
 import AppLogo from "../components/common/AppLogo";
@@ -17,6 +18,7 @@ const ROUTES_CACHE_DURATION = 60 * 60 * 1000; // 1 hour
 const CACHE_KEY_ROUTES = 'mirat_routes_cache';
 
 export default function Routes() {
+  const { t } = useLanguage();
   const [routes, setRoutes] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -388,7 +390,7 @@ export default function Routes() {
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 flex items-center gap-3 mb-2">
             <Route className="w-6 sm:w-8 h-6 sm:h-8 text-blue-600" />
-            Biblioteca de Rutas
+            {t.routes}
           </h1>
           <p className="text-slate-500 text-sm sm:text-base">
             {userRole === 'admin' 
@@ -400,7 +402,7 @@ export default function Routes() {
           </p>
           {/* Contador de rutas */}
           <p className="text-xs text-slate-400 mt-1">
-            {routes.length} rutas disponibles
+            {routes.length} {t.available}
           </p>
         </div>
         
@@ -410,14 +412,14 @@ export default function Routes() {
             <Link to={createPageUrl("UploadGpxPage")}>
               <Button className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto">
                 <Plus className="w-4 h-4 mr-2" />
-                Subir Ruta
+                {t.upload}
               </Button>
             </Link>
           )}
           <Link to={createPageUrl("Navigation")}>
             <Button variant="outline" className="border-slate-300 hover:bg-slate-100 text-slate-700 hover:text-slate-800 w-full sm:w-auto">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Volver a Navegación
+              {t.backNavigation}
             </Button>
           </Link>
         </div>
@@ -433,7 +435,7 @@ export default function Routes() {
               <>
                 <Mountain className="w-12 sm:w-16 h-12 sm:h-16 mx-auto mb-4 text-slate-400" />
                 <h3 className="text-lg sm:text-xl font-semibold text-slate-800 mb-2">
-                  No tienes rutas guardadas
+                  {t.noSaved}
                 </h3>
                 <p className="text-slate-500 mb-6 text-sm sm:text-base">
                   Sube tu primer archivo GPX para comenzar la navegación
@@ -441,7 +443,7 @@ export default function Routes() {
                 <Link to={createPageUrl("UploadGpxPage")}>
                   <Button className="bg-blue-600 hover:bg-blue-700">
                     <Upload className="w-4 h-4 mr-2" />
-                    Subir Primera Ruta
+                    {t.firstGpx}
                   </Button>
                 </Link>
               </>

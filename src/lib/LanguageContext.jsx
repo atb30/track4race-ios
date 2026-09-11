@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useMemo, useState } from 'react';
 
 const translations = {
-  es: { addPoi: 'Añadir POI', goStart: 'Ir a Salida', goFinish: 'Ir a Meta', noRoute: 'Sin ruta activa', onRoute: 'En ruta', offRoute: 'Fuera', language: 'Idioma', spanish: 'Español', english: 'English' },
-  en: { addPoi: 'Add POI', goStart: 'Go to start', goFinish: 'Go to finish', noRoute: 'No active route', onRoute: 'On route', offRoute: 'Off route', language: 'Language', spanish: 'Español', english: 'English' },
+  es: { addPoi: 'Añadir POI', goStart: 'Ir a Salida', goFinish: 'Ir a Meta', noRoute: 'Sin ruta activa', onRoute: 'En ruta', offRoute: 'Fuera', language: 'Idioma', spanish: 'Español', english: 'English', routes: 'Biblioteca de Rutas', upload: 'Subir Ruta', backNavigation: 'Volver a Navegación', available: 'rutas disponibles', noSaved: 'No tienes rutas guardadas', firstGpx: 'Subir Primera Ruta' },
+  en: { addPoi: 'Add POI', goStart: 'Go to start', goFinish: 'Go to finish', noRoute: 'No active route', onRoute: 'On route', offRoute: 'Off route', language: 'Language', spanish: 'Español', english: 'English', routes: 'Route Library', upload: 'Upload Route', backNavigation: 'Back to Navigation', available: 'routes available', noSaved: 'No saved routes', firstGpx: 'Upload First Route' },
 };
 
 function detectLanguage() {

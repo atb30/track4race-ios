@@ -125,7 +125,8 @@ export default function TurnByTurnNavigator({ gpxTrack, currentPosition, current
       bearings.push(calculateBearing(sampled[i].lat, sampled[i].lng, sampled[i + 1].lat, sampled[i + 1].lng));
     }
 
-    const MIN_TURN = 25; // degrees
+    // Ignore GPS noise and gentle bends; announce only a meaningful change.
+    const MIN_TURN = 32; // degrees
     const MIN_DIST_BETWEEN = 150; // meters
     const result = [];
     let lastManeuverDist = -Infinity;
@@ -198,7 +199,9 @@ export default function TurnByTurnNavigator({ gpxTrack, currentPosition, current
       const dominantCurve = Math.max(cumulativeLeft, cumulativeRight);
       const secondaryCurve = Math.min(cumulativeLeft, cumulativeRight);
       const dominantSegments = cumulativeLeft >= cumulativeRight ? leftSegments : rightSegments;
-      if (dominantSegments >= 3 && dominantCurve >= 85 && dominantCurve >= secondaryCurve * 1.8 && end > start) {
+      // A roundabout must contain a sustained circular sweep. These stricter
+      // thresholds prevent ordinary bends or hairpins being announced as one.
+      if (dominantSegments >= 6 && dominantCurve >= 120 && dominantCurve >= secondaryCurve * 2.2 && end > start) {
         const dominantIndices = cumulativeLeft >= cumulativeRight ? leftIndices : rightIndices;
         // The first small deflection is commonly the approach lane rather than
         // the roundabout itself. Confirm entry on the second circular segment.

@@ -64,11 +64,11 @@ function RoundaboutIcon({ exit, className = "w-12 h-12" }) {
   );
 }
 
-const getTurnInstruction = (turnType, distanceMeters) => {
+const getTurnInstruction = (turnType, distanceMeters, language = 'es') => {
   const distText = distanceMeters < 1000 ? `${Math.round(distanceMeters)} m` : `${(distanceMeters / 1000).toFixed(1)} km`;
 
   if (turnType.type === "straight") {
-    return distanceMeters < 30 ? "Continúa recto" : `Continúa recto ${distText}`;
+    return language === 'en' ? (distanceMeters < 30 ? 'Continue straight' : `Continue straight for ${distText}`) : (distanceMeters < 30 ? "Continúa recto" : `Continúa recto ${distText}`);
   }
 
   const dirText = turnType.direction === "right" ? "derecha" : "izquierda";
@@ -77,10 +77,10 @@ const getTurnInstruction = (turnType, distanceMeters) => {
   if (distanceMeters < 30) {
     return `${action} a la ${dirText}`;
   }
-  return `En ${distText}, ${action.toLowerCase()} a la ${dirText}`;
+  return language === 'en' ? `In ${distText}, ${action.toLowerCase()} ${turnType.direction === 'right' ? 'right' : 'left'}` : `En ${distText}, ${action.toLowerCase()} a la ${dirText}`;
 };
 
-export default function TurnByTurnNavigator({ gpxTrack, currentPosition, currentSpeed = 0, isOffTrack, remoteRoute = null }) {
+export default function TurnByTurnNavigator({ gpxTrack, currentPosition, currentSpeed = 0, isOffTrack, remoteRoute = null, language = 'es' }) {
   const [maneuverIndex, setManeuverIndex] = useState(0);
   const [navigationNow, setNavigationNow] = useState(() => Date.now());
   const closestApproachRef = useRef({ index: -1, distance: Infinity });
@@ -155,7 +155,7 @@ export default function TurnByTurnNavigator({ gpxTrack, currentPosition, current
           lng: wp.lng,
           distance: distM,
           turnType,
-          instruction: getTurnInstruction(turnType, distM),
+          instruction: getTurnInstruction(turnType, distM, language),
           bearingBefore: bearings[i - 1],
           bearingAfter: bearings[i],
         });
@@ -241,7 +241,7 @@ export default function TurnByTurnNavigator({ gpxTrack, currentPosition, current
     }
 
     return result;
-  }, [gpxTrack, remoteRoute]);
+  }, [gpxTrack, remoteRoute, language]);
 
   useEffect(() => {
     const currentDistance = livePosition?.distance || 0;

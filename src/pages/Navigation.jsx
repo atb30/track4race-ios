@@ -2619,7 +2619,7 @@ export default function Navigation() {
           {/* Turn-by-turn Navigation Banner */}
           {showTurnByTurn && (
             <div className="absolute top-14 sm:top-16 left-1/2 transform -translate-x-1/2 z-[1003] w-[calc(100%_-_16px)] sm:w-[90vw] max-w-lg pointer-events-none">
-              <TurnByTurnNavigator gpxTrack={activeTrack} currentPosition={currentPosition} currentSpeed={currentSpeed} isOffTrack={isOffTrack} remoteRoute={valhallaRoute} />
+              <TurnByTurnNavigator gpxTrack={activeTrack} currentPosition={currentPosition} currentSpeed={currentSpeed} isOffTrack={isOffTrack} remoteRoute={valhallaRoute} language={language} />
             </div>
           )}
 

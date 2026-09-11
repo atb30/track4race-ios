@@ -415,6 +415,7 @@ export default function Navigation() {
   const [showRouteArrows, setShowRouteArrows] = useState(false); // New state for route arrows
   const [showTurnByTurn, setShowTurnByTurn] = useState(false); // Turn-by-turn navigation mode
   const [valhallaStatus, setValhallaStatus] = useState('idle');
+  const [valhallaRoute, setValhallaRoute] = useState(null);
   const [isNativeFullscreen, setIsNativeFullscreen] = useState(false);
   const [currentSpeed, setCurrentSpeed] = useState(0);
   const [previousPositions, setPreviousPositions] = useState([]);
@@ -444,13 +445,15 @@ export default function Navigation() {
   useEffect(() => {
     if (!activeTrack?.id || !activeTrack?.waypoints?.length) return;
     const cacheKey = `mirat_valhalla_${activeTrack.id}`;
-    if (localStorage.getItem(cacheKey)) { setValhallaStatus('cached'); return; }
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) { try { setValhallaRoute(JSON.parse(cached).route); } catch {} setValhallaStatus('cached'); return; }
     let cancelled = false;
     setValhallaStatus('loading');
     requestReliableInstructions(activeTrack.waypoints, 'auto').then((result) => {
       if (cancelled) return;
       if (!result.fallback) {
         localStorage.setItem(cacheKey, JSON.stringify({ savedAt: Date.now(), route: result }));
+        setValhallaRoute(result);
         setValhallaStatus('ready');
       } else setValhallaStatus('fallback');
     });
@@ -2598,7 +2601,7 @@ export default function Navigation() {
           {/* Turn-by-turn Navigation Banner */}
           {showTurnByTurn && (
             <div className="absolute top-14 sm:top-16 left-1/2 transform -translate-x-1/2 z-[1003] w-[calc(100%_-_16px)] sm:w-[90vw] max-w-lg pointer-events-none">
-              <TurnByTurnNavigator gpxTrack={activeTrack} currentPosition={currentPosition} currentSpeed={currentSpeed} isOffTrack={isOffTrack} />
+              <TurnByTurnNavigator gpxTrack={activeTrack} currentPosition={currentPosition} currentSpeed={currentSpeed} isOffTrack={isOffTrack} remoteRoute={valhallaRoute} />
             </div>
           )}
 

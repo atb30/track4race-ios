@@ -80,7 +80,7 @@ const getTurnInstruction = (turnType, distanceMeters) => {
   return `En ${distText}, ${action.toLowerCase()} a la ${dirText}`;
 };
 
-export default function TurnByTurnNavigator({ gpxTrack, currentPosition, currentSpeed = 0, isOffTrack }) {
+export default function TurnByTurnNavigator({ gpxTrack, currentPosition, currentSpeed = 0, isOffTrack, remoteRoute = null }) {
   const [maneuverIndex, setManeuverIndex] = useState(0);
   const [navigationNow, setNavigationNow] = useState(() => Date.now());
   const closestApproachRef = useRef({ index: -1, distance: Infinity });
@@ -103,6 +103,17 @@ export default function TurnByTurnNavigator({ gpxTrack, currentPosition, current
   }, [currentPosition, currentSpeed, navigationNow]);
 
   const maneuvers = useMemo(() => {
+    const remote = remoteRoute?.trip?.legs?.flatMap((leg) => leg.maneuvers || []) || [];
+    if (remote.length) return remote.map((item, index) => ({
+      lat: Number(item.lat) || gpxTrack.waypoints[Math.min(item.begin_shape_index || 0, gpxTrack.waypoints.length - 1)].lat,
+      lng: Number(item.lon) || gpxTrack.waypoints[Math.min(item.begin_shape_index || 0, gpxTrack.waypoints.length - 1)].lng,
+      distance: Number(item.begin_shape_index || index),
+      distanceMeters: Number(item.length || 0) * 1000,
+      instruction: item.verbal_pre_transition_instruction || item.verbal_post_transition_instruction || item.instruction || 'Continúa por la ruta',
+      type: String(item.type).toLowerCase().includes('roundabout') ? 'roundabout' : 'normal',
+      direction: String(item.type).toLowerCase().includes('right') ? 'right' : String(item.type).toLowerCase().includes('left') ? 'left' : null,
+      exit: item.exit_number,
+    }));
     if (!gpxTrack?.waypoints || gpxTrack.waypoints.length < 3) return [];
     const waypoints = gpxTrack.waypoints;
 
@@ -230,7 +241,7 @@ export default function TurnByTurnNavigator({ gpxTrack, currentPosition, current
     }
 
     return result;
-  }, [gpxTrack]);
+  }, [gpxTrack, remoteRoute]);
 
   useEffect(() => {
     const currentDistance = livePosition?.distance || 0;

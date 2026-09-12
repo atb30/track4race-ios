@@ -1,5 +1,6 @@
 
 import React, { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { GpxTrack } from '@/entities/GpxTrack';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -117,6 +118,7 @@ const parseGpx = (gpxContent) => {
 };
 
 export default function UploadGpxPage() {
+  const navigate = useNavigate();
   const { language } = useLanguage();
   const en = language === 'en';
   const [file, setFile] = useState(null);
@@ -219,6 +221,9 @@ export default function UploadGpxPage() {
     <div className="max-w-2xl mx-auto py-8 px-4 sm:px-6">
       <Card className="bg-white border-slate-200 shadow-lg">
         <CardHeader>
+          <Button type="button" variant="ghost" className="w-fit -ml-2 text-slate-600" onClick={() => navigate(-1)}>
+            ← {en ? 'Back' : 'Volver'}
+          </Button>
           <CardTitle className="text-2xl font-bold text-slate-800 flex items-center gap-3">
             <Upload className="w-7 h-7 text-blue-600" />
             {en ? 'Upload New GPX Route' : 'Subir Nueva Ruta GPX'}

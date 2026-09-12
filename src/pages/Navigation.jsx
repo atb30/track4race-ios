@@ -2723,7 +2723,7 @@ export default function Navigation() {
               <div className="bg-slate-100 p-1 sm:p-2 border-b border-slate-800">
                  <h3 className="text-xs text-slate-500 uppercase font-semibold tracking-wider flex items-center gap-2">
                   <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4"/>
-                  Corredores en Ruta
+                  {language === 'en' ? 'Runners on Route' : 'Corredores en Ruta'}
                 </h3>
               </div>
               {runnersOnTrack.length === 0 ? (

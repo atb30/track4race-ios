@@ -452,10 +452,10 @@ export default function Routes() {
               <>
                 <Lock className="w-12 sm:w-16 h-12 sm:h-16 mx-auto mb-4 text-slate-400" />
                 <h3 className="text-lg sm:text-xl font-semibold text-slate-800 mb-2">
-                  No tienes acceso a ninguna ruta
+                  {en ? 'You do not have access to any route' : 'No tienes acceso a ninguna ruta'}
                 </h3>
                 <p className="text-slate-500 text-sm sm:text-base">
-                  Contacta con el administrador para que te asigne acceso a las rutas
+                  {en ? 'Contact the administrator to request route access' : 'Contacta con el administrador para que te asigne acceso a las rutas'}
                 </p>
               </>
             )}
@@ -491,18 +491,18 @@ export default function Routes() {
                             <span className="truncate">{route.name}</span>
                             {route.is_active && (
                               <Badge className="bg-blue-600 text-white text-xs flex-shrink-0">
-                                ACTIVA
+                                {en ? 'ACTIVE' : 'ACTIVA'}
                               </Badge>
                             )}
                             {isOwner && (
                               <Badge className="bg-green-600 text-white text-xs flex-shrink-0">
-                                TU RUTA
+                                {en ? 'YOUR ROUTE' : 'TU RUTA'}
                               </Badge>
                             )}
                             {isActivating && (
                               <Badge className="bg-orange-500 text-white text-xs flex-shrink-0 flex items-center gap-1">
                                 <Loader2 className="w-3 h-3 animate-spin" />
-                                ACTIVANDO
+                                {en ? 'ACTIVATING' : 'ACTIVANDO'}
                               </Badge>
                             )}
                           </CardTitle>
@@ -520,7 +520,7 @@ export default function Routes() {
                         <div className="bg-slate-50 rounded-lg p-2 sm:p-3 border border-slate-200">
                           <div className="flex items-center gap-2 text-slate-500 mb-1">
                             <MapPin className="w-3 sm:w-4 h-3 sm:h-4" />
-                            <span className="text-xs">Distancia</span>
+                            <span className="text-xs">{en ? 'Distance' : 'Distancia'}</span>
                           </div>
                           <div className="font-bold text-slate-800 text-base sm:text-lg">
                             {route.total_distance?.toFixed(1) || 0}
@@ -531,7 +531,7 @@ export default function Routes() {
                         <div className="bg-slate-50 rounded-lg p-2 sm:p-3 border border-slate-200">
                           <div className="flex items-center gap-2 text-slate-500 mb-1">
                             <TrendingUp className="w-3 sm:w-4 h-3 sm:h-4" />
-                            <span className="text-xs">Desnivel</span>
+                            <span className="text-xs">{en ? 'Elevation gain' : 'Desnivel'}</span>
                           </div>
                           <div className="font-bold text-slate-800 text-base sm:text-lg">
                             {route.total_elevation_gain?.toFixed(0) || 0}
@@ -542,7 +542,7 @@ export default function Routes() {
                         <div className="bg-slate-50 rounded-lg p-2 sm:p-3 border border-slate-200">
                           <div className="flex items-center gap-2 text-slate-500 mb-1">
                             <Mountain className="w-3 sm:w-4 h-3 sm:h-4" />
-                            <span className="text-xs">Max Alt</span>
+                            <span className="text-xs">{en ? 'Max elevation' : 'Max Alt'}</span>
                           </div>
                           <div className="font-bold text-slate-800 text-sm sm:text-base">
                             {route.max_elevation?.toFixed(0) || 0}m
@@ -552,7 +552,7 @@ export default function Routes() {
                         <div className="bg-slate-50 rounded-lg p-2 sm:p-3 border border-slate-200">
                           <div className="flex items-center gap-2 text-slate-500 mb-1">
                             <Clock className="w-3 sm:w-4 h-3 sm:h-4" />
-                            <span className="text-xs">Subidas</span>
+                            <span className="text-xs">{en ? 'Climbs' : 'Subidas'}</span>
                           </div>
                           <div className="font-bold text-slate-800 text-sm sm:text-base">
                             {route.climb_segments?.length || 0}
@@ -590,12 +590,12 @@ export default function Routes() {
                           {isActivating ? (
                             <>
                               <Loader2 className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2 animate-spin" />
-                              Activando...
+                              {en ? 'Activating...' : 'Activando...'}
                             </>
                           ) : (
                             <>
                               <Play className="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2" />
-                              {route.is_active ? "Activa" : "Activar"}
+                              {route.is_active ? (en ? "Active" : "Activa") : (en ? "Activate" : "Activar")}
                             </>
                           )}
                         </Button>

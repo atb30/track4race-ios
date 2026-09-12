@@ -86,25 +86,25 @@ function ClimbExplorerContent({ track, googleApiKey }) {
               <div className="space-y-3 min-w-0 md:pr-3 md:border-r border-slate-200" role="group" aria-label="Elegir subida">
                 <label className="block text-sm font-semibold text-slate-800">{en ? 'Climb' : 'Subida'} {selectedIndex + 1} {en ? 'of' : 'de'} {climbs.length}
                   <select value={selected.id} onChange={e => setSelectedId(e.target.value)} className="block w-full min-h-12 rounded-lg border border-blue-200 bg-blue-50 text-blue-900 text-base mt-2 px-2">
-                    {climbs.map(c => <option key={c.id} value={c.id}>Subida {c.number} · {format(c.length, 2)} km · {format(c.grade)} %</option>)}
+                    {climbs.map(c => <option key={c.id} value={c.id}>{en ? 'Climb' : 'Subida'} {c.number} · {format(c.length, 2)} km · {format(c.grade)}% {en ? 'average' : 'de media'}</option>)}
                   </select>
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   <Button variant="outline" className="min-h-12 px-2" disabled={selectedIndex === 0} onClick={() => setSelectedId(climbs[selectedIndex - 1].id)}>{en ? 'Previous' : 'Anterior'}</Button>
                   <Button variant="outline" className="min-h-12 px-2" disabled={selectedIndex === climbs.length - 1} onClick={() => setSelectedId(climbs[selectedIndex + 1].id)}>{en ? 'Next' : 'Siguiente'}</Button>
                 </div>
-                <p className="text-sm text-slate-600">Del km {format(selected.start, 2)} al {format(selected.end, 2)}</p>
+                <p className="text-sm text-slate-600">{en ? 'From km' : 'Del km'} {format(selected.start, 2)} {en ? 'to' : 'al'} {format(selected.end, 2)}</p>
               </div>
               <section className="min-w-0" aria-live="polite" aria-label="Perfil de la subida seleccionada">
-                <h3 className="font-semibold text-slate-900">Subida {selected.number} · {format(selected.length, 2)} km · {format(selected.grade)} % de media</h3>
+                <h3 className="font-semibold text-slate-900">{en ? 'Climb' : 'Subida'} {selected.number} · {format(selected.length, 2)} km · {format(selected.grade)}% {en ? 'average' : 'de media'}</h3>
                 <p className="text-xs text-slate-600 mt-1">{en ? 'Average gradient in segments of' : 'Pendiente media por tramos de'} {selected.step < 1 ? `${format(selected.step * 1000, 0)} m` : `${format(selected.step)} km`}. {en ? 'The last segment may be shorter.' : 'El último tramo puede ser más corto.'}</p>
                 <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50" role="region" aria-label="Perfil táctil de la subida">
                   <div ref={chartBox} className="w-full min-w-0 h-[220px] sm:h-[250px] cursor-crosshair">
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={selected.profile} margin={{ top: 34, right: 14, left: 5, bottom: 20 }} onClick={selectChartPoint}>
-                        <XAxis dataKey="km" type="number" domain={[0, selected.length]} ticks={[0, ...selected.segments.map(s => s.to)]} minTickGap={24} tickFormatter={v => format(v, 2)} label={{ value: 'Distancia de subida (km)', position: 'bottom', offset: 0 }} tick={{ fontSize: 11, fill: '#345873' }} />
+                        <XAxis dataKey="km" type="number" domain={[0, selected.length]} ticks={[0, ...selected.segments.map(s => s.to)]} minTickGap={24} tickFormatter={v => format(v, 2)} label={{ value: en ? 'Climb distance (km)' : 'Distancia de subida (km)', position: 'bottom', offset: 0 }} tick={{ fontSize: 11, fill: '#345873' }} />
                         <YAxis domain={['auto', 'auto']} tickFormatter={v => `${Math.round(v)} m`} width={65} tick={{ fontSize: 11, fill: '#345873' }} />
-                        <Tooltip labelFormatter={v => `Km ${format(Number(v), 2)} de la subida`} formatter={v => [`${format(Number(v), 0)} m`, 'Altitud']} />
+                        <Tooltip labelFormatter={v => `${en ? 'Km' : 'Km'} ${format(Number(v), 2)} ${en ? 'of climb' : 'de la subida'}`} formatter={v => [`${format(Number(v), 0)} m`, en ? 'Altitude' : 'Altitud']} />
                         <Area type="linear" dataKey="elevation" stroke="#006fba" fill="#b5e0fa" strokeWidth={2} isAnimationActive={false} />
                         {selected.segments.map((s, i) => <ReferenceArea key={`area-${i}`} x1={s.from} x2={s.to} fill={i % 2 ? '#006fba' : '#24bce8'} fillOpacity={0.07} />)}
                         {chartWidth >= 560 && selected.segments.map((s, i) => <ReferenceLine key={`label-${i}`} x={(s.from + s.to) / 2} stroke="transparent" label={{ value: `${format(s.grade)}%`, position: 'insideTop', fill: '#092844', fontSize: 12 }} />)}
@@ -115,7 +115,7 @@ function ClimbExplorerContent({ track, googleApiKey }) {
                 </div>
                 {chartWidth < 560 && <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2" aria-label="Pendientes por tramo">{selected.segments.map((s, i) => <button type="button" key={i} className="min-h-12 rounded-lg bg-blue-50 text-blue-900 text-xs px-2 py-2" onClick={() => openAtDistance((s.from + s.to) / 2)}>{format(s.from, 2)}–{format(s.to, 2)} km · {format(s.grade)} %</button>)}</div>}
                 {street && <div className="mt-3 rounded-lg overflow-hidden border border-slate-200">
-                  <div className="bg-blue-50 p-3 text-sm text-blue-800 flex justify-between gap-2"><span>Street View · km {format(selected.start + street.km, 3)} del track</span><button type="button" aria-label="Cerrar Street View" onClick={() => { requestId.current += 1; setStreet(null); }}><X className="w-5 h-5" /></button></div>
+                  <div className="bg-blue-50 p-3 text-sm text-blue-800 flex justify-between gap-2"><span>Street View · km {format(selected.start + street.km, 3)} {en ? 'of track' : 'del track'}</span><button type="button" aria-label={en ? 'Close Street View' : 'Cerrar Street View'} onClick={() => { requestId.current += 1; setStreet(null); }}><X className="w-5 h-5" /></button></div>
                   <div role="status" aria-live="polite">{street.loading && <p className="p-3 text-sm">{en ? 'Checking Google coverage…' : 'Comprobando cobertura de Google…'}</p>}{street.error && <p className="p-3 text-sm text-slate-600">{street.error}</p>}</div>
                   {street.panoId && <><iframe title={en ? 'Street View of selected point' : 'Street View del punto seleccionado'} className="w-full h-64" key={street.panoId} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" src={`https://www.google.com/maps/embed/v1/streetview?key=${encodeURIComponent(googleApiKey)}&pano=${encodeURIComponent(street.panoId)}`} /><p className="px-3 py-2 text-xs text-slate-500">{en ? 'Google shows the nearest available panorama; it may be offset from the exact GPX point.' : 'Google muestra la panorámica disponible más cercana; puede estar desplazada del punto exacto del GPX.'}</p></>}
                 </div>}

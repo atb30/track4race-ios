@@ -9,6 +9,8 @@ import { useLanguage } from "@/lib/LanguageContext";
 
 // NEW: Popup for clicked points on the chart
 const ChartClickPopup = ({ pointInfo, totalDistance, onClose }) => {
+  const { language } = useLanguage();
+  const en = language === 'en';
   if (!pointInfo) return null;
 
   const remainingDistance = totalDistance - pointInfo.distance;
@@ -41,6 +43,8 @@ const ChartClickPopup = ({ pointInfo, totalDistance, onClose }) => {
 
 // Tooltip/Popup que aparece al hacer clic en un POI
 const PoiPopup = ({ poi, poiType, onClose }) => {
+  const { language } = useLanguage();
+  const en = language === 'en';
   if (!poi) return null;
 
   return (

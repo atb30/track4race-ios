@@ -14,7 +14,7 @@ class ClimbErrorBoundary extends React.Component {
   static getDerivedStateFromError() { return { failed: true }; }
   componentDidCatch(error) { console.error('Climb explorer failed:', error); }
   render() {
-    if (this.state.failed) return <Button variant="outline" className="bg-white text-blue-700" onClick={() => this.setState({ failed: false })} title="No se pudo abrir el visor. Pulsa para reintentar.">Reintentar subidas</Button>;
+    if (this.state.failed) return <Button variant="outline" className="bg-white text-blue-700" onClick={() => this.setState({ failed: false })} title="Viewer could not open. Tap to retry. / No se pudo abrir el visor. Pulsa para reintentar.">Retry climbs / Reintentar subidas</Button>;
     return this.props.children;
   }
 }
@@ -97,7 +97,7 @@ function ClimbExplorerContent({ track, googleApiKey }) {
               </div>
               <section className="min-w-0" aria-live="polite" aria-label="Perfil de la subida seleccionada">
                 <h3 className="font-semibold text-slate-900">Subida {selected.number} · {format(selected.length, 2)} km · {format(selected.grade)} % de media</h3>
-                <p className="text-xs text-slate-600 mt-1">Pendiente media por tramos de {selected.step < 1 ? `${format(selected.step * 1000, 0)} m` : `${format(selected.step)} km`}. El último tramo puede ser más corto.</p>
+                <p className="text-xs text-slate-600 mt-1">{en ? 'Average gradient in segments of' : 'Pendiente media por tramos de'} {selected.step < 1 ? `${format(selected.step * 1000, 0)} m` : `${format(selected.step)} km`}. {en ? 'The last segment may be shorter.' : 'El último tramo puede ser más corto.'}</p>
                 <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50" role="region" aria-label="Perfil táctil de la subida">
                   <div ref={chartBox} className="w-full min-w-0 h-[220px] sm:h-[250px] cursor-crosshair">
                     <ResponsiveContainer width="100%" height="100%">
@@ -116,8 +116,8 @@ function ClimbExplorerContent({ track, googleApiKey }) {
                 {chartWidth < 560 && <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2" aria-label="Pendientes por tramo">{selected.segments.map((s, i) => <button type="button" key={i} className="min-h-12 rounded-lg bg-blue-50 text-blue-900 text-xs px-2 py-2" onClick={() => openAtDistance((s.from + s.to) / 2)}>{format(s.from, 2)}–{format(s.to, 2)} km · {format(s.grade)} %</button>)}</div>}
                 {street && <div className="mt-3 rounded-lg overflow-hidden border border-slate-200">
                   <div className="bg-blue-50 p-3 text-sm text-blue-800 flex justify-between gap-2"><span>Street View · km {format(selected.start + street.km, 3)} del track</span><button type="button" aria-label="Cerrar Street View" onClick={() => { requestId.current += 1; setStreet(null); }}><X className="w-5 h-5" /></button></div>
-                  <div role="status" aria-live="polite">{street.loading && <p className="p-3 text-sm">Comprobando cobertura de Google…</p>}{street.error && <p className="p-3 text-sm text-slate-600">{street.error}</p>}</div>
-                  {street.panoId && <><iframe title="Street View del punto seleccionado" className="w-full h-64" key={street.panoId} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" src={`https://www.google.com/maps/embed/v1/streetview?key=${encodeURIComponent(googleApiKey)}&pano=${encodeURIComponent(street.panoId)}`} /><p className="px-3 py-2 text-xs text-slate-500">Google muestra la panorámica disponible más cercana; puede estar desplazada del punto exacto del GPX.</p></>}
+                  <div role="status" aria-live="polite">{street.loading && <p className="p-3 text-sm">{en ? 'Checking Google coverage…' : 'Comprobando cobertura de Google…'}</p>}{street.error && <p className="p-3 text-sm text-slate-600">{street.error}</p>}</div>
+                  {street.panoId && <><iframe title={en ? 'Street View of selected point' : 'Street View del punto seleccionado'} className="w-full h-64" key={street.panoId} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" src={`https://www.google.com/maps/embed/v1/streetview?key=${encodeURIComponent(googleApiKey)}&pano=${encodeURIComponent(street.panoId)}`} /><p className="px-3 py-2 text-xs text-slate-500">{en ? 'Google shows the nearest available panorama; it may be offset from the exact GPX point.' : 'Google muestra la panorámica disponible más cercana; puede estar desplazada del punto exacto del GPX.'}</p></>}
                 </div>}
               </section>
             </div>

@@ -30,9 +30,9 @@ const ChartClickPopup = ({ pointInfo, totalDistance, onClose }) => {
         {pointInfo.runnerName || `Km ${pointInfo.distance.toFixed(1)}`}
       </h4>
       <div className="space-y-1 text-slate-600">
-        <p><strong>Altitud:</strong> {pointInfo.elevation.toFixed(0)} m</p>
-        <p><strong>Distancia a meta:</strong> {remainingDistance.toFixed(1)} km</p>
-        {pointInfo.grade && <p><strong>Pendiente:</strong> {pointInfo.grade.toFixed(1)} %</p>}
+        <p><strong>{en ? 'Altitude:' : 'Altitud:'}</strong> {pointInfo.elevation.toFixed(0)} m</p>
+        <p><strong>{en ? 'Distance to finish:' : 'Distancia a meta:'}</strong> {remainingDistance.toFixed(1)} km</p>
+        {pointInfo.grade && <p><strong>{en ? 'Gradient:' : 'Pendiente:'}</strong> {pointInfo.grade.toFixed(1)} %</p>}
       </div>
     </div>
   );
@@ -59,8 +59,8 @@ const PoiPopup = ({ poi, poiType, onClose }) => {
       <h4 className="font-bold text-slate-800 mb-2 text-base">{poi.name || poiType?.name || 'POI'}</h4>
       <div className="space-y-1 text-slate-600">
         <p><strong>Km:</strong> {poi.distance.toFixed(1)}</p>
-        <p><strong>Elevación:</strong> {poi.elevation.toFixed(0)} m</p>
-        <p><strong>Pendiente:</strong> {poi.grade.toFixed(1)} %</p>
+        <p><strong>{en ? 'Elevation:' : 'Elevación:'}</strong> {poi.elevation.toFixed(0)} m</p>
+        <p><strong>{en ? 'Gradient:' : 'Pendiente:'}</strong> {poi.grade.toFixed(1)} %</p>
       </div>
     </div>);
 
@@ -498,7 +498,7 @@ export default function ElevationProfile({
         <div className="bg-white/80 backdrop-blur-sm border border-slate-200 p-3 rounded-lg shadow-xl">
           <p className="font-semibold text-slate-800">Km {label?.toFixed(1)}</p>
           <p className="text-green-600">Elevación: {payload[0].value?.toFixed(0)}m</p>
-          {grade ? <p className="text-orange-600">Pendiente: {grade.toFixed(1)}%</p> : null}
+          {grade ? <p className="text-orange-600">{en ? 'Gradient' : 'Pendiente'}: {grade.toFixed(1)}%</p> : null}
           {climbSegment && <p className="text-red-600 font-medium">Subida: {climbSegment.grade_percent?.toFixed(1)}% ({climbSegment.elevation_gain?.toFixed(0)}m)</p>}
         </div>);
 
@@ -610,7 +610,7 @@ export default function ElevationProfile({
           <TooltipContent className="bg-slate-800 text-white border-slate-700">
             <p className="font-bold" style={{ color: runner.color }}>{runner.device_name}</p>
             <p className="text-xs">{runner.user_name}</p>
-            <p className="text-xs">Clic para más info</p>
+            <p className="text-xs">{en ? 'Click for more info' : 'Clic para más info'}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

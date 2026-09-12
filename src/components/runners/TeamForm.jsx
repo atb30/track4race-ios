@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, X, Save, Palette, Shield } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/lib/LanguageContext";
 
 const TEAM_COLORS = [
   "#3b82f6", // Blue
@@ -22,6 +23,7 @@ const TEAM_COLORS = [
 ];
 
 export default function TeamForm({ team, onSave, onCancel, allUsers = [] }) {
+  const { language } = useLanguage(); const en = language === 'en';
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -105,7 +107,7 @@ export default function TeamForm({ team, onSave, onCancel, allUsers = [] }) {
           <CardHeader className="flex flex-row items-center justify-between border-b border-slate-200">
             <CardTitle className="flex items-center gap-2 text-slate-800">
               <Users className="w-5 h-5 text-blue-500" />
-              {team ? "Editar Equipo" : "Nuevo Equipo"}
+              {team ? (en ? "Edit Team" : "Editar Equipo") : (en ? "New Team" : "Nuevo Equipo")}
             </CardTitle>
             <Button variant="ghost" size="icon" onClick={onCancel} className="text-slate-500 hover:text-slate-800">
               <X className="w-4 h-4" />
@@ -115,7 +117,7 @@ export default function TeamForm({ team, onSave, onCancel, allUsers = [] }) {
             <CardContent className="p-6 space-y-6"> {/* Changed space-y-4 to space-y-6 */}
               <div>
                 <Label htmlFor="name" className="text-slate-600">
-                  Nombre del Equipo *
+                  {en ? 'Team Name' : 'Nombre del Equipo'} *
                 </Label>
                 <Input
                   id="name"
@@ -129,21 +131,21 @@ export default function TeamForm({ team, onSave, onCancel, allUsers = [] }) {
 
               <div>
                 <Label htmlFor="description" className="text-slate-600">
-                  Descripción
+                  {en ? 'Description' : 'Descripción'}
                 </Label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => handleInputChange("description", e.target.value)}
                   className="border-slate-300 h-20"
-                  placeholder="Descripción del equipo y objetivos..."
+                  placeholder={en ? 'Team description and objectives...' : 'Descripción del equipo y objetivos...'}
                 />
               </div>
 
               <div>
                 <Label className="text-slate-600 flex items-center gap-2 mb-3">
                   <Palette className="w-4 h-4" />
-                  Color del Equipo
+                  {en ? 'Team Color' : 'Color del Equipo'}
                 </Label>
                 <div className="grid grid-cols-5 gap-2">
                   {TEAM_COLORS.map((color) => (
@@ -173,10 +175,10 @@ export default function TeamForm({ team, onSave, onCancel, allUsers = [] }) {
               <div>
                 <Label className="text-slate-600 flex items-center gap-2 mb-3">
                   <Shield className="w-4 h-4" />
-                  Acceso de visualización
+                  {en ? 'Viewing access' : 'Acceso de visualización'}
                 </Label>
                 <div className="max-h-48 overflow-y-auto border border-slate-200 rounded-lg p-3 space-y-2 bg-slate-50">
-                  <p className="text-xs text-slate-500 mb-2">Selecciona qué usuarios (no administradores) pueden ver los corredores de este equipo.</p>
+                  <p className="text-xs text-slate-500 mb-2">{en ? 'Select which non-administrator users can view this team’s runners.' : 'Selecciona qué usuarios (no administradores) pueden ver los corredores de este equipo.'}</p>
                   {allUsers.filter(u => u.role !== 'admin').map(user => (
                     <div key={user.id} className="flex items-center gap-3">
                       <input
@@ -192,7 +194,7 @@ export default function TeamForm({ team, onSave, onCancel, allUsers = [] }) {
                     </div>
                   ))}
                   {allUsers.filter(u => u.role !== 'admin').length === 0 && (
-                    <p className="text-xs text-slate-400 text-center py-2">No hay usuarios (no-admin) en el sistema.</p>
+                    <p className="text-xs text-slate-400 text-center py-2">{en ? 'No non-administrator users in the system.' : 'No hay usuarios (no-admin) en el sistema.'}</p>
                   )}
                 </div>
               </div>
@@ -206,19 +208,19 @@ export default function TeamForm({ team, onSave, onCancel, allUsers = [] }) {
                   className="w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 rounded focus:ring-blue-500"
                 />
                 <Label htmlFor="is_active" className="text-slate-600 cursor-pointer">
-                  Equipo activo
+                  {en ? 'Active team' : 'Equipo activo'}
                 </Label>
               </div>
             </CardContent>
             <div className="p-6 pt-0 flex gap-3">
               <Button type="button" variant="outline" onClick={onCancel} className="flex-1" disabled={isSubmitting}>
-                Cancelar
+                {en ? 'Cancel' : 'Cancelar'}
               </Button>
               <Button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700" disabled={isSubmitting}>
-                {isSubmitting ? "Guardando..." : (
+                {isSubmitting ? (en ? "Saving..." : "Guardando...") : (
                   <>
                     <Save className="w-4 h-4 mr-2" />
-                    {team ? "Actualizar" : "Crear"}
+                    {team ? (en ? "Update" : "Actualizar") : (en ? "Create" : "Crear")}
                   </>
                 )}
               </Button>

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MapPin, Plus, Tag, Trash2, Edit, Route as RouteIcon, ChevronRight } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
+import { useLanguage } from "../lib/LanguageContext";
 
 import PoiTypeForm from "../components/pois/PoiTypeForm";
 import PoiIcon from "../components/pois/PoiIcon";
@@ -15,6 +16,8 @@ import LoadingScreen from "../components/common/LoadingScreen";
 
 
 export default function Management() {
+  const { language } = useLanguage();
+  const en = language === 'en';
   const [pois, setPois] = useState([]);
   const [poiTypes, setPoiTypes] = useState([]);
   const [routes, setRoutes] = useState([]);
@@ -108,10 +111,10 @@ export default function Management() {
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 flex items-center gap-3 mb-2">
             <MapPin className="w-6 sm:w-8 h-6 sm:h-8 text-blue-600" />
-            Gestión de Datos
+            {en ? 'Data Management' : 'Gestión de Datos'}
           </h1>
           <p className="text-slate-500 text-sm sm:text-base">
-            Administra los Puntos de Interés (POIs) y sus categorías.
+            {en ? 'Manage points of interest (POIs) and their categories.' : 'Administra los Puntos de Interés (POIs) y sus categorías.'}
           </p>
         </div>
       </div>
@@ -120,12 +123,12 @@ export default function Management() {
         <TabsList className="grid grid-cols-2 w-full sm:w-72 mb-6 bg-slate-200">
           <TabsTrigger value="pois" className="flex items-center gap-2 text-xs sm:text-sm">
             <MapPin className="w-4 h-4" />
-            <span className="hidden sm:inline">Puntos de Interés</span>
+            <span className="hidden sm:inline">{en ? 'Points of Interest' : 'Puntos de Interés'}</span>
             <span className="sm:hidden">POIs</span>
           </TabsTrigger>
           <TabsTrigger value="types" className="flex items-center gap-2 text-xs sm:text-sm">
             <Tag className="w-4 h-4" />
-            <span className="hidden sm:inline">Tipos de POI</span>
+            <span className="hidden sm:inline">{en ? 'POI Types' : 'Tipos de POI'}</span>
             <span className="sm:hidden">Tipos</span>
           </TabsTrigger>
         </TabsList>
@@ -134,7 +137,7 @@ export default function Management() {
           <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
             <div className="p-4 border-b border-slate-200">
               <h2 className="text-base sm:text-lg font-semibold text-slate-700">
-                Selecciona una ruta para gestionar sus POIs
+                {en ? 'Select a route to manage its POIs' : 'Selecciona una ruta para gestionar sus POIs'}
               </h2>
             </div>
             

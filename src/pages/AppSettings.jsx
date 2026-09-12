@@ -104,7 +104,7 @@ export default function AppSettings() {
       
     } catch (error) {
       console.error("Error completo subiendo el logo:", error);
-      alert('Error subiendo el logo: ' + error.message);
+      alert((en ? 'Error uploading the logo: ' : 'Error subiendo el logo: ') + error.message);
     } finally {
       setIsUploading(false);
     }
@@ -143,10 +143,10 @@ export default function AppSettings() {
         <CardContent>
           <div className="space-y-2">
             <p className="text-sm text-slate-600">
-              <strong>URL actual del logo:</strong> {currentLogoUrl || "No configurado"}
+              <strong>{en ? 'Current logo URL:' : 'URL actual del logo:'}</strong> {currentLogoUrl || (en ? 'Not configured' : 'No configurado')}
             </p>
             <p className="text-sm text-slate-600">
-              <strong>Total de configuraciones:</strong> {debugInfo.length}
+              <strong>{en ? 'Total configurations:' : 'Total de configuraciones:'}</strong> {debugInfo.length}
             </p>
             <details className="text-xs">
               <summary className="cursor-pointer text-slate-500 hover:text-slate-700">

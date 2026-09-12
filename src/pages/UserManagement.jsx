@@ -204,7 +204,7 @@ export default function UserManagement() {
       await loadData();
     } catch (error) {
       console.error("Error updating user access:", error);
-      alert("Error al guardar los permisos de rutas.");
+      alert(en ? 'Error saving route permissions.' : 'Error al guardar los permisos de rutas.');
     } finally {
       setIsSaving(false);
     }
@@ -241,7 +241,7 @@ export default function UserManagement() {
       await loadData();
     } catch (error) {
       console.error("Error updating team access:", error);
-      alert("Error al guardar los permisos de equipos.");
+      alert(en ? 'Error saving team permissions.' : 'Error al guardar los permisos de equipos.');
     } finally {
       setIsSavingTeams(false);
     }
@@ -249,7 +249,7 @@ export default function UserManagement() {
 
   const handleToggleUserRole = async (userId, currentRole) => {
     const newRole = currentRole === 'admin' ? 'user' : 'admin';
-    const confirmMessage = `¿Estás seguro de que quieres ${newRole === 'admin' ? 'dar permisos de administrador' : 'quitar permisos de administrador'} a este usuario?`;
+    const confirmMessage = en ? `Are you sure you want to ${newRole === 'admin' ? 'grant administrator permissions to' : 'remove administrator permissions from'} this user?` : `¿Estás seguro de que quieres ${newRole === 'admin' ? 'dar permisos de administrador' : 'quitar permisos de administrador'} a este usuario?`;
     
     if (confirm(confirmMessage)) {
       try {
@@ -261,7 +261,7 @@ export default function UserManagement() {
         await loadData();
       } catch (error) {
         console.error("Error updating user role:", error);
-        alert("Error al cambiar el rol del usuario");
+        alert(en ? 'Error changing user role.' : 'Error al cambiar el rol del usuario');
       }
     }
   };
@@ -270,8 +270,8 @@ export default function UserManagement() {
   const handleToggleUploadPermission = async (userId, currentValue) => {
     const newValue = !currentValue;
     const confirmMessage = newValue 
-      ? "¿Permitir que este usuario suba sus propias rutas?" 
-      : "¿Quitar permiso para subir rutas?";
+      ? (en ? 'Allow this user to upload their own routes?' : "¿Permitir que este usuario suba sus propias rutas?")
+      : (en ? 'Remove route upload permission?' : "¿Quitar permiso para subir rutas?");
     
     if (confirm(confirmMessage)) {
       try {
@@ -279,7 +279,7 @@ export default function UserManagement() {
         await loadData();
       } catch (error) {
         console.error("Error updating upload permission:", error);
-        alert("Error al cambiar el permiso de subida de rutas");
+        alert(en ? 'Error changing route upload permission.' : 'Error al cambiar el permiso de subida de rutas');
       }
     }
   };
@@ -288,7 +288,7 @@ export default function UserManagement() {
     return (
       <div className="text-center py-12">
         <div className="w-12 h-12 border-4 border-slate-300 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-slate-500">Cargando usuarios...</p>
+        <p className="text-slate-500">{en ? 'Loading users...' : 'Cargando usuarios...'}</p>
       </div>
     );
   }
@@ -322,7 +322,7 @@ export default function UserManagement() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Shield className="w-5 h-5 text-amber-500" />
-              Administradores ({adminUsers.length})
+              {en ? 'Administrators' : 'Administradores'} ({adminUsers.length})
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -333,7 +333,7 @@ export default function UserManagement() {
                     <p className="font-medium text-slate-800">{user.full_name}</p>
                     <p className="text-sm text-slate-500">{user.email}</p>
                   </div>
-                  <Button variant="ghost" size="sm" onClick={() => handleToggleUserRole(user.id, user.role)} className="text-slate-500 hover:text-amber-600" title="Revocar permisos de administrador">
+                  <Button variant="ghost" size="sm" onClick={() => handleToggleUserRole(user.id, user.role)} className="text-slate-500 hover:text-amber-600" title={en ? 'Revoke administrator permissions' : 'Revocar permisos de administrador'}>
                     <UserMinus className="w-4 h-4" />
                   </Button>
                 </div>
@@ -350,7 +350,7 @@ export default function UserManagement() {
               {en ? 'Regular Users' : 'Usuarios Regulares'} ({regularUsers.length})
             </CardTitle>
             <CardDescription>
-              Gestiona permisos individuales de cada usuario
+              {en ? 'Manage individual permissions for each user' : 'Gestiona permisos individuales de cada usuario'}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -362,7 +362,7 @@ export default function UserManagement() {
                     <p className="text-sm text-slate-500 truncate">{user.email}</p>
                     {user.can_upload_routes && (
                       <Badge className="mt-1 bg-green-100 text-green-700 border-green-300">
-                        Puede subir rutas
+                        {en ? 'Can upload routes' : 'Puede subir rutas'}
                       </Badge>
                     )}
                   </div>
@@ -395,10 +395,10 @@ export default function UserManagement() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Lock className="w-5 h-5 text-blue-500" />
-              Gestionar Permisos de Usuarios
+              {en ? 'Manage User Permissions' : 'Gestionar Permisos de Usuarios'}
             </CardTitle>
             <CardDescription>
-                Selecciona un usuario regular para gestionar el acceso a rutas y equipos.
+                {en ? 'Select a regular user to manage route and team access.' : 'Selecciona un usuario regular para gestionar el acceso a rutas y equipos.'}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -406,11 +406,11 @@ export default function UserManagement() {
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="routes" className="flex items-center gap-2">
                   <RouteIcon className="w-4 h-4" />
-                  Acceso a Rutas
+                  {en ? 'Route Access' : 'Acceso a Rutas'}
                 </TabsTrigger>
                 <TabsTrigger value="teams" className="flex items-center gap-2">
                   <Users className="w-4 h-4" />
-                  Acceso a Equipos
+                  {en ? 'Team Access' : 'Acceso a Equipos'}
                 </TabsTrigger>
               </TabsList>
 
@@ -419,7 +419,7 @@ export default function UserManagement() {
                   <div className="flex flex-col sm:flex-row gap-4 items-center">
                       <Select value={selectedUserId} onValueChange={setSelectedUserId}>
                           <SelectTrigger className="flex-1">
-                              <SelectValue placeholder="Selecciona un usuario..." />
+                              <SelectValue placeholder={en ? 'Select a user...' : 'Selecciona un usuario...'} />
                           </SelectTrigger>
                           <SelectContent>
                               {regularUsers.map(user => (
@@ -438,10 +438,10 @@ export default function UserManagement() {
                   {selectedUserId && (
                       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="pt-4 border-t border-slate-200 space-y-4">
                           <div className="flex justify-between items-center">
-                              <h4 className="font-medium text-slate-700">Gestionar Acceso a Rutas</h4>
+                              <h4 className="font-medium text-slate-700">{en ? 'Manage Route Access' : 'Gestionar Acceso a Rutas'}</h4>
                               <div className="flex gap-2">
-                                  <Button type="button" size="xs" variant="outline" onClick={handleSelectAllRoutes}>Todas</Button>
-                                  <Button type="button" size="xs" variant="outline" onClick={handleDeselectAllRoutes}>Ninguna</Button>
+                                  <Button type="button" size="xs" variant="outline" onClick={handleSelectAllRoutes}>{en ? 'All' : 'Todas'}</Button>
+                                  <Button type="button" size="xs" variant="outline" onClick={handleDeselectAllRoutes}>{en ? 'None' : 'Ninguna'}</Button>
                               </div>
                           </div>
                           
@@ -449,11 +449,11 @@ export default function UserManagement() {
                           <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-4 items-center">
                               {/* Available Routes (Left) */}
                               <div className="space-y-2">
-                                  <h5 className="font-medium text-sm text-slate-600">Rutas Disponibles</h5>
+                                  <h5 className="font-medium text-sm text-slate-600">{en ? 'Available Routes' : 'Rutas Disponibles'}</h5>
                                   <div className="border border-slate-200 rounded-lg h-64 overflow-y-auto bg-slate-50">
                                       {allRoutes.filter(route => !allowedRouteIds.includes(route.id)).length === 0 ? (
                                           <div className="h-full flex items-center justify-center text-slate-500 text-sm">
-                                              No hay rutas disponibles
+                                              {en ? 'No routes available' : 'No hay rutas disponibles'}
                                           </div>
                                       ) : (
                                           <div className="p-2 space-y-1">
@@ -488,7 +488,7 @@ export default function UserManagement() {
                                   >
                                       <span className="hidden lg:inline">→</span>
                                       <span className="lg:hidden">↓</span>
-                                      <span className="hidden sm:inline">Añadir</span>
+                                      <span className="hidden sm:inline">{en ? 'Add' : 'Añadir'}</span>
                                   </Button>
                                   <Button
                                       type="button"
@@ -500,13 +500,13 @@ export default function UserManagement() {
                                   >
                                       <span className="hidden lg:inline">←</span>
                                       <span className="lg:hidden">↑</span>
-                                      <span className="hidden sm:inline">Quitar</span>
+                                      <span className="hidden sm:inline">{en ? 'Remove' : 'Quitar'}</span>
                                   </Button>
                               </div>
 
                               {/* User's Routes (Right) */}
                               <div className="space-y-2">
-                                  <h5 className="font-medium text-sm text-slate-600">Rutas con Acceso</h5>
+                                  <h5 className="font-medium text-sm text-slate-600">{en ? 'Routes with Access' : 'Rutas con Acceso'}</h5>
                                   <div className="border border-slate-200 rounded-lg h-64 overflow-y-auto bg-green-50">
                                       {allRoutes.filter(route => allowedRouteIds.includes(route.id)).length === 0 ? (
                                           <div className="h-full flex items-center justify-center text-slate-500 text-sm">
@@ -536,13 +536,13 @@ export default function UserManagement() {
 
                           {/* Stats */}
                           <div className="flex justify-between text-xs text-slate-500 bg-slate-50 p-2 rounded">
-                              <span>Disponibles: {allRoutes.filter(route => !allowedRouteIds.includes(route.id)).length}</span>
-                              <span>Con acceso: {allowedRouteIds.length}</span>
+                              <span>{en ? 'Available:' : 'Disponibles:'} {allRoutes.filter(route => !allowedRouteIds.includes(route.id)).length}</span>
+                              <span>{en ? 'With access:' : 'Con acceso:'} {allowedRouteIds.length}</span>
                           </div>
 
                           <div className="flex justify-end">
                               <Button onClick={handleSavePermissions} disabled={isSaving}>
-                                  {isSaving ? (<div className="flex items-center gap-2"><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>Guardando...</div>) : (<><Save className="w-4 h-4 mr-2" />Guardar Cambios</>)}
+                                  {isSaving ? (<div className="flex items-center gap-2"><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>{en ? 'Saving...' : 'Guardando...'}</div>) : (<><Save className="w-4 h-4 mr-2" />{en ? 'Save Changes' : 'Guardar Cambios'}</>)}
                               </Button>
                           </div>
                       </motion.div>
@@ -556,7 +556,7 @@ export default function UserManagement() {
                   <div className="flex flex-col sm:flex-row gap-4 items-center">
                       <Select value={selectedUserIdTeams} onValueChange={setSelectedUserIdTeams}>
                           <SelectTrigger className="flex-1">
-                              <SelectValue placeholder="Selecciona un usuario..." />
+                              <SelectValue placeholder={en ? 'Select a user...' : 'Selecciona un usuario...'} />
                           </SelectTrigger>
                           <SelectContent>
                               {regularUsers.map(user => (
@@ -575,10 +575,10 @@ export default function UserManagement() {
                     {selectedUserIdTeams && (
                       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="pt-4 border-t border-slate-200 space-y-4">
                         <div className="flex justify-between items-center">
-                          <h4 className="font-medium text-slate-700">Gestionar Acceso a Equipos</h4>
+                          <h4 className="font-medium text-slate-700">{en ? 'Manage Team Access' : 'Gestionar Acceso a Equipos'}</h4>
                           <div className="flex gap-2">
-                            <Button type="button" size="xs" variant="outline" onClick={handleSelectAllTeams}>Todos</Button>
-                            <Button type="button" size="xs" variant="outline" onClick={handleDeselectAllTeams}>Ninguno</Button>
+                            <Button type="button" size="xs" variant="outline" onClick={handleSelectAllTeams}>{en ? 'All' : 'Todos'}</Button>
+                            <Button type="button" size="xs" variant="outline" onClick={handleDeselectAllTeams}>{en ? 'None' : 'Ninguno'}</Button>
                           </div>
                         </div>
                         
@@ -586,11 +586,11 @@ export default function UserManagement() {
                         <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-4 items-center">
                           {/* Available Teams (Left) */}
                           <div className="space-y-2">
-                            <h5 className="font-medium text-sm text-slate-600">Equipos Disponibles</h5>
+                            <h5 className="font-medium text-sm text-slate-600">{en ? 'Available Teams' : 'Equipos Disponibles'}</h5>
                             <div className="border border-slate-200 rounded-lg h-64 overflow-y-auto bg-slate-50">
                               {allTeams.filter(team => !allowedTeamIds.includes(team.id)).length === 0 ? (
                                 <div className="h-full flex items-center justify-center text-slate-500 text-sm">
-                                  No hay equipos disponibles
+                                  {en ? 'No teams available' : 'No hay equipos disponibles'}
                                 </div>
                               ) : (
                                 <div className="p-2 space-y-1">
@@ -611,7 +611,7 @@ export default function UserManagement() {
                                         ></div>
                                         <div className="font-medium text-slate-800">{team.name}</div>
                                       </div>
-                                      <div className="text-xs text-slate-500">{team.description || 'Sin descripción'}</div>
+                                      <div className="text-xs text-slate-500">{team.description || (en ? 'No description' : 'Sin descripción')}</div>
                                     </div>
                                   ))}
                                 </div>
@@ -631,7 +631,7 @@ export default function UserManagement() {
                             >
                               <span className="hidden lg:inline">→</span>
                               <span className="lg:hidden">↓</span>
-                              <span className="hidden sm:inline">Añadir</span>
+                              <span className="hidden sm:inline">{en ? 'Add' : 'Añadir'}</span>
                             </Button>
                             <Button
                               type="button"
@@ -643,17 +643,17 @@ export default function UserManagement() {
                             >
                               <span className="hidden lg:inline">←</span>
                               <span className="lg:hidden">↑</span>
-                              <span className="hidden sm:inline">Quitar</span>
+                              <span className="hidden sm:inline">{en ? 'Remove' : 'Quitar'}</span>
                             </Button>
                           </div>
 
                           {/* User's Teams (Right) */}
                           <div className="space-y-2">
-                            <h5 className="font-medium text-sm text-slate-600">Equipos con Acceso</h5>
+                            <h5 className="font-medium text-sm text-slate-600">{en ? 'Teams with Access' : 'Equipos con Acceso'}</h5>
                             <div className="border border-slate-200 rounded-lg h-64 overflow-y-auto bg-green-50">
                               {allTeams.filter(team => allowedTeamIds.includes(team.id)).length === 0 ? (
                                 <div className="h-full flex items-center justify-center text-slate-500 text-sm">
-                                  Sin acceso a equipos
+                                  {en ? 'No team access' : 'Sin acceso a equipos'}
                                 </div>
                               ) : (
                                 <div className="p-2 space-y-1">
@@ -674,7 +674,7 @@ export default function UserManagement() {
                                         ></div>
                                         <div className="font-medium text-slate-800">{team.name}</div>
                                       </div>
-                                      <div className="text-xs text-slate-500">{team.description || 'Sin descripción'}</div>
+                                      <div className="text-xs text-slate-500">{team.description || (en ? 'No description' : 'Sin descripción')}</div>
                                     </div>
                                   ))}
                                 </div>
@@ -685,13 +685,13 @@ export default function UserManagement() {
 
                         {/* Stats */}
                         <div className="flex justify-between text-xs text-slate-500 bg-slate-50 p-2 rounded">
-                          <span>Disponibles: {allTeams.filter(team => !allowedTeamIds.includes(team.id)).length}</span>
-                          <span>Con acceso: {allowedTeamIds.length}</span>
+                          <span>{en ? 'Available:' : 'Disponibles:'} {allTeams.filter(team => !allowedTeamIds.includes(team.id)).length}</span>
+                          <span>{en ? 'With access:' : 'Con acceso:'} {allowedTeamIds.length}</span>
                         </div>
 
                         <div className="flex justify-end">
                           <Button onClick={handleSaveTeamPermissions} disabled={isSavingTeams}>
-                            {isSavingTeams ? (<div className="flex items-center gap-2"><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>Guardando...</div>) : (<><Save className="w-4 h-4 mr-2" />Guardar Cambios</>)}
+                            {isSavingTeams ? (<div className="flex items-center gap-2"><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>{en ? 'Saving...' : 'Guardando...'}</div>) : (<><Save className="w-4 h-4 mr-2" />{en ? 'Save Changes' : 'Guardar Cambios'}</>)}
                           </Button>
                         </div>
                       </motion.div>

@@ -11,12 +11,12 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 
-function RunnerList({ runners, onSelectRunner, selectedRunnerId }) {
+function RunnerList({ runners, onSelectRunner, selectedRunnerId, en }) {
   if (!runners || runners.length === 0) {
     return (
       <div className="flex-1 p-4 text-center text-slate-500">
         <Users className="w-8 h-8 mx-auto mb-2 opacity-50" />
-        <p className="text-sm">No hay dispositivos activos</p>
+        <p className="text-sm">{en ? 'No active devices' : 'No hay dispositivos activos'}</p>
       </div>
     );
   }
@@ -126,7 +126,7 @@ export default function CompanionTracking() {
 
     } catch (err) {
       console.error("Error loading Traccar data:", err);
-      setApiError(err.message || "Error al cargar datos de Traccar. El servidor puede estar temporalmente inaccesible.");
+      setApiError(en ? 'Unable to load tracking data. The server may be temporarily unavailable.' : 'Error al cargar datos de Traccar. El servidor puede estar temporalmente inaccesible.');
       // Set empty data but don't crash
       setAllRunners([]);
       setSummaryInfo({
@@ -184,7 +184,7 @@ export default function CompanionTracking() {
       <div className="h-screen flex items-center justify-center">
         <div className="text-center py-12">
           <div className="w-12 h-12 border-4 border-slate-300 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-500">Conectando con Traccar...</p>
+          <p className="text-slate-500">{en ? 'Connecting to Traccar...' : 'Conectando con Traccar...'}</p>
         </div>
       </div>
     );
@@ -196,7 +196,7 @@ export default function CompanionTracking() {
         <div>
             <Users className="w-16 h-16 mx-auto mb-6 text-slate-400" />
             <h2 className="text-xl font-semibold text-slate-800 mb-3">{en ? 'No team access' : 'Sin acceso a equipos'}</h2>
-            <p className="text-slate-500 mb-6 text-sm">No tienes permisos para ver el seguimiento de ningún equipo.</p>
+            <p className="text-slate-500 mb-6 text-sm">{en ? 'You do not have permission to track any team.' : 'No tienes permisos para ver el seguimiento de ningún equipo.'}</p>
             <Link to={createPageUrl("Navigation")}><Button className="bg-blue-600 hover:bg-blue-700 text-white"><ArrowLeft className="w-4 h-4 mr-2" />{en ? 'Back' : 'Volver'}</Button></Link>
         </div>
       </div>
@@ -236,13 +236,13 @@ export default function CompanionTracking() {
       <main className="flex-1 flex overflow-hidden">
         <div className="w-1/3 max-w-sm border-r border-slate-200 bg-white flex flex-col">
           <div className="p-4 border-b border-slate-200 space-y-3">
-            <h2 className="font-semibold flex items-center gap-2"><Users className="w-5 h-5"/>Dispositivos GPS</h2>
+            <h2 className="font-semibold flex items-center gap-2"><Users className="w-5 h-5"/>{en ? 'GPS Devices' : 'Dispositivos GPS'}</h2>
             <div className="flex items-center gap-2">
-              <Label className="text-sm text-slate-600 flex-shrink-0 flex items-center gap-1"><Filter className="w-3 h-3"/>Filtrar por equipo:</Label>
+              <Label className="text-sm text-slate-600 flex-shrink-0 flex items-center gap-1"><Filter className="w-3 h-3"/>{en ? 'Filter by team:' : 'Filtrar por equipo:'}</Label>
               <Select value={selectedTeamId} onValueChange={setSelectedTeamId}>
                 <SelectTrigger className="w-full h-8 text-sm"><SelectValue placeholder="Seleccionar equipo..." /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Todos los equipos</SelectItem>
+                  <SelectItem value="all">{en ? 'All teams' : 'Todos los equipos'}</SelectItem>
                   {(userRole === 'admin' ? teams : accessibleTeams).map(team => (
                     <SelectItem key={team.id} value={team.id}>
                       <div className="flex items-center gap-2">
@@ -256,7 +256,7 @@ export default function CompanionTracking() {
             </div>
             {apiError && <div className="bg-red-50 border border-red-200 rounded-lg p-2 text-xs text-red-600">{apiError}</div>}
           </div>
-          <RunnerList runners={filteredRunners} onSelectRunner={handleSelectRunner} selectedRunnerId={selectedPoint?.id} />
+          <RunnerList runners={filteredRunners} onSelectRunner={handleSelectRunner} selectedRunnerId={selectedPoint?.id} en={en} />
         </div>
         <div className="flex-1 relative">
           <MapView runners={filteredRunners} selectedPoint={selectedPoint} />

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { CloudRain } from "lucide-react";
+import { useLanguage } from "@/lib/LanguageContext";
 
 
 import { base44 } from "@/api/base44Client";
@@ -661,6 +662,7 @@ export default function MapView({
   onStreetViewOpen,
   onMapViewChange = () => {}
 }) {
+  const { language } = useLanguage(); const en = language === 'en';
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const [isMapReady, setIsMapReady] = useState(false);
@@ -1054,7 +1056,7 @@ export default function MapView({
       {showRainRadar && !rainRadarError && (
         <div className="absolute top-2 left-2 z-[1000] bg-yellow-500 text-slate-900 px-4 py-2 rounded-lg text-sm shadow-xl flex items-center gap-2 font-semibold">
           <CloudRain className="w-4 h-4" />
-          <span>Radar de Lluvia Activo</span>
+          <span>{en ? 'Rain Radar Active' : 'Radar de Lluvia Activo'}</span>
         </div>
       )}
 
@@ -1170,7 +1172,7 @@ export default function MapView({
             >
               <Popup>
                 <div className="text-center">
-                  <strong>Dirección</strong><br />
+                  <strong>{en ? 'Address' : 'Dirección'}</strong><br />
                   Km {arrow.km.toFixed(1)}
                 </div>
               </Popup>
@@ -1187,7 +1189,7 @@ export default function MapView({
               <Popup>
                 <div className="text-center">
                   <strong>Km {marker.km}</strong><br />
-                  Elevación: {marker.elevation?.toFixed(0) || 0}m
+                  {en ? 'Elevation' : 'Elevación'}: {marker.elevation?.toFixed(0) || 0}m
                 </div>
               </Popup>
             </Marker>
@@ -1251,9 +1253,9 @@ export default function MapView({
             >
               <Popup>
                 <div className="text-center">
-                  <strong>Tu Ubicación</strong><br />
+                  <strong>{en ? 'Your Location' : 'Tu Ubicación'}</strong><br />
                   Km {(currentPosition.distance / 1000)?.toFixed(1) || 0}<br />
-                  Elevación: {currentPosition.elevation?.toFixed(0) || 0}m
+                  {en ? 'Elevation' : 'Elevación'}: {currentPosition.elevation?.toFixed(0) || 0}m
                 </div>
               </Popup>
             </Marker>
@@ -1273,7 +1275,7 @@ export default function MapView({
                     {marker.speedKmh} km/h
                   </span>
                   <br />
-                  Dirección: {marker.direction.toFixed(0)}°
+                  {en ? 'Direction' : 'Dirección'}: {marker.direction.toFixed(0)}°
                 </div>
               </Popup>
             </Marker>
@@ -1293,14 +1295,14 @@ export default function MapView({
                   <div className="text-center">
                     <strong style={{color: runner.color}}>{runner.user_name || runner.device_name || 'Runner'}</strong><br />
                     {runner.user_name && (
-                      <>👤 Corredor: {runner.user_name}<br /></>
+                      <>👤 {en ? 'Runner' : 'Corredor'}: {runner.user_name}<br /></>
                     )}
-                    Velocidad: {runner.speed?.toFixed(0) || 0} km/h<br />
-                    Elevación: {runner.elevation?.toFixed(0) || 0}m<br />
+                    {en ? 'Speed' : 'Velocidad'}: {runner.speed?.toFixed(0) || 0} km/h<br />
+                    {en ? 'Elevation' : 'Elevación'}: {runner.elevation?.toFixed(0) || 0}m<br />
                     {runner.battery_level !== null && runner.battery_level !== undefined && (
-                      <>🔋 Batería: {runner.battery_level}%<br /></>
+                      <>🔋 {en ? 'Battery' : 'Batería'}: {runner.battery_level}%<br /></>
                     )}
-                    Estado: {runner.is_online ? 'En línea' : 'Desconectado'}
+                    {en ? 'Status' : 'Estado'}: {runner.is_online ? (en ? 'Online' : 'En línea') : (en ? 'Offline' : 'Desconectado')}
                   </div>
                 </Popup>
               </Marker>

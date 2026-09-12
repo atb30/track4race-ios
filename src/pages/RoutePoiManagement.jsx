@@ -67,7 +67,7 @@ export default function RoutePoiManagement() {
       setCanManagePois(hasPermission);
 
       if (!hasPermission) {
-        setError("No tienes permiso para gestionar POIs de esta ruta.");
+        setError(en ? "You do not have permission to manage this route's POIs." : "No tienes permiso para gestionar POIs de esta ruta.");
         setIsLoading(false);
         return;
       }
@@ -86,7 +86,7 @@ export default function RoutePoiManagement() {
       
     } catch (error) {
       console.error("Error loading data:", error);
-      setError("Error cargando los datos. Inténtalo de nuevo.");
+      setError(en ? "Error loading data. Please try again." : "Error cargando los datos. Inténtalo de nuevo.");
     } finally {
       setIsLoading(false);
     }
@@ -125,14 +125,14 @@ export default function RoutePoiManagement() {
   };
 
   const handleDeletePoi = async (poiId) => {
-    if (confirm("¿Estás seguro de que quieres eliminar este POI?")) {
+    if (confirm(en ? "Are you sure you want to delete this POI?" : "¿Estás seguro de que quieres eliminar este POI?")) {
       try {
         await Poi.delete(poiId);
         invalidateStaticCache();
         loadData();
       } catch (error) {
         console.error("Error deleting POI:", error);
-        alert("Error eliminando el POI. Inténtalo de nuevo.");
+        alert(en ? "Error deleting the POI. Please try again." : "Error eliminando el POI. Inténtalo de nuevo.");
       }
     }
   };
@@ -148,7 +148,7 @@ export default function RoutePoiManagement() {
         <Link to={createPageUrl(userRole === 'admin' ? "Management" : "Routes")}>
           <Button variant="ghost" className="mb-4 text-slate-600 hover:text-slate-800">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              {userRole === 'admin' ? 'Volver a Gestión de Datos' : 'Volver a Rutas'}
+              {userRole === 'admin' ? (en ? 'Back to Data Management' : 'Volver a Gestión de Datos') : (en ? 'Back to Routes' : 'Volver a Rutas')}
           </Button>
         </Link>
         <div className="text-center py-12">
@@ -158,7 +158,7 @@ export default function RoutePoiManagement() {
           <div className="text-red-500 mb-4">{error}</div>
           {!error.includes("permiso") && ( // Only show retry if it's not a permission error
             <Button onClick={handleRetry} className="bg-blue-600 hover:bg-blue-700">
-              Reintentar
+              {en ? 'Retry' : 'Reintentar'}
             </Button>
           )}
         </div>
@@ -172,10 +172,10 @@ export default function RoutePoiManagement() {
         <Link to={createPageUrl(userRole === 'admin' ? "Management" : "Routes")}>
           <Button variant="ghost" className="mb-4 text-slate-600 hover:text-slate-800">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              {userRole === 'admin' ? 'Volver a Gestión de Datos' : 'Volver a Rutas'}
+              {userRole === 'admin' ? (en ? 'Back to Data Management' : 'Volver a Gestión de Datos') : (en ? 'Back to Routes' : 'Volver a Rutas')}
           </Button>
         </Link>
-        <LoadingScreen message="Cargando POIs de la ruta..." />
+        <LoadingScreen message={en ? 'Loading route POIs...' : 'Cargando POIs de la ruta...'} />
       </div>
     );
   }
@@ -186,7 +186,7 @@ export default function RoutePoiManagement() {
           <Link to={createPageUrl(userRole === 'admin' ? "Management" : "Routes")}>
             <Button variant="ghost" className="mb-4 text-slate-600 hover:text-slate-800">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                {userRole === 'admin' ? 'Volver a Gestión de Datos' : 'Volver a Rutas'}
+                {userRole === 'admin' ? (en ? 'Back to Data Management' : 'Volver a Gestión de Datos') : (en ? 'Back to Routes' : 'Volver a Rutas')}
             </Button>
           </Link>
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 flex items-center gap-3">
@@ -286,7 +286,7 @@ export default function RoutePoiManagement() {
             </Table>
             {pois.length === 0 && (
               <div className="text-center py-12 text-slate-500">
-                No hay POIs en esta ruta. ¡Añade el primero!
+                {en ? 'There are no POIs on this route. Add the first one!' : 'No hay POIs en esta ruta. ¡Añade el primero!'}
               </div>
             )}
         </div>

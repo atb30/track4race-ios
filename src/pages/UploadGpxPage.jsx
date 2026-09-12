@@ -235,7 +235,7 @@ export default function UploadGpxPage() {
                 <CheckCircle className="w-5 h-5" />
                 <div>
                   <p className="font-bold">{en ? 'Route uploaded successfully!' : '¡Ruta subida con éxito!'}</p>
-                  <p className="text-sm">Ya está disponible en la biblioteca de rutas.</p>
+                  <p className="text-sm">{en ? 'It is now available in the route library.' : 'Ya está disponible en la biblioteca de rutas.'}</p>
                 </div>
               </motion.div>
             )}
@@ -258,7 +258,7 @@ export default function UploadGpxPage() {
               <Upload className="w-10 h-10 mx-auto text-slate-400 mb-4" />
               {file ? (
                 <div className="text-slate-700">
-                  <p className="font-semibold">Archivo seleccionado:</p>
+                  <p className="font-semibold">{en ? 'Selected file:' : 'Archivo seleccionado:'}</p>
                   <p className="flex items-center justify-center gap-2 mt-2">
                     <File className="w-4 h-4" /> {file.name}
                   </p>
@@ -274,13 +274,13 @@ export default function UploadGpxPage() {
 
             <div className="space-y-2">
               <label htmlFor="name" className="text-sm font-medium text-slate-700">
-                Nombre de la ruta
+                {en ? 'Route name' : 'Nombre de la ruta'}
               </label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Ej: Vuelta a la Sierra"
+                placeholder={en ? 'E.g. Mountain loop' : 'Ej: Vuelta a la Sierra'}
                 required
                 className="border-slate-300"
               />
@@ -288,13 +288,13 @@ export default function UploadGpxPage() {
             
             <div className="space-y-2">
               <label htmlFor="description" className="text-sm font-medium text-slate-700">
-                Descripción (opcional)
+                {en ? 'Description (optional)' : 'Descripción (opcional)'}
               </label>
               <Textarea
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Añade detalles sobre la ruta..."
+                placeholder={en ? 'Add details about the route...' : 'Añade detalles sobre la ruta...'}
                 className="border-slate-300"
               />
             </div>

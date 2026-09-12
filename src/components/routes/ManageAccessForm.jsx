@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, X, Save } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "../../lib/LanguageContext";
 
 export default function ManageAccessForm({
   route,
@@ -11,6 +12,8 @@ export default function ManageAccessForm({
   onSave,
   onCancel,
 }) {
+  const { language } = useLanguage();
+  const en = language === 'en';
   const [selectedUserEmails, setSelectedUserEmails] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -87,11 +90,11 @@ export default function ManageAccessForm({
             <CardContent className="p-6 overflow-y-auto">
                 <div className="flex justify-between items-center mb-4">
                   <Label className="text-slate-600">
-                    Selecciona los usuarios con acceso:
+                    {en ? 'Select users with access:' : 'Selecciona los usuarios con acceso:'}
                   </Label>
                   <div className="flex gap-2">
-                      <Button type="button" size="xs" variant="outline" onClick={handleSelectAll}>Todos</Button>
-                      <Button type="button" size="xs" variant="outline" onClick={handleDeselectAll}>Ninguno</Button>
+                      <Button type="button" size="xs" variant="outline" onClick={handleSelectAll}>{en ? 'All' : 'Todos'}</Button>
+                      <Button type="button" size="xs" variant="outline" onClick={handleDeselectAll}>{en ? 'None' : 'Ninguno'}</Button>
                   </div>
                 </div>
 
@@ -119,7 +122,7 @@ export default function ManageAccessForm({
                             </span>
                             {isOwner && (
                               <span className="text-xs font-semibold text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">
-                                Propietario
+                                {en ? 'Owner' : 'Propietario'}
                               </span>
                             )}
                           </Label>
@@ -127,16 +130,16 @@ export default function ManageAccessForm({
                       );
                     })
                   ) : (
-                    <p className="text-sm text-slate-500 text-center py-4">No hay otros usuarios registrados.</p>
+                    <p className="text-sm text-slate-500 text-center py-4">{en ? 'No other registered users.' : 'No hay otros usuarios registrados.'}</p>
                   )}
                 </div>
             </CardContent>
             <div className="p-6 pt-0 flex gap-3">
               <Button type="button" variant="outline" onClick={onCancel} className="flex-1" disabled={isSubmitting}>
-                Cancelar
+                {en ? 'Cancel' : 'Cancelar'}
               </Button>
               <Button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700" disabled={isSubmitting}>
-                {isSubmitting ? "Guardando..." : <><Save className="w-4 h-4 mr-2" /> Guardar Cambios</>}
+                {isSubmitting ? (en ? 'Saving...' : 'Guardando...') : <><Save className="w-4 h-4 mr-2" /> {en ? 'Save Changes' : 'Guardar Cambios'}</>}
               </Button>
             </div>
           </form>

@@ -2248,8 +2248,8 @@ export default function Navigation() {
                 <a href={startNavUrl} target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" size="sm" className="flex items-center gap-1 sm:gap-2 border-blue-200 bg-blue-50/50 hover:bg-blue-100 text-blue-700 hover:text-blue-800 px-2 sm:px-3">
                     <Send className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span className="hidden sm:inline">Ir a Salida</span>
-                    <span className="sm:hidden text-xs">Salida</span>
+                    <span className="hidden sm:inline">{language === 'en' ? 'Go to Start' : 'Ir a Salida'}</span>
+                    <span className="sm:hidden text-xs">{language === 'en' ? 'Start' : 'Salida'}</span>
                   </Button>
                 </a>
               )}
@@ -2257,8 +2257,8 @@ export default function Navigation() {
                 <a href={endNavUrl} target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" size="sm" className="flex items-center gap-1 sm:gap-2 border-green-200 bg-green-50/50 hover:bg-green-100 text-green-700 hover:text-green-800 px-2 sm:px-3">
                     <Send className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span className="hidden sm:inline">Ir a Meta</span>
-                    <span className="sm:hidden text-xs">Meta</span>
+                    <span className="hidden sm:inline">{language === 'en' ? 'Go to Finish' : 'Ir a Meta'}</span>
+                    <span className="sm:hidden text-xs">{language === 'en' ? 'Finish' : 'Meta'}</span>
                   </Button>
                 </a>
               )}
@@ -2290,7 +2290,7 @@ export default function Navigation() {
                 className="flex items-center gap-1 text-slate-600 hover:text-slate-900 hover:bg-slate-100/90 px-2 sm:px-3"
               >
                 <Maximize className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Pantalla Completa</span>
+                <span className="hidden sm:inline">{language === 'en' ? 'Full Screen' : 'Pantalla Completa'}</span>
               </Button>
 
               {/* NEW: Wake Lock Status Indicator (only show if not supported or there's an issue) */}
@@ -2303,7 +2303,7 @@ export default function Navigation() {
                   title="Mantener pantalla encendida"
                 >
                   <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-yellow-500 animate-pulse" />
-                  <span className="hidden sm:inline text-xs">Activar Pantalla</span>
+                  <span className="hidden sm:inline text-xs">{language === 'en' ? 'Enable Screen' : 'Activar Pantalla'}</span>
                 </Button>
               )}
             </div>
@@ -2313,7 +2313,7 @@ export default function Navigation() {
             <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-slate-900/45 p-4">
               <div className="w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-2xl">
                 <h2 className="text-lg font-semibold text-slate-800">{t.language}</h2>
-                <p className="mt-2 text-sm text-slate-500">Choose your language / Elige tu idioma</p>
+                <p className="mt-2 text-sm text-slate-500">Elige tu idioma / Choose your language</p>
                 <div className="mt-5 grid grid-cols-2 gap-3">
                   <Button type="button" onClick={() => setLanguage('es')}>Español</Button>
                   <Button type="button" onClick={() => setLanguage('en')} variant="outline">English</Button>
@@ -2577,7 +2577,7 @@ export default function Navigation() {
                 className="h-7 sm:h-10 px-1.5 sm:px-4 rounded-full bg-white/90 backdrop-blur-sm text-slate-700 hover:text-slate-900 hover:bg-white flex items-center gap-1 sm:gap-2 shadow-lg border border-slate-200"
               >
                 <Minimize className="w-3 h-3 sm:w-5 sm:h-5" />
-                <span className="text-xs sm:text-sm">Salir</span>
+                <span className="text-xs sm:text-sm">{language === 'en' ? 'Sign out' : 'Salir'}</span>
               </Button>
             </div>
           )}
@@ -2666,7 +2666,7 @@ export default function Navigation() {
             <div className="grid grid-cols-2">
               <div className="bg-white p-1 sm:p-2 md:p-4 lg:p-3 border-r border-slate-800">
                 <div className="flex justify-between items-center mb-1">
-                  <div className="text-xs text-slate-500 uppercase tracking-wide">Recorridos</div>
+                  <div className="text-xs text-slate-500 uppercase tracking-wide">{language === 'en' ? 'Traveled' : 'Recorridos'}</div>
                 </div>
                 <div className="flex items-center justify-center gap-1">
                   <div className="text-lg sm:text-2xl md:text-4xl lg:text-4xl font-bold text-slate-800">{currentKm.toFixed(1)}</div>
@@ -2680,7 +2680,7 @@ export default function Navigation() {
               </div>
               <div className="bg-white p-1 sm:p-2 md:p-4 lg:p-3">
                 <div className="flex justify-between items-center mb-1">
-                  <div className="text-xs text-slate-500 uppercase tracking-wide">Faltan</div>
+                  <div className="text-xs text-slate-500 uppercase tracking-wide">{language === 'en' ? 'Remaining' : 'Faltan'}</div>
                 </div>
                 <div className="flex items-center justify-center gap-1">
                   <div className="text-lg sm:text-2xl md:text-4xl lg:text-4xl font-bold text-slate-800">{Math.max(0, remainingKm).toFixed(1)}</div>
@@ -2840,14 +2840,14 @@ export default function Navigation() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-white border-slate-200 text-slate-800 w-48 z-[10001]" align="end" sideOffset={4}>
-                <DropdownMenuLabel>Perfil de Elevación</DropdownMenuLabel>
+                <DropdownMenuLabel>{language === 'en' ? 'Elevation Profile' : 'Perfil de Elevación'}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem 
                   onClick={() => setElevationSegmentView('full')}
                   className="cursor-pointer focus:bg-slate-100 text-xs"
                 >
                   {elevationSegmentView === 'full' && <Check className="w-3 h-3 mr-2" />}
-                  <span className={elevationSegmentView !== 'full' ? 'ml-5' : ''}>Completo</span>
+                  <span className={elevationSegmentView !== 'full' ? 'ml-5' : ''}>{language === 'en' ? 'Full' : 'Completo'}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setElevationSegmentView('selection')}
@@ -2866,49 +2866,49 @@ export default function Navigation() {
                   className="cursor-pointer focus:bg-slate-100 text-xs"
                 >
                   {elevationSegmentView === '500m' && <Check className="w-3 h-3 mr-2" />}
-                  <span className={elevationSegmentView !== '500m' ? 'ml-5' : ''}>Últimos 500m</span>
+                  <span className={elevationSegmentView !== '500m' ? 'ml-5' : ''}>{language === 'en' ? 'Last 500m' : 'Últimos 500m'}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setElevationSegmentView('1k')}
                   className="cursor-pointer focus:bg-slate-100 text-xs"
                 >
                   {elevationSegmentView === '1k' && <Check className="w-3 h-3 mr-2" />}
-                  <span className={elevationSegmentView !== '1k' ? 'ml-5' : ''}>Último 1km</span>
+                  <span className={elevationSegmentView !== '1k' ? 'ml-5' : ''}>{language === 'en' ? 'Last 1km' : 'Último 1km'}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setElevationSegmentView('2km')}
                   className="cursor-pointer focus:bg-slate-100 text-xs"
                 >
                   {elevationSegmentView === '2km' && <Check className="w-3 h-3 mr-2" />}
-                  <span className={elevationSegmentView !== '2km' ? 'ml-5' : ''}>Últimos 2km</span>
+                  <span className={elevationSegmentView !== '2km' ? 'ml-5' : ''}>{language === 'en' ? 'Last 2km' : 'Últimos 2km'}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setElevationSegmentView('5km')}
                   className="cursor-pointer focus:bg-slate-100 text-xs"
                 >
                   {elevationSegmentView === '5km' && <Check className="w-3 h-3 mr-2" />}
-                  <span className={elevationSegmentView !== '5km' ? 'ml-5' : ''}>Últimos 5km</span>
+                  <span className={elevationSegmentView !== '5km' ? 'ml-5' : ''}>{language === 'en' ? 'Last 5km' : 'Últimos 5km'}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setElevationSegmentView('10km')}
                   className="cursor-pointer focus:bg-slate-100 text-xs"
                 >
                   {elevationSegmentView === '10km' && <Check className="w-3 h-3 mr-2" />}
-                  <span className={elevationSegmentView !== '10km' ? 'ml-5' : ''}>Últimos 10km</span>
+                  <span className={elevationSegmentView !== '10km' ? 'ml-5' : ''}>{language === 'en' ? 'Last 10km' : 'Últimos 10km'}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setElevationSegmentView('25km')}
                   className="cursor-pointer focus:bg-slate-100 text-xs"
                 >
                   {elevationSegmentView === '25km' && <Check className="w-3 h-3 mr-2" />}
-                  <span className={elevationSegmentView !== '25km' ? 'ml-5' : ''}>Últimos 25km</span>
+                  <span className={elevationSegmentView !== '25km' ? 'ml-5' : ''}>{language === 'en' ? 'Last 25km' : 'Últimos 25km'}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setElevationSegmentView('50km')}
                   className="cursor-pointer focus:bg-slate-100 text-xs"
                 >
                   {elevationSegmentView === '50km' && <Check className="w-3 h-3 mr-2" />}
-                  <span className={elevationSegmentView !== '50km' ? 'ml-5' : ''}>Últimos 50km</span>
+                  <span className={elevationSegmentView !== '50km' ? 'ml-5' : ''}>{language === 'en' ? 'Last 50km' : 'Últimos 50km'}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

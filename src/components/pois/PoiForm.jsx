@@ -61,17 +61,17 @@ export default function PoiForm({
   const validateForm = () => {
     const newErrors = {};
     
-    if (!formData.gpx_track_id) newErrors.gpx_track_id = "Selecciona una ruta";
-    if (!formData.poi_type_id) newErrors.poi_type_id = "Selecciona un tipo de POI";
+    if (!formData.gpx_track_id) newErrors.gpx_track_id = en ? "Select a route" : "Selecciona una ruta";
+    if (!formData.poi_type_id) newErrors.poi_type_id = en ? "Select a POI type" : "Selecciona un tipo de POI";
     if (!formData.distance_from_start || isNaN(parseFloat(formData.distance_from_start))) {
-      newErrors.distance_from_start = "Punto kilométrico válido requerido";
+      newErrors.distance_from_start = en ? "A valid kilometer point is required" : "Punto kilométrico válido requerido";
     } else {
       const distanceKm = parseFloat(formData.distance_from_start);
       if (selectedRoute && distanceKm > selectedRoute.total_distance) {
         newErrors.distance_from_start = `El punto debe estar dentro de la ruta (máx: ${selectedRoute.total_distance.toFixed(1)}km)`;
       }
       if (distanceKm < 0) {
-        newErrors.distance_from_start = "El punto kilométrico debe ser positivo";
+        newErrors.distance_from_start = en ? "The kilometer point must be positive" : "El punto kilométrico debe ser positivo";
       }
     }
 
@@ -172,12 +172,12 @@ export default function PoiForm({
               <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name" className="text-slate-600">{en ? 'POI Name (Optional)' : 'Nombre del POI (Opcional)'}</Label>
-                    <Input id="name" value={formData.name} onChange={(e) => handleInputChange("name", e.target.value)} placeholder="Ej: Refugio de montaña" className={`bg-slate-50 border-slate-300 ${errors.name ? "border-red-500" : ""}`}/>
+                    <Input id="name" value={formData.name} onChange={(e) => handleInputChange("name", e.target.value)} placeholder={en ? 'E.g. Mountain shelter' : 'Ej: Refugio de montaña'} className={`bg-slate-50 border-slate-300 ${errors.name ? "border-red-500" : ""}`}/>
                     {errors.name && <p className="text-xs text-red-500">{errors.name}</p>}
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="poi_type_id" className="text-slate-600">Tipo de POI *</Label>
+                    <Label htmlFor="poi_type_id" className="text-slate-600">{en ? 'POI type *' : 'Tipo de POI *'}</Label>
                     <Select value={formData.poi_type_id} onValueChange={(value) => handleInputChange("poi_type_id", value)}>
                       <SelectTrigger className={`bg-slate-50 border-slate-300 ${errors.poi_type_id ? "border-red-500" : ""}`}>
                         <SelectValue placeholder={en ? 'Select type' : 'Selecciona tipo'} />
@@ -210,7 +210,7 @@ export default function PoiForm({
 
                 <div className="space-y-2">
                   <Label htmlFor="description" className="text-slate-600">{en ? 'Description' : 'Descripción'}</Label>
-                  <Textarea id="description" value={formData.description} onChange={(e) => handleInputChange("description", e.target.value)} placeholder="Descripción opcional del POI..." className="h-20 bg-slate-50 border-slate-300"/>
+                  <Textarea id="description" value={formData.description} onChange={(e) => handleInputChange("description", e.target.value)} placeholder={en ? 'Optional POI description...' : 'Descripción opcional del POI...'} className="h-20 bg-slate-50 border-slate-300"/>
                 </div>
 
                 <div className="space-y-2">
@@ -268,7 +268,7 @@ export default function PoiForm({
                     disabled={isSubmitting || poiTypes.length === 0}
                   >
                     {isSubmitting ? (
-                        <div className="flex items-center gap-2"><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>Guardando...</div>
+                        <div className="flex items-center gap-2"><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>{en ? 'Saving...' : 'Guardando...'}</div>
                     ) : (
                         <div className="flex items-center gap-2"><Save className="w-4 h-4" />{en ? 'Save POI' : 'Guardar POI'}</div>
                     )}

@@ -114,14 +114,14 @@ export default function GpsDeviceForm({ device, runners, teams, onSave, onCancel
                   value={formData.device_name}
                   onChange={(e) => handleInputChange("device_name", e.target.value)}
                   className={`border-slate-300 ${errors.device_name ? 'border-red-500' : ''}`}
-                  placeholder="Ej: GPS-001, Tracker Juan"
+                  placeholder={en ? 'E.g. GPS-001, John Tracker' : 'Ej: GPS-001, Tracker Juan'}
                   disabled={!device}
                 />
                 {errors.device_name && <p className="text-red-500 text-xs mt-1">{errors.device_name}</p>}
               </div>
               
               <div>
-                <Label htmlFor="team_id" className="text-slate-600">Equipo *</Label>
+                <Label htmlFor="team_id" className="text-slate-600">{en ? 'Team *' : 'Equipo *'}</Label>
                 <Select value={formData.team_id} onValueChange={(value) => handleInputChange("team_id", value)}>
                   <SelectTrigger className={`border-slate-300 ${errors.team_id ? 'border-red-500' : ''}`}>
                     <SelectValue placeholder={en ? 'Select a team...' : 'Selecciona un equipo...'} />

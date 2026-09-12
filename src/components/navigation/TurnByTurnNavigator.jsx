@@ -319,9 +319,9 @@ export default function TurnByTurnNavigator({ gpxTrack, currentPosition, current
           <NavIcon className="w-5 h-5" />
         </div>
         <div>
-          <p className="font-semibold text-sm">Esperando GPS...</p>
+          <p className="font-semibold text-sm">{language === 'en' ? 'Waiting for GPS...' : 'Esperando GPS...'}</p>
           <p className="text-xs text-slate-300">
-            {isOffTrack ? "Vuelve a la ruta para navegación" : "Buscando tu posición"}
+            {isOffTrack ? (language === 'en' ? 'Return to the route for navigation' : 'Vuelve a la ruta para navegación') : (language === 'en' ? 'Finding your position' : 'Buscando tu posición')}
           </p>
         </div>
       </div>
@@ -336,9 +336,9 @@ export default function TurnByTurnNavigator({ gpxTrack, currentPosition, current
           <Flag className="w-6 h-6" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="font-bold text-base">Continúa hasta la meta</p>
+          <p className="font-bold text-base">{language === 'en' ? 'Continue to the finish' : 'Continúa hasta la meta'}</p>
           <p className="text-sm text-green-100">
-            {distanceToFinish < 1000 ? `${Math.round(distanceToFinish)} m` : `${(distanceToFinish / 1000).toFixed(1)} km`} restantes
+            {distanceToFinish < 1000 ? `${Math.round(distanceToFinish)} m` : `${(distanceToFinish / 1000).toFixed(1)} km`} {language === 'en' ? 'remaining' : 'restantes'}
           </p>
         </div>
       </div>
@@ -372,7 +372,7 @@ export default function TurnByTurnNavigator({ gpxTrack, currentPosition, current
       {/* Following maneuver preview */}
       {followingManeuver && (
         <div className="bg-black/25 px-3 sm:px-4 py-2.5 flex items-center gap-2 border-t border-white/10">
-          <span className="text-xs text-slate-300">Después, en {nextGap.value} {nextGap.unit}:</span>
+          <span className="text-xs text-slate-300">{language === 'en' ? 'Next, in' : 'Después, en'} {nextGap.value} {nextGap.unit}:</span>
           {(() => {
             const NextIcon = getTurnIcon(followingManeuver.turnType);
             return followingManeuver.turnType.type === 'roundabout'
@@ -387,7 +387,7 @@ export default function TurnByTurnNavigator({ gpxTrack, currentPosition, current
       <div className="bg-black/30 px-3 py-1.5 flex items-center justify-between border-t border-white/10">
         <span className="text-xs text-slate-300 flex items-center gap-1">
           <Flag className="w-3 h-3" />
-          Meta
+          {language === 'en' ? 'Finish' : 'Meta'}
         </span>
         <span className="text-xs font-medium">
           {distanceToFinish < 1000 ? `${Math.round(distanceToFinish)} m` : `${(distanceToFinish / 1000).toFixed(1)} km`}

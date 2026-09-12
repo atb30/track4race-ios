@@ -113,7 +113,7 @@ export default function RunnerForm({ runner, teams, onSave, onCancel }) {
                   value={formData.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   className={`border-slate-300 ${errors.name ? 'border-red-500' : ''}`}
-                  placeholder="Ej: Juan Pérez"
+                  placeholder={en ? 'E.g. John Smith' : 'Ej: Juan Pérez'}
                 />
                 {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
               </div>
@@ -127,7 +127,7 @@ export default function RunnerForm({ runner, teams, onSave, onCancel }) {
                   value={formData.device_id}
                   onChange={(e) => handleInputChange("device_id", e.target.value)}
                   className={`border-slate-300 font-mono ${errors.device_id ? 'border-red-500' : ''}`}
-                  placeholder="Ej: GPS001, IMEI123456789"
+                  placeholder={en ? 'E.g. GPS001, IMEI123456789' : 'Ej: GPS001, IMEI123456789'}
                 />
                 {errors.device_id && <p className="text-red-500 text-xs mt-1">{errors.device_id}</p>}
                 <p className="text-xs text-slate-500 mt-1">
@@ -172,7 +172,7 @@ export default function RunnerForm({ runner, teams, onSave, onCancel }) {
                   value={formData.phone_number}
                   onChange={(e) => handleInputChange("phone_number", e.target.value)}
                   className="border-slate-300"
-                  placeholder="Ej: +34 600 123 456"
+                  placeholder={en ? 'E.g. +34 600 123 456' : 'Ej: +34 600 123 456'}
                 />
               </div>
 
@@ -185,7 +185,7 @@ export default function RunnerForm({ runner, teams, onSave, onCancel }) {
                   value={formData.notes}
                   onChange={(e) => handleInputChange("notes", e.target.value)}
                   className="border-slate-300 h-20"
-                  placeholder="Información adicional sobre el corredor..."
+                  placeholder={en ? 'Additional information about the runner...' : 'Información adicional sobre el corredor...'}
                 />
               </div>
 

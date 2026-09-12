@@ -118,22 +118,22 @@ export default function RunnerManagement() {
       <Tabs defaultValue={defaultTab}>
         <TabsList className="grid grid-cols-4 w-full sm:w-auto mb-6 bg-slate-200">
           <TabsTrigger value="runners"><UserCheck className="w-4 h-4 mr-2"/>{en ? 'Runners' : 'Corredores'}</TabsTrigger>
-          <TabsTrigger value="devices"><Smartphone className="w-4 h-4 mr-2"/>Dispositivos</TabsTrigger>
+          <TabsTrigger value="devices"><Smartphone className="w-4 h-4 mr-2"/>{en ? 'Devices' : 'Dispositivos'}</TabsTrigger>
           <TabsTrigger value="teams"><Users className="w-4 h-4 mr-2"/>{en ? 'Teams' : 'Equipos'}</TabsTrigger>
-          <TabsTrigger value="traccar"><Satellite className="w-4 h-4 mr-2"/>Traccar</TabsTrigger>
+          <TabsTrigger value="traccar"><Satellite className="w-4 h-4 mr-2"/>{en ? 'Traccar' : 'Traccar'}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="runners">
           <Card>
              <div className="p-4 flex justify-between items-center"><h2 className="text-lg font-semibold">{runners.length} {en ? 'Runners' : 'Corredores'}</h2><Button onClick={() => { setEditingRunner(null); setShowRunnerForm(true); }}><Plus className="w-4 h-4 mr-2"/>{en ? 'Add' : 'Añadir'}</Button></div>
              <div className="overflow-x-auto"><Table>
-                <TableHeader><TableRow><TableHead>Nombre</TableHead><TableHead>Dispositivo</TableHead><TableHead>Equipo</TableHead><TableHead>Estado</TableHead><TableHead>Acciones</TableHead></TableRow></TableHeader>
+                <TableHeader><TableRow><TableHead>{en ? 'Name' : 'Nombre'}</TableHead><TableHead>{en ? 'Device' : 'Dispositivo'}</TableHead><TableHead>{en ? 'Team' : 'Equipo'}</TableHead><TableHead>{en ? 'Status' : 'Estado'}</TableHead><TableHead>{en ? 'Actions' : 'Acciones'}</TableHead></TableRow></TableHeader>
                 <TableBody>{runners.map(r => { const team = teams.find(t=>t.id===r.team_id); return (<TableRow key={r.id}>
                     <TableCell className="font-medium">{r.name}</TableCell>
                     <TableCell className="font-mono">{r.device_id}</TableCell>
                     <TableCell>{team && <Badge style={{backgroundColor:`${team.color}20`,color:team.color}}>{team.name}</Badge>}</TableCell>
-                    <TableCell><Badge variant={r.is_active ? 'default' : 'secondary'}>{r.is_active ? 'Activo' : 'Inactivo'}</Badge></TableCell>
-                    <TableCell><Button variant="ghost" size="icon" onClick={() => { setEditingRunner(r); setShowRunnerForm(true); }}><Edit className="w-4"/></Button><Button variant="ghost" size="icon" onClick={() => handleDelete(Runner, r.id, 'Eliminar corredor?')}><Trash2 className="w-4"/></Button></TableCell>
+                      <TableCell><Badge variant={r.is_active ? 'default' : 'secondary'}>{r.is_active ? (en ? 'Active' : 'Activo') : (en ? 'Inactive' : 'Inactivo')}</Badge></TableCell>
+                    <TableCell><Button variant="ghost" size="icon" onClick={() => { setEditingRunner(r); setShowRunnerForm(true); }}><Edit className="w-4"/></Button><Button variant="ghost" size="icon" onClick={() => handleDelete(Runner, r.id, en ? 'Delete runner?' : 'Eliminar corredor?')}><Trash2 className="w-4"/></Button></TableCell>
                 </TableRow>);})}</TableBody>
              </Table></div>
           </Card>
@@ -152,7 +152,7 @@ export default function RunnerManagement() {
                 </div>
             </div>
             <div className="overflow-x-auto"><Table>
-                <TableHeader><TableRow><TableHead>Nombre</TableHead><TableHead>IMEI</TableHead><TableHead>Corredor</TableHead><TableHead>Estado</TableHead><TableHead>Batería</TableHead><TableHead>Acciones</TableHead></TableRow></TableHeader>
+                <TableHeader><TableRow><TableHead>{en ? 'Name' : 'Nombre'}</TableHead><TableHead>IMEI</TableHead><TableHead>{en ? 'Runner' : 'Corredor'}</TableHead><TableHead>{en ? 'Status' : 'Estado'}</TableHead><TableHead>{en ? 'Battery' : 'Batería'}</TableHead><TableHead>{en ? 'Actions' : 'Acciones'}</TableHead></TableRow></TableHeader>
                 <TableBody>{gpsDevices.map(d => {
                     const runner = runners.find(r => r.id === d.runner_id);
                     const liveData = getLiveDataForDevice(d.device_imei);
@@ -160,9 +160,9 @@ export default function RunnerManagement() {
                         <TableCell className="font-medium">{d.device_name}</TableCell>
                         <TableCell className="font-mono">{d.device_imei}</TableCell>
                         <TableCell>{runner?.name || 'N/A'}</TableCell>
-                        <TableCell>{liveData ? <Badge variant={liveData.is_online ? 'default' : 'destructive'}>{liveData.is_online ? 'En línea' : 'Offline'}</Badge> : <Badge variant="secondary">N/A</Badge>}</TableCell>
+                        <TableCell>{liveData ? <Badge variant={liveData.is_online ? 'default' : 'destructive'}>{liveData.is_online ? (en ? 'Online' : 'En línea') : 'Offline'}</Badge> : <Badge variant="secondary">N/A</Badge>}</TableCell>
                         <TableCell>{liveData?.battery_level !== null ? `${liveData?.battery_level}%` : 'N/A'}</TableCell>
-                        <TableCell><Button variant="ghost" size="icon" onClick={() => { setEditingDevice(d); setShowDeviceForm(true); }}><Edit className="w-4"/></Button><Button variant="ghost" size="icon" onClick={() => handleDelete(GpsDevice, d.id, 'Eliminar dispositivo?')}><Trash2 className="w-4"/></Button></TableCell>
+                        <TableCell><Button variant="ghost" size="icon" onClick={() => { setEditingDevice(d); setShowDeviceForm(true); }}><Edit className="w-4"/></Button><Button variant="ghost" size="icon" onClick={() => handleDelete(GpsDevice, d.id, en ? 'Delete device?' : 'Eliminar dispositivo?')}><Trash2 className="w-4"/></Button></TableCell>
                     </TableRow>);
                 })}</TableBody>
             </Table></div>
@@ -174,8 +174,8 @@ export default function RunnerManagement() {
                 <div className="p-4 flex justify-between items-center"><h2 className="text-lg font-semibold">{teams.length} {en ? 'Teams' : 'Equipos'}</h2><Button onClick={() => { setEditingTeam(null); setShowTeamForm(true); }}><Plus className="w-4 h-4 mr-2"/>{en ? 'New Team' : 'Nuevo Equipo'}</Button></div>
                 <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {teams.map(t => <div key={t.id} className="bg-slate-50 p-4 rounded-lg">
-                        <div className="flex justify-between items-start"><h3 className="font-semibold" style={{color:t.color}}>{t.name}</h3><div className="flex gap-1"><Button variant="ghost" size="icon" onClick={() => { setEditingTeam(t); setShowTeamForm(true); }}><Edit className="w-4"/></Button><Button variant="ghost" size="icon" onClick={() => handleDelete(Team, t.id, 'Eliminar equipo?')}><Trash2 className="w-4"/></Button></div></div>
-                        <p className="text-sm text-slate-600">{t.description || 'Sin descripción'}</p>
+                        <div className="flex justify-between items-start"><h3 className="font-semibold" style={{color:t.color}}>{t.name}</h3><div className="flex gap-1"><Button variant="ghost" size="icon" onClick={() => { setEditingTeam(t); setShowTeamForm(true); }}><Edit className="w-4"/></Button><Button variant="ghost" size="icon" onClick={() => handleDelete(Team, t.id, en ? 'Delete team?' : 'Eliminar equipo?')}><Trash2 className="w-4"/></Button></div></div>
+                        <p className="text-sm text-slate-600">{t.description || (en ? 'No description' : 'Sin descripción')}</p>
                         <p className="text-xs text-slate-500 mt-2">{runners.filter(r=>r.team_id===t.id).length} corredores</p>
                     </div>)}
                 </div>
@@ -185,7 +185,7 @@ export default function RunnerManagement() {
         <TabsContent value="traccar">
             <div className="space-y-6">
                 <TraccarSyncPanel onTokenError={() => setTraccarCredsMissing(true)} />
-                {traccarCredsMissing && <Alert variant="destructive"><AlertTriangle className="h-4 w-4" /><AlertTitle>Faltan Credenciales de Traccar</AlertTitle><AlertDescription>Para usar la importación, un administrador debe configurar los secretos `TRACCAR_URL`, `TRACCAR_USER`, y `TRACCAR_PASSWORD`.</AlertDescription></Alert>}
+                {traccarCredsMissing && <Alert variant="destructive"><AlertTriangle className="h-4 w-4" /><AlertTitle>{en ? 'Traccar credentials missing' : 'Faltan Credenciales de Traccar'}</AlertTitle><AlertDescription>{en ? 'An administrator must configure the `TRACCAR_URL`, `TRACCAR_USER`, and `TRACCAR_PASSWORD` secrets to use the import.' : 'Para usar la importación, un administrador debe configurar los secretos `TRACCAR_URL`, `TRACCAR_USER`, y `TRACCAR_PASSWORD`.'}</AlertDescription></Alert>}
             </div>
         </TabsContent>
       </Tabs>
@@ -199,3 +199,4 @@ export default function RunnerManagement() {
     </div>
   );
 }
+

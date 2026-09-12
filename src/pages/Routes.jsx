@@ -18,7 +18,8 @@ const ROUTES_CACHE_DURATION = 60 * 60 * 1000; // 1 hour
 const CACHE_KEY_ROUTES = 'mirat_routes_cache';
 
 export default function Routes() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const en = language === 'en';
   const [routes, setRoutes] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -317,21 +318,21 @@ export default function Routes() {
             
           } catch (retryError) {
             console.error("Error en reintento de activación:", retryError);
-            alert("No se pudo activar la ruta después de reintentar. Por favor, recarga la página e inténtalo de nuevo.");
+            alert(en ? "Could not activate the route after retrying. Please reload the page and try again." : "No se pudo activar la ruta después de reintentar. Por favor, recarga la página e inténtalo de nuevo.");
             setActivatingRouteId(null);
           }
         }, 10000); // Increased retry delay for rate limit
         
       } else {
         console.error("Error activating route:", error);
-        alert("Error al activar la ruta. Por favor, inténtalo de nuevo.");
+        alert(en ? "Error activating the route. Please try again." : "Error al activar la ruta. Por favor, inténtalo de nuevo.");
         setActivatingRouteId(null);
       }
     }
   };
 
   const deleteRoute = async (routeId) => {
-    if (confirm("¿Estás seguro de que quieres eliminar esta ruta?")) {
+    if (confirm(en ? "Are you sure you want to delete this route?" : "¿Estás seguro de que quieres eliminar esta ruta?")) {
       try {
         await GpxTrack.delete(routeId);
         
@@ -345,7 +346,7 @@ export default function Routes() {
         }, 2000); // Increased delay
       } catch (error) {
         if (error.response?.status === 429 || error.message?.includes('429')) {
-          alert("Demasiadas solicitudes. Por favor, espera un momento antes de intentar de nuevo.");
+          alert(en ? "Too many requests. Please wait a moment and try again." : "Demasiadas solicitudes. Por favor, espera un momento antes de intentar de nuevo.");
           return;
         }
         console.error("Error deleting route:", error);
@@ -368,7 +369,7 @@ export default function Routes() {
       }, 2000); // Increased delay
     } catch (error) {
       if (error.response?.status === 429 || error.message?.includes('429')) {
-        alert("Demasiadas solicitudes. Por favor, espera un momento antes de intentar de nuevo.");
+        alert(en ? "Too many requests. Please wait a moment and try again." : "Demasiadas solicitudes. Por favor, espera un momento antes de intentar de nuevo.");
         return;
       }
       console.error("Error updating route access:", error);
@@ -381,7 +382,7 @@ export default function Routes() {
   };
 
   if (isLoading || !currentUser) {
-    return <LoadingScreen message="Cargando biblioteca de rutas..." />;
+    return <LoadingScreen message={en ? 'Loading route library...' : 'Cargando biblioteca de rutas...'} />;
   }
 
   return (
@@ -394,10 +395,10 @@ export default function Routes() {
           </h1>
           <p className="text-slate-500 text-sm sm:text-base">
             {userRole === 'admin' 
-              ? "Gestiona tus rutas GPX y activa la que quieres usar para navegación"
+              ? (en ? "Manage your GPX routes and activate the one you want to use for navigation" : "Gestiona tus rutas GPX y activa la que quieres usar para navegación")
               : canUploadRoutes
-                ? "Tus rutas y rutas compartidas contigo - Puedes subir nuevas rutas"
-                : "Rutas disponibles para navegación"
+                ? (en ? "Your routes and routes shared with you - You can upload new routes" : "Tus rutas y rutas compartidas contigo - Puedes subir nuevas rutas")
+                : (en ? "Routes available for navigation" : "Rutas disponibles para navegación")
             }
           </p>
           {/* Contador de rutas */}

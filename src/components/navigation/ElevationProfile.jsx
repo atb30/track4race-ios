@@ -866,6 +866,18 @@ export default function ElevationProfile({
             fillOpacity={1.0} 
             dot={false}
           />
+          {currentPosition?.distance != null && (
+            <ReferenceArea
+              x1={minDomain}
+              x2={Math.min(maxDomain, Math.max(minDomain, currentPosition.distance / 1000))}
+              y1={yDomainMin}
+              y2={yDomainMax}
+              fill="#64748b"
+              fillOpacity={0.28}
+              strokeOpacity={0}
+              ifOverflow="hidden"
+            />
+          )}
           
           {/* Selection overlay (ReferenceArea) */}
           {selectionMode && isSelecting && selectionStart !== null && selectionEnd !== null && (

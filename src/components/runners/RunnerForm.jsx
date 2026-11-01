@@ -131,7 +131,7 @@ export default function RunnerForm({ runner, teams, onSave, onCancel }) {
                 />
                 {errors.device_id && <p className="text-red-500 text-xs mt-1">{errors.device_id}</p>}
                 <p className="text-xs text-slate-500 mt-1">
-                  {en ? 'Enter the unique identifier of the GPS device' : 'Introduce el identificador único del dispositivo GPS'}
+                  {en ? 'Enter the Traccar uniqueId / IMEI. Do not use the Track&Race record ID.' : 'Introduce el uniqueId / IMEI de Traccar. No uses el ID interno del registro de Track&Race.'}
                 </p>
               </div>
 

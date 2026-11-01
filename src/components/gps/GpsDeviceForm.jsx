@@ -115,7 +115,7 @@ export default function GpsDeviceForm({ device, runners, teams, onSave, onCancel
                   onChange={(e) => handleInputChange("device_name", e.target.value)}
                   className={`border-slate-300 ${errors.device_name ? 'border-red-500' : ''}`}
                   placeholder={en ? 'E.g. GPS-001, John Tracker' : 'Ej: GPS-001, Tracker Juan'}
-                  disabled={!device}
+                  disabled={false}
                 />
                 {errors.device_name && <p className="text-red-500 text-xs mt-1">{errors.device_name}</p>}
               </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Runner, Team, User, GpsDevice } from "@/entities/all"; import { base44 } from "@/api/base44Client";
 import { getTraccarData } from "@/functions/getTraccarData";
+import { registerTraccarDevice } from "@/functions/registerTraccarDevice";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, Plus, Edit, Trash2, UserCheck, Smartphone, FileText, Satellite, AlertTriangle, RefreshCw } from "lucide-react";
@@ -106,6 +107,13 @@ export default function RunnerManagement() {
     // GpsDevice registry. Create or relink that authorization automatically.
     const deviceId = data.device_id?.trim();
     if (deviceId) {
+      // Register Location4Race devices in Traccar before authorizing them locally.
+      try {
+        await registerTraccarDevice({ uniqueId: deviceId, name: data.name || deviceId, category: 'gps' });
+      } catch (error) {
+        // Keep the local authorization usable if Traccar is temporarily unavailable.
+        console.warn('Could not register device in Traccar; keeping local authorization:', error);
+      }
       const existingDevices = await GpsDevice.list();
       const matchingDevice = existingDevices.find((device) => device.device_imei === deviceId);
       const runnerId = savedRunner?.id || editingRunner?.id;

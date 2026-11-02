@@ -182,7 +182,9 @@ async function functionsApi(req, res, user, name) {
         is_online: traccarDevice.status === 'online', has_fresh_position: lastUpdate ? (Date.now() - Date.parse(lastUpdate) < 10 * 60 * 1000) : false,
       };
     }).filter(Boolean);
-    return json(res, 200, { data, summary: { total_traccar_devices: traccarDevices.length, matched_app_devices: data.length, onlineDevices: data.filter((item) => item.is_online).length } });
+    // Keep the Base44-compatible envelope expected by the iOS/web clients:
+    // getTraccarData() returns response.data.data for the runner list.
+    return json(res, 200, { data: { data, summary: { total_traccar_devices: traccarDevices.length, matched_app_devices: data.length, onlineDevices: data.filter((item) => item.is_online).length } } });
   }
   if (name === 'registerTraccarDevice') {
     assertAdmin(user);

@@ -141,6 +141,30 @@ async function entityApi(req, res, user, entity, action) {
 }
 
 async function functionsApi(req, res, user, name) {
+  if (name === 'registerTraccarDevice') {
+    assertAdmin(user);
+    const { uniqueId, name: deviceName, category = 'gps' } = await body(req);
+    const normalizedId = String(uniqueId || '').trim();
+    if (!normalizedId) return json(res, 400, { error: 'uniqueId es obligatorio' });
+    const traccarUrl = process.env.TRACCAR_URL;
+    const traccarUser = process.env.TRACCAR_USER;
+    const traccarPassword = process.env.TRACCAR_PASSWORD;
+    if (!traccarUrl || !traccarUser || !traccarPassword) return json(res, 503, { error: 'TRACCAR_URL, TRACCAR_USER y TRACCAR_PASSWORD no están configurados' });
+    const baseUrl = String(traccarUrl).replace(/\/+$/, '').replace(/\/login\/?$/, '').replace(/\/api\/?$/, '');
+    const auth = await fetch(`${baseUrl}/api/session`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' }, body: new URLSearchParams({ email: traccarUser, password: traccarPassword }) });
+    if (!auth.ok) return json(res, 502, { error: `Autenticación Traccar fallida (${auth.status})` });
+    const cookie = auth.headers.get('set-cookie');
+    if (!cookie) return json(res, 502, { error: 'Traccar no devolvió sesión' });
+    const headers = { Cookie: cookie, Accept: 'application/json', 'Content-Type': 'application/json' };
+    const devicesResponse = await fetch(`${baseUrl}/api/devices`, { headers });
+    if (!devicesResponse.ok) return json(res, 502, { error: `No se pueden consultar dispositivos Traccar (${devicesResponse.status})` });
+    const devices = await devicesResponse.json();
+    const existing = devices.find((device) => String(device.uniqueId).trim() === normalizedId);
+    if (existing) return json(res, 200, { created: false, device: existing });
+    const created = await fetch(`${baseUrl}/api/devices`, { method: 'POST', headers, body: JSON.stringify({ name: deviceName || normalizedId, uniqueId: normalizedId, category }) });
+    if (!created.ok) return json(res, 502, { error: `No se puede crear el dispositivo Traccar (${created.status})`, detail: await created.text() });
+    return json(res, 200, { created: true, device: await created.json() });
+  }
   if (name === 'getValhallaRoute') {
     const valhallaUrl = String(process.env.VALHALLA_URL || 'http://valhalla:8002').replace(/\/$/, '');
     const input = await body(req);

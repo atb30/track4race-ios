@@ -141,6 +141,49 @@ async function entityApi(req, res, user, entity, action) {
 }
 
 async function functionsApi(req, res, user, name) {
+  if (name === 'getTraccarData') {
+    const traccarUrl = process.env.TRACCAR_URL;
+    const traccarUser = process.env.TRACCAR_USER;
+    const traccarPassword = process.env.TRACCAR_PASSWORD;
+    if (!traccarUrl || !traccarUser || !traccarPassword) return json(res, 503, { error: 'Credenciales de Traccar no configuradas' });
+    const baseUrl = String(traccarUrl).replace(/\/+$/, '').replace(/\/login\/?$/, '').replace(/\/api\/?$/, '');
+    const auth = await fetch(`${baseUrl}/api/session`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' }, body: new URLSearchParams({ email: traccarUser, password: traccarPassword }) });
+    if (!auth.ok) return json(res, 502, { error: `Autenticación Traccar fallida (${auth.status})` });
+    const cookie = auth.headers.get('set-cookie');
+    if (!cookie) return json(res, 502, { error: 'Traccar no devolvió sesión' });
+    const headers = { Cookie: cookie, Accept: 'application/json' };
+    const [devicesResponse, positionsResponse] = await Promise.all([
+      fetch(`${baseUrl}/api/devices`, { headers }),
+      fetch(`${baseUrl}/api/positions`, { headers }),
+    ]);
+    if (!devicesResponse.ok || !positionsResponse.ok) return json(res, 502, { error: 'No se pudieron obtener datos de Traccar' });
+    const [traccarDevices, positions] = await Promise.all([devicesResponse.json(), positionsResponse.json()]);
+    const db = readDb();
+    const appDevices = db.GpsDevice || [];
+    const runners = db.Runner || [];
+    const teams = db.Team || [];
+    const deviceByImei = new Map(appDevices.map((device) => [String(device.device_imei).trim(), device]));
+    const runnerById = new Map(runners.map((runner) => [runner.id, runner]));
+    const teamById = new Map(teams.map((team) => [team.id, team]));
+    const deviceByTraccarId = new Map(traccarDevices.map((device) => [device.id, device]));
+    const data = positions.map((position) => {
+      const traccarDevice = deviceByTraccarId.get(position.deviceId);
+      const appDevice = traccarDevice && deviceByImei.get(String(traccarDevice.uniqueId).trim());
+      if (!appDevice) return null;
+      const runner = runnerById.get(appDevice.runner_id);
+      const team = teamById.get(appDevice.team_id || runner?.team_id);
+      const lastUpdate = position.fixTime || position.deviceTime || position.serverTime;
+      return {
+        id: appDevice.id, user_name: runner?.name, device_name: traccarDevice.name,
+        latitude: position.latitude, longitude: position.longitude,
+        speed: Number(position.speed || 0) * 1.852, elevation: position.altitude,
+        last_update: lastUpdate, team_id: team?.id || 'unassigned', team_name: team?.name || 'Sin Equipo',
+        color: appDevice.color || team?.color || '#3b82f6', device_imei: traccarDevice.uniqueId,
+        is_online: traccarDevice.status === 'online', has_fresh_position: lastUpdate ? (Date.now() - Date.parse(lastUpdate) < 10 * 60 * 1000) : false,
+      };
+    }).filter(Boolean);
+    return json(res, 200, { data, summary: { total_traccar_devices: traccarDevices.length, matched_app_devices: data.length, onlineDevices: data.filter((item) => item.is_online).length } });
+  }
   if (name === 'registerTraccarDevice') {
     assertAdmin(user);
     const { uniqueId, name: deviceName, category = 'gps' } = await body(req);

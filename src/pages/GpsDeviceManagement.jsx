@@ -14,6 +14,7 @@ import { useLanguage } from "../lib/LanguageContext";
 
 import GpsDeviceForm from "../components/gps/GpsDeviceForm";
 import GpsConfigurationGuide from "../components/gps/GpsConfigurationGuide";
+import { registerTraccarDevice } from "@/functions/registerTraccarDevice";
 import {
   Table,
   TableBody,
@@ -101,6 +102,20 @@ export default function GpsDeviceManagement() {
       const selectedRunner = runners.find(r => r.id === deviceData.runner_id);
       if (selectedRunner) {
         deviceData.team_id = selectedRunner.team_id;
+      }
+
+      // Register L4R devices in Traccar as well as in the local registry.
+      if (deviceData.device_imei?.trim()) {
+        try {
+          await registerTraccarDevice({
+            uniqueId: deviceData.device_imei.trim(),
+            name: deviceData.device_name || deviceData.device_imei.trim(),
+            category: 'gps',
+          });
+        } catch (error) {
+          // Keep local administration available if Traccar is temporarily unavailable.
+          console.warn('Could not register device in Traccar; keeping local record:', error);
+        }
       }
       
       if (editingDevice) {

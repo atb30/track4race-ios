@@ -165,7 +165,7 @@ export default function RunnerManagement() {
         <TabsContent value="runners">
           <Card>
              <div className="p-4 flex justify-between items-center"><h2 className="text-lg font-semibold">{runners.length} {en ? 'Runners' : 'Corredores'}</h2><Button onClick={() => { setEditingRunner(null); setShowRunnerForm(true); }}><Plus className="w-4 h-4 mr-2"/>{en ? 'Add' : 'Añadir'}</Button></div>
-             <div className="overflow-x-auto"><Table>
+             <div className="max-h-[min(55vh,520px)] overflow-auto overscroll-contain"><Table>
                 <TableHeader><TableRow><TableHead>{en ? 'Name' : 'Nombre'}</TableHead><TableHead>{en ? 'Device' : 'Dispositivo'}</TableHead><TableHead>{en ? 'Team' : 'Equipo'}</TableHead><TableHead>{en ? 'Status' : 'Estado'}</TableHead><TableHead>{en ? 'Actions' : 'Acciones'}</TableHead></TableRow></TableHeader>
                 <TableBody>{runners.map(r => { const team = teams.find(t=>t.id===r.team_id); return (<TableRow key={r.id}>
                     <TableCell className="font-medium">{r.name}</TableCell>
@@ -190,7 +190,7 @@ export default function RunnerManagement() {
                     <Button onClick={() => { setEditingDevice(null); setShowDeviceForm(true); }}><Plus className="w-4 h-4 mr-2"/>{en ? 'Add Device' : 'Añadir Dispositivo'}</Button>
                 </div>
             </div>
-            <div className="overflow-x-auto"><Table>
+            <div className="max-h-[min(55vh,520px)] overflow-auto overscroll-contain"><Table>
                 <TableHeader><TableRow><TableHead>{en ? 'Name' : 'Nombre'}</TableHead><TableHead>IMEI</TableHead><TableHead>{en ? 'Runner' : 'Corredor'}</TableHead><TableHead>{en ? 'Status' : 'Estado'}</TableHead><TableHead>{en ? 'Battery' : 'Batería'}</TableHead><TableHead>{en ? 'Actions' : 'Acciones'}</TableHead></TableRow></TableHeader>
                 <TableBody>{gpsDevices.map(d => {
                     const runner = runners.find(r => r.id === d.runner_id);

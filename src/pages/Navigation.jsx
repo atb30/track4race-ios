@@ -2731,7 +2731,7 @@ export default function Navigation() {
                   {language === 'en' ? 'Waiting for runners...' : 'Esperando corredores...'}
                 </div>
               ) : (
-                <div className="divide-y divide-slate-200">
+                <div className={`divide-y divide-slate-200 ${runnersOnTrack.length > 6 ? 'max-h-[220px] overflow-y-auto overscroll-contain' : ''}`}>
                   <NavigationPages items={runnersOnTrack} renderItem={(runner) => (
                     <div key={`runner-${runner.id}`} className="flex items-center justify-between py-1 sm:py-2 px-1 sm:px-2 md:px-3 gap-1 sm:gap-2">
                       <div className="flex items-center gap-1 sm:gap-2 min-w-0">

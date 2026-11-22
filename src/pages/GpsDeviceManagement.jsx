@@ -308,7 +308,7 @@ export default function GpsDeviceManagement() {
             </div>
 
             {/* Desktop table view */}
-            <div className="hidden sm:block overflow-x-auto">
+            <div className="hidden sm:block max-h-[min(65vh,620px)] overflow-auto overscroll-contain">
               <Table>
                 <TableHeader>
                   <TableRow className="border-slate-200 hover:bg-slate-50">

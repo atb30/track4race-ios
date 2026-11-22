@@ -27,7 +27,15 @@ function ClimbExplorerContent({ track, googleApiKey }) {
   const { language } = useLanguage(); const en = language === 'en';
   const [open, setOpen] = useState(false);
   // Never process GPX data while the map is starting and the window is closed.
-  const climbs = useMemo(() => open ? buildClimbProfiles(track) : [], [track, open]);
+  // Show the longest climbs first so the most significant climbs are at the
+  // top of the selector, regardless of their order along the route.
+  const climbs = useMemo(() => {
+    if (!open) return [];
+    return buildClimbProfiles(track)
+      .slice()
+      .sort((a, b) => (Number(b.length) || 0) - (Number(a.length) || 0))
+      .map((climb, index) => ({ ...climb, number: index + 1 }));
+  }, [track, open]);
   const [selectedId, setSelectedId] = useState(null);
   const selected = climbs.find(c => c.id === selectedId) || climbs[0];
   const chartBox = useRef(null);

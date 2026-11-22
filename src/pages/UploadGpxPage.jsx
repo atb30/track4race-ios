@@ -25,7 +25,9 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
 const calculateClimbSegments = (waypoints) => {
   const segments = [];
   let climbStart = null;
-  const MIN_GRADE = 4; // Minimum grade in percent to consider a climb segment
+  let belowGradeStart = null;
+  const MIN_GRADE = 2.5; // Keep sustained climbs even when the GPX has short flatter sections.
+  const MAX_FLAT_GAP_KM = 0.35;
 
   for (let i = 1; i < waypoints.length; i++) {
     const current = waypoints[i];
@@ -37,16 +39,24 @@ const calculateClimbSegments = (waypoints) => {
 
     if (grade >= MIN_GRADE && !climbStart) {
       climbStart = previous;
+      belowGradeStart = null;
+    } else if (grade >= MIN_GRADE && climbStart) {
+      belowGradeStart = null;
     } else if (grade < MIN_GRADE && climbStart) {
-      if ((current.distance - climbStart.distance) > 0.1 || (current.elevation - climbStart.elevation) > 10) {
+      // Do not split a long climb because of a short flat/downhill GPX sample.
+      if (belowGradeStart === null) belowGradeStart = previous.distance;
+      if ((current.distance - belowGradeStart) <= MAX_FLAT_GAP_KM) continue;
+      const end = current.distance;
+      if ((end - climbStart.distance) > 0.1 || (end - climbStart.distance) > 0.02 && (current.elevation - climbStart.elevation) > 10) {
         segments.push({
           start_km: climbStart.distance,
-          end_km: current.distance,
-          grade_percent: ((current.elevation - climbStart.elevation) / ((current.distance - climbStart.distance) * 1000)) * 100,
+          end_km: end,
+          grade_percent: ((current.elevation - climbStart.elevation) / ((end - climbStart.distance) * 1000)) * 100,
           elevation_gain: current.elevation - climbStart.elevation
         });
       }
       climbStart = null;
+      belowGradeStart = null;
     }
   }
   

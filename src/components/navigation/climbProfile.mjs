@@ -40,6 +40,9 @@ export function buildClimbProfiles(track) {
     if (length <= 0) return [];
     const startElevation = elevationAt(points, start), endElevation = elevationAt(points, end);
     if (startElevation === null || endElevation === null) return [];
+    const averageGrade = (endElevation - startElevation) / (length * 1000) * 100;
+    // A climb must have a positive average gradient of at least 2%.
+    if (averageGrade < 2) return [];
     const step = [0.05, 0.1, 0.2, 0.25, 0.5, 1, 2, 5, 10, 20, 50].find(s => length / s <= 10 + 1e-8) || Math.ceil(length / 10);
     const segments = [];
     for (let offset = 0; offset < length - 1e-8; offset += step) {
@@ -60,6 +63,6 @@ export function buildClimbProfiles(track) {
     const profile = [{ km: 0, elevation: startElevation }];
     for (let i = first; i < last; i += stride) profile.push({ km: points[i].distance - start, elevation: points[i].elevation });
     profile.push({ km: length, elevation: endElevation });
-    return [{ id: `${index}-${start}-${end}`, number: index + 1, start, end, length, step, grade: (endElevation - startElevation) / (length * 1000) * 100, profile, segments }];
+    return [{ id: `${index}-${start}-${end}`, number: index + 1, start, end, length, step, grade: averageGrade, profile, segments }];
   });
 }

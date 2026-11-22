@@ -221,7 +221,8 @@ async function functionsApi(req, res, user, name) {
     try {
       const remote = await fetch(`${valhallaUrl}/route`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
         locations: locations.map((p) => ({ lat: Number(p.lat), lon: Number(p.lon ?? p.lng) })), costing,
-        units: 'kilometers', directions_options: { units: 'kilometers', language: 'es-ES' }, shape_format: 'geojson',
+        units: 'kilometers', directions_type: 'instructions', roundabout_exits: true,
+        directions_options: { units: 'kilometers', language: 'es-ES' }, shape_format: 'geojson',
       }) });
       const result = await remote.json();
       if (!remote.ok) return json(res, 502, { error: 'Valhalla no pudo calcular la ruta', details: result });

@@ -1299,6 +1299,7 @@ export default function MapView({
                     )}
                     {en ? 'Speed' : 'Velocidad'}: {runner.speed?.toFixed(0) || 0} km/h<br />
                     {en ? 'Elevation' : 'Elevación'}: {runner.elevation?.toFixed(0) || 0}m<br />
+                    🕒 {en ? 'Last position' : 'Última posición'}: {runner.last_update ? new Date(runner.last_update).toLocaleTimeString(en ? 'en-GB' : 'es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }) : (en ? 'Unknown' : 'Desconocida')}<br />
                     {runner.battery_level !== null && runner.battery_level !== undefined && (
                       <>🔋 {en ? 'Battery' : 'Batería'}: {runner.battery_level}%<br /></>
                     )}
@@ -1331,6 +1332,7 @@ export default function MapView({
                       <br />👤 {selectedPoint.runner.user_name}
                       <br />🏎️ {Math.round(selectedPoint.runner.speed)} km/h
                       <br />⛰️ {Math.round(selectedPoint.runner.elevation)}m
+                      <br />🕒 {en ? 'Last position' : 'Última posición'}: {selectedPoint.runner.last_update ? new Date(selectedPoint.runner.last_update).toLocaleTimeString(en ? 'en-GB' : 'es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }) : (en ? 'Unknown' : 'Desconocida')}
                     </>
                   )}
                 </div>

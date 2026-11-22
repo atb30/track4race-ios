@@ -2733,7 +2733,7 @@ export default function Navigation() {
               ) : (
                 <div className={`divide-y divide-slate-200 ${runnersOnTrack.length > 6 ? 'max-h-[220px] overflow-y-auto overscroll-contain' : ''}`}>
                   <NavigationPages items={runnersOnTrack} renderItem={(runner) => (
-                    <div key={`runner-${runner.id}`} className="flex items-center justify-between py-1 sm:py-2 px-1 sm:px-2 md:px-3 gap-1 sm:gap-2">
+                    <div key={`runner-${runner.id}`} onClick={() => setSelectedPoint({ lat: runner.latitude, lng: runner.longitude, runner })} className="flex items-center justify-between py-1 sm:py-2 px-1 sm:px-2 md:px-3 gap-1 sm:gap-2 cursor-pointer hover:bg-slate-100">
                       <div className="flex items-center gap-1 sm:gap-2 min-w-0">
                         <div 
                           className="w-2 h-2 sm:w-3 sm:h-3 rounded-full flex-shrink-0" 
@@ -2752,6 +2752,7 @@ export default function Navigation() {
                           km
                         </span>
                       </div>
+                      <span className="sr-only">{language === 'en' ? 'Last position' : 'Última posición'} {runner.last_update ? new Date(runner.last_update).toLocaleTimeString(language === 'en' ? 'en-GB' : 'es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }) : (language === 'en' ? 'Unknown' : 'Desconocida')}</span>
                     </div>
                   )} />
                 </div>

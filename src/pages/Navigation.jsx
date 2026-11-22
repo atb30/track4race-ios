@@ -30,6 +30,7 @@ import NavigationLoadingScreen from "../components/navigation/NavigationLoadingS
 import ClimbExplorer from "../components/navigation/ClimbExplorer";
 import QuickPoiDialog from "../components/navigation/QuickPoiDialog";
 import { requestReliableInstructions } from "../lib/navigationEngine";
+import { cacheOfflineMap } from "../lib/offlineMapStore";
 import { useLanguage } from "../lib/LanguageContext";
 import OrientationWarning from "../components/common/OrientationWarning";
 import AdminMenu from "../components/common/AdminMenu";
@@ -446,6 +447,10 @@ export default function Navigation() {
   // Prepara las instrucciones al cargar el track y las deja disponibles sin cobertura.
   useEffect(() => {
     if (!activeTrack?.id || !activeTrack?.waypoints?.length) return;
+    // Pre-cache the regional PMTiles package opportunistically. If the server
+    // is unavailable, navigation continues normally and Valhalla instructions
+    // still use their independent local cache.
+    cacheOfflineMap().catch(() => {});
     const cacheKey = `mirat_valhalla_${activeTrack.id}`;
     const cached = localStorage.getItem(cacheKey);
     if (cached) { try { setValhallaRoute(JSON.parse(cached).route); } catch {} setValhallaStatus('cached'); return; }

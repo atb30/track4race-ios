@@ -105,6 +105,21 @@ function sendFile(res, file) {
   res.writeHead(200, { 'Content-Type': types[extension] || 'application/octet-stream' });
   fs.createReadStream(file).pipe(res);
 }
+function sendRangeFile(req, res, file) {
+  const stat = fs.statSync(file);
+  const range = req.headers.range;
+  if (!range) {
+    res.writeHead(200, { 'Content-Type': 'application/vnd.pmtiles', 'Content-Length': stat.size, 'Accept-Ranges': 'bytes', 'Cache-Control': 'public, max-age=86400' });
+    return fs.createReadStream(file).pipe(res);
+  }
+  const match = range.match(/^bytes=(\d+)-(\d*)$/);
+  if (!match) { res.writeHead(416, { 'Content-Range': `bytes */${stat.size}` }); return res.end(); }
+  const start = Number(match[1]);
+  const end = match[2] ? Math.min(Number(match[2]), stat.size - 1) : stat.size - 1;
+  if (start >= stat.size || end < start) { res.writeHead(416, { 'Content-Range': `bytes */${stat.size}` }); return res.end(); }
+  res.writeHead(206, { 'Content-Type': 'application/vnd.pmtiles', 'Content-Length': end - start + 1, 'Content-Range': `bytes ${start}-${end}/${stat.size}`, 'Accept-Ranges': 'bytes', 'Cache-Control': 'public, max-age=86400' });
+  return fs.createReadStream(file, { start, end }).pipe(res);
+}
 function body(req) { return new Promise((resolve, reject) => { let raw = ''; req.on('data', (c) => raw += c); req.on('end', () => { try { resolve(raw ? JSON.parse(raw) : {}); } catch { reject(new Error('JSON inválido')); } }); }); }
 function assertAdmin(user) { if (user.role !== 'admin') throw Object.assign(new Error('Solo administradores'), { status: 403 }); }
 
@@ -306,6 +321,14 @@ const server = http.createServer(async (req, res) => {
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     }
     if (req.method === 'OPTIONS') { res.writeHead(204); return res.end(); }
+
+    const offlineMap = url.pathname.match(/^\/offline-maps\/([a-z0-9_-]+\.pmtiles)$/i);
+    if (req.method === 'GET' && offlineMap) {
+      const mapRoot = path.resolve(process.env.OFFLINE_MAP_DIR || path.join(root, 'offline-maps'));
+      const file = path.resolve(mapRoot, offlineMap[1]);
+      if (!file.startsWith(`${mapRoot}${path.sep}`) || !fs.existsSync(file)) return json(res, 404, { error: 'Mapa offline no disponible' });
+      return sendRangeFile(req, res, file);
+    }
 
     if (req.method === 'GET' && url.pathname === '/health') return json(res, 200, { status: 'ok' });
     if (req.method === 'POST' && url.pathname === '/api/auth/login') {
